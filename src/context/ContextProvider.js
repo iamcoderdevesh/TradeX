@@ -21,9 +21,19 @@ export const ContextProvider = ({ children }) => {
     sessionStorage.setItem("themeMode", mode);
   };
 
+  useEffect(() => {
+    if (sessionStorage.getItem("themeMode") !== undefined) {
+      sessionStorage.getItem("themeMode") === "dark"
+        ? setTheme("dark")
+        : setTheme("light");
+    }
+  }, [currentMode]);
+
   return (
     // eslint-disable-next-line react/jsx-no-constructed-context-values
-    <StateContext.Provider value={{ currentMode, setCurrentMode, setMode, setTheme }}>
+    <StateContext.Provider
+      value={{ currentMode, setCurrentMode, setMode, setTheme }}
+    >
       {children}
     </StateContext.Provider>
   );
