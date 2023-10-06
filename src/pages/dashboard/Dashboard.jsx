@@ -3,15 +3,15 @@ import { AiOutlineLineChart, AiFillSliders } from "react-icons/ai";
 import { LuDollarSign } from "react-icons/lu";
 import { MdOutlineBarChart } from "react-icons/md";
 import { PiChartLineUpBold } from "react-icons/pi";
-import LineChart from '../components/charts/LineChart';
-import BarChart from '../components/charts/BarChart';
-import ColumnChart from '../components/charts/ColumnChart';
+import LineChart from '../../components/charts/LineChart';
+import BarChart from '../../components/charts/BarChart';
+import ColumnChart from '../../components/charts/ColumnChart';
 
-const dashboard = () => {
+const Dashboard = () => {
     return (
         <div className="p-2 bg-gray-50 dark:bg-primary-dark md:ml-64 md:p-4">
             <div className="p-2 mt-8 md:p-4">
-                <h3 className='text-xl font-medium dark:text-white my-4'>Dashboard</h3>
+                <h3 className='text-xl font-medium dark:text-white my-4 mt-8 lg:my-4'>Dashboard</h3>
                 <div className="grid grid-rows-1 gap-7 mb-8 lg:grid-cols-4">
                     <div className="flex flex-row justify-between h-24 rounded-md border border-gray-200 dark:border-gray-900 shadow-sm bg-white dark:bg-main-dark">
                         <div className="ml-4 flex h-[90px] w-auto flex-row items-center">
@@ -109,18 +109,18 @@ const dashboard = () => {
                     </div>
                 </div>
 
-                <div className="grid grid-rows-1 gap-7 mb-8 lg:grid-cols-3 h-full">
-                    <div className="flex flex-col col-span-2 rounded-md border border-gray-200 dark:border-gray-900 shadow-sm bg-white dark:bg-main-dark">
+                <div className="grid grid-rows-1 gap-7 mb-8 lg:grid-cols-3 h-auto">
+                    <div className="flex flex-col lg:col-span-2 rounded-md border border-gray-200 dark:border-gray-900 shadow-sm bg-white dark:bg-main-dark">
                         <h3 className='text-base font-medium dark:text-white m-4'>Net Profit</h3>
                         <div className="w-full p-4 md:p-6">
                             <ColumnChart />
                         </div>
                     </div>
-                    <div className="flex flex-col rounded-md border border-gray-200 dark:border-gray-900 shadow-sm bg-white dark:bg-main-dark">
+                    <div className="flex flex-col h-[360px] w-full rounded-md border border-gray-200 dark:border-gray-900 bg-white dark:bg-main-dark">
                         <h3 className='text-base font-medium dark:text-white m-4'>Recent Transaction</h3>
                         <div className="relative overflow-x-auto shadow-md">
                             <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-                                <thead className="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-400">
+                                <thead className="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-800 dark:text-gray-300">
                                     <tr>
                                         <th scope="col" className="px-6 py-3">
                                             Product name
@@ -131,7 +131,7 @@ const dashboard = () => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                    <tr className="bg-white border-b dark:bg-main-dark dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                                         <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                             Apple MacBook Pro 17"
                                         </th>
@@ -139,7 +139,7 @@ const dashboard = () => {
                                             $2999
                                         </td>
                                     </tr>
-                                    <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                    <tr className="bg-white border-b dark:bg-main-dark dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                                         <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                             Microsoft Surface Pro
                                         </th>
@@ -147,7 +147,7 @@ const dashboard = () => {
                                             $1999
                                         </td>
                                     </tr>
-                                    <tr className="bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                    <tr className="bg-white dark:bg-main-dark hover:bg-gray-50 dark:hover:bg-gray-600">
                                         <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                             Magic Mouse 2
                                         </th>
@@ -155,7 +155,7 @@ const dashboard = () => {
                                             $99
                                         </td>
                                     </tr>
-                                    <tr className="bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                    <tr className="bg-white dark:bg-main-dark hover:bg-gray-50 dark:hover:bg-gray-600">
                                         <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                             Magic Mouse 2
                                         </th>
@@ -163,39 +163,7 @@ const dashboard = () => {
                                             $99
                                         </td>
                                     </tr>
-                                    <tr className="bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-600">
-                                        <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                            Magic Mouse 2
-                                        </th>
-                                        <td className="px-6 py-4">
-                                            $99
-                                        </td>
-                                    </tr>
-                                    <tr className="bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-600">
-                                        <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                            Magic Mouse 2
-                                        </th>
-                                        <td className="px-6 py-4">
-                                            $99
-                                        </td>
-                                    </tr>
-                                    <tr className="bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-600">
-                                        <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                            Magic Mouse 2
-                                        </th>
-                                        <td className="px-6 py-4">
-                                            $99
-                                        </td>
-                                    </tr>
-                                    <tr className="bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-600">
-                                        <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                            Magic Mouse 2
-                                        </th>
-                                        <td className="px-6 py-4">
-                                            $99
-                                        </td>
-                                    </tr>
-                                    <tr className="bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                    <tr className="bg-white dark:bg-main-dark hover:bg-gray-50 dark:hover:bg-gray-600">
                                         <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                             Magic Mouse 2
                                         </th>
@@ -231,7 +199,7 @@ const dashboard = () => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                    <tr className="bg-white border-b dark:bg-main-dark dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                                         <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                             Apple MacBook Pro 17"
                                         </th>
@@ -245,7 +213,7 @@ const dashboard = () => {
                                             $2999
                                         </td>
                                     </tr>
-                                    <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                    <tr className="bg-white border-b dark:bg-main-dark dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                                         <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                             Microsoft Surface Pro
                                         </th>
@@ -259,7 +227,7 @@ const dashboard = () => {
                                             $1999
                                         </td>
                                     </tr>
-                                    <tr className="bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                    <tr className="bg-white dark:bg-main-dark hover:bg-gray-50 dark:hover:bg-gray-600">
                                         <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                             Magic Mouse 2
                                         </th>
@@ -273,7 +241,7 @@ const dashboard = () => {
                                             $99
                                         </td>
                                     </tr>
-                                    <tr className="bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                    <tr className="bg-white dark:bg-main-dark hover:bg-gray-50 dark:hover:bg-gray-600">
                                         <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                             Magic Mouse 2
                                         </th>
@@ -291,13 +259,11 @@ const dashboard = () => {
                             </table>
                         </div>
                     </div>
-
                 </div>
 
             </div>
         </div>
-
     )
 }
 
-export default dashboard
+export default Dashboard

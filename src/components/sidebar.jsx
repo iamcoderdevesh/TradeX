@@ -1,5 +1,6 @@
 import React from "react";
 import { components } from "../data/sidebarData";
+import { NavLink } from 'react-router-dom';
 
 const sidebar = () => {
     return (
@@ -25,19 +26,24 @@ const sidebar = () => {
                                         <ul id="dropdown-example" className="hidden py-2 space-y-2">
                                             {components.submenu.map((link) => (
                                                 <li key={link.id}>
-                                                    <a href="#" className="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-200 dark:text-white dark:hover:bg-gray-700">
-                                                    <span className="font-normal text-sm">{link.name}</span>
-                                                    </a>
+                                                    <NavLink
+                                                        to={`/${link.name}`}
+                                                        key={link.name}
+                                                        className="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-200 dark:text-white dark:hover:bg-gray-700">
+                                                        <span className="font-normal text-sm">{link.name}</span>
+                                                    </NavLink>
                                                 </li>
                                             ))}
                                         </ul>
                                     </div>
                                     : <li key={items.id}>
-                                        <a href="#"
+                                        <NavLink
+                                            to={`/${items.name}`}
+                                            key={items.name}
                                             className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-200 dark:hover:bg-gray-700 group">
                                             {items.icon}
                                             <span className="ml-3 font-normal text-sm">{items.name}</span>
-                                        </a>
+                                        </NavLink>
                                     </li>
                             ))}
                     </ul>

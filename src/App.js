@@ -1,17 +1,10 @@
 import './App.css';
-import Navbar from './components/Navbar';
-import Sidebar from './components/sidebar';
-import Dashboard from './pages/dashboard';
-import { useStateContext } from './context/ContextProvider';
+import Routes from './routes';
 
 function App() {
 
   return (
-    <div>
-      <Navbar/>
-      <Sidebar />
-      <Dashboard />
-    </div>
+    <Routes />
   );
 }
 
