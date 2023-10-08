@@ -1,6 +1,6 @@
 import React from 'react'
 import Navbar from '../components/Navbar';
-import Sidebar from '../components/sidebar';
+import Sidebar from '../components/Sidebar';
 import { Dashboard, AddTrade, ImportTrade, Journal } from '../pages';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
@@ -8,7 +8,7 @@ const route = () => {
   return (
     <BrowserRouter>
       <Navbar />
-      <Sidebar />
+      <Sidebar/>
       <Routes>
         <Route path="/dashboard" element={(<Dashboard />)} />
         <Route path="/Add Trades" element={(<AddTrade />)} />

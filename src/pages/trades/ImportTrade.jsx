@@ -1,6 +1,6 @@
 import React from 'react'
 
-const ImportTrades = () => {
+const ImportTrade = () => {
   return (
     <div>
       
@@ -8,4 +8,4 @@ const ImportTrades = () => {
   )
 }
 
-export default ImportTrades
+export default ImportTrade
