@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { BiChevronDown, BiChevronUp } from "react-icons/bi";
 import InputField from '../../../components/common/inputs/InputField';
 import Dropdown from '../../../components/common/dropdown';
 import Button from '../../../components/common/buttons';
@@ -6,14 +7,15 @@ import { Inputs } from "../variables/FormVariables";
 
 const FormContent = () => {
     const [formData, setFormData] = useState({ Symbol: "", EntryDate: "", ExitDate: "" });
+    const [showAdd, setShowAdd] = useState(false);
 
     const handleChange = (event) => {
         const { name, value } = event.target;
         setFormData((prevFormData) => ({ ...prevFormData, [name]: value }));
     };
 
-    const handleSubmit = (event) => {
-        event.preventDefault();
+    const handleSubmit = (e) => {
+        e.preventDefault();
         // console.log(`Symbol: ${formData.Symbol}, Entry Date: ${formData.EntryDate}, Exit Date: ${formData.ExitDate}`);
     };
 
@@ -21,9 +23,10 @@ const FormContent = () => {
         <div className="p-4">
             <section className="bg-white dark:bg-primary-dark">
                 <div className="py-8 px-1 max-w-2xl lg:py-2">
-                    <h2 className="mb-4 text-xl font-bold text-gray-900 dark:text-white">Trade Details</h2>
+                    <h2 className="pb-4 mb-4 sm:mb-5 text-xl border-b font-bold text-gray-900 dark:text-white dark:border-gray-600">Trade Details</h2>
                     <form onSubmit={handleSubmit}>
                         <div className="grid gap-4 sm:grid-cols-2 sm:gap-6">
+                            {/* Below Code is displaying mutiple form elements using javascript object */}
                             {Inputs.FormDropdown.map((items) => (
                                 <div key={items.id}>
                                     <Dropdown label={items.label} id={items.id}
@@ -35,25 +38,45 @@ const FormContent = () => {
                                 </div>
                             ))}
                             {Inputs.FormInputs.map((items) => (
-                                // items.id === "ScreenShot" ?
-                                // FormAddDropdown.map((dropdown) => (
-                                //     <div key={dropdown.id}>
-                                //         <Dropdown label={dropdown.label} id={dropdown.id}
-                                //             children={
-                                //                 dropdown.children.map((child) => (
-                                //                     <option key={child}>{child}</option>
-                                //                 ))
-                                //             } />
-                                //     </div>
-                                // )) :
                                 <div key={items.id} className={items.divClass}>
                                     <InputField label={items.label} divClass={items.divClass} placeholder={items.placeholder} id={items.id} type={items.type} htmlName={items.id} handleChange={handleChange} />
                                 </div>
                             ))}
+                            {
+                                showAdd &&
+                                <h2 className="pb-4 col-span-2 text-xl border-b font-bold text-gray-900 dark:text-white dark:border-gray-600">Additional Details</h2>
+                            }
+
+                            {showAdd && Inputs.FormAddInputs.map((items) => (
+                                items.id === "null" ?
+                                    Inputs.FormAddDropdown.map((dropdown) => (
+                                        <div key={dropdown.id}>
+                                            <Dropdown label={dropdown.label} id={dropdown.id}
+                                                children={
+                                                    dropdown.children.map((child) => (
+                                                        <option key={child}>{child}</option>
+                                                    ))
+                                                } />
+                                        </div>
+                                    )) :
+                                    <div key={items.id} className={items.divClass}>
+                                        <InputField label={items.label} divClass={items.divClass} placeholder={items.placeholder} id={items.id} type={items.type} htmlName={items.id} handleChange={handleChange} />
+                                    </div>
+                            ))}
                         </div>
 
-                        <Button type="reset" id="reset" label="Reset" buttonClass="inline-flex items-center px-5 py-2.5 mt-4 mr-4 sm:mt-6 text-sm font-medium text-center text-white bg-gray-400 rounded-lg hover:bg-gray-500" />
-                        <Button type="submit" id="submit" label="Open Position" buttonClass="inline-flex items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-primary-100 rounded-lg hover:bg-primary-200" />
+                        <div className="flex flex-row items-center justify-center my-4 sm:my-8">
+                            <button onClick={() => setShowAdd(!showAdd)} className="flex flex-col items-center justify-center">
+                                {showAdd && <BiChevronUp className="dark:text-white cursor-pointer" />}
+                                <h3 className="text-base dark:text-white cursor-pointer">{showAdd ? "Less" : "More"}</h3>
+                                {!showAdd && <BiChevronDown className="dark:text-white cursor-pointer" />}
+                            </button>
+                        </div>
+
+                        <div className="flex flex-row items-center">
+                            <Button type="reset" id="reset" label="Reset" buttonClass="inline-flex items-center px-5 py-2.5  mr-4 text-xs sm:text-sm font-medium text-center text-white bg-gray-500 rounded-lg hover:bg-gray-600" />
+                            <Button type="submit" id="submit" label="Add Trade" buttonClass="inline-flex items-center px-5 py-2.5 text-xs sm:text-sm font-medium text-center text-white bg-primary-100 rounded-lg hover:bg-primary-200" />
+                        </div>
                     </form>
                 </div>
             </section>

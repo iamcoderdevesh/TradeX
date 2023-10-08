@@ -68,6 +68,13 @@ export const Inputs = {
             type: "text",
         },
         {
+            id: "null",
+            label: "",
+            divClass: "",
+            placeholder: "",
+            type: ""
+        },
+        {
             id: "ScreenShot",
             label: "Upload Screenshot",
             divClass: "sm:col-span-2",

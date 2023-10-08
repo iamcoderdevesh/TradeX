@@ -1,8 +1,8 @@
-import {AiOutlineHome, AiOutlineDashboard, AiOutlinePieChart, AiFillPlusCircle} from "react-icons/ai";
-import {BsFillBarChartLineFill, BsFillJournalBookmarkFill} from "react-icons/bs";
-import {LuImport} from "react-icons/lu";
-import {MdOutlineLibraryBooks} from "react-icons/md";
-import {SlCalender} from "react-icons/sl";
+import { AiOutlineHome, AiOutlineDashboard, AiOutlinePieChart, AiFillPlusCircle } from "react-icons/ai";
+import { BsFillBarChartLineFill, BsFillJournalBookmarkFill } from "react-icons/bs";
+import { LuImport } from "react-icons/lu";
+import { MdOutlineLibraryBooks } from "react-icons/md";
+import { SlCalender } from "react-icons/sl";
 
 export const components = {
   menu: [
