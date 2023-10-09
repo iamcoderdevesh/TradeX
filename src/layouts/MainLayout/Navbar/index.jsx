@@ -1,7 +1,7 @@
 import React from 'react'
 import { AiOutlineMenu, AiOutlineCloseCircle } from "react-icons/ai";
 import { BsSunFill, BsFillMoonFill } from "react-icons/bs";
-import { useStateContext } from '../../../context/ContextProvider';
+import { useStateContext } from 'context/ContextProvider';
 
 const Navbar = () => {
 

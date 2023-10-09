@@ -3,13 +3,13 @@ import React from "react";
 //Icons
 import { AiOutlineHome, AiOutlineDashboard, AiOutlinePieChart, AiOutlinePlusCircle } from "react-icons/ai";
 import { BsFillBarChartLineFill, BsFillJournalBookmarkFill } from "react-icons/bs";
-import { LuImport } from "react-icons/lu";
+//import { LuImport } from "react-icons/lu";
 import { PiCellSignalNoneThin } from "react-icons/pi";
 import { MdOutlineLibraryBooks } from "react-icons/md";
 import { SlCalender } from "react-icons/sl";
 
 //Pages
-import { Home, Dashboard, Analytics, BackTester, PnLCalendar, AddTrade, ImportTrade, Journal, StrategyLibrary } from '../pages';
+import { Home, Dashboard, Analytics, BackTester, PnLCalendar, AddTrade, ImportTrade, Journal, StrategyLibrary } from 'pages';
 
 const routes = {
     menu: [

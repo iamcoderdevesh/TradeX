@@ -1,7 +1,7 @@
 import React from "react";
 import { NavLink, useLocation } from 'react-router-dom';
 import { BiChevronDown } from "react-icons/bi";
-import routes from "../../../routes/routes";
+import routes from "routes/routes";
 
 // SidebarLink component for individual links
 const SidebarLink = ({ to, icon, name, active, submenu }) => (

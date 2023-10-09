@@ -3,9 +3,9 @@ import { AiOutlineLineChart, AiFillSliders } from "react-icons/ai";
 import { LuDollarSign } from "react-icons/lu";
 import { MdOutlineBarChart } from "react-icons/md";
 import { PiChartLineUpBold } from "react-icons/pi";
-import LineChart from '../../components/charts/LineChart';
-import BarChart from '../../components/charts/BarChart';
-import ColumnChart from '../../components/charts/ColumnChart';
+import LineChart from 'components/charts/LineChart';
+import BarChart from 'components/charts/BarChart';
+import ColumnChart from 'components/charts/ColumnChart';
 
 const Dashboard = () => {
     return (

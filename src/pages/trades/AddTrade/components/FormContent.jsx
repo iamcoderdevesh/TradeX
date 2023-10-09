@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { BiChevronDown, BiChevronUp } from "react-icons/bi";
-import InputField from '../../../components/common/inputs/InputField';
-import Dropdown from '../../../components/common/dropdown';
-import Button from '../../../components/common/buttons';
+import InputField from 'components/common/inputs/InputField';
+import Dropdown from 'components/common/dropdown';
+import Button from 'components/common/buttons';
 import { Inputs } from "../variables/FormVariables";
 
 const FormContent = () => {
