@@ -1,19 +1,22 @@
 import React from 'react'
-import Navbar from '../components/Navbar';
-import Sidebar from '../components/Sidebar';
-import { Dashboard, AddTrade, ImportTrade, Journal } from '../pages';
+import Navbar from '../layouts/MainLayout/Navbar';
+import Sidebar from '../layouts/MainLayout/Sidebar';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-
+import routes from "./routes";
+import { Home } from '../pages';
 const route = () => {
   return (
     <BrowserRouter>
       <Navbar />
-      <Sidebar/>
+      <Sidebar />
       <Routes>
-        <Route path="/dashboard" element={(<Dashboard />)} />
-        <Route path="/Add Trades" element={(<AddTrade />)} />
-        <Route path="/Import Trades" element={(<ImportTrade />)} />
-        <Route path="/Journal" element={(<Journal />)} />
+        <Route path="/" element={(<Home />)} />
+        {routes.menu.map((route) => (
+          <Route key={route.id} path={route.path} element={(route.component)} />
+        ))}
+        {routes.submenu.map((route) => (
+          <Route key={route.id} path={route.path} element={(route.component)} />
+        ))}
       </Routes>
     </BrowserRouter>
   )

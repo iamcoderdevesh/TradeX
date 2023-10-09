@@ -1,5 +1,5 @@
 import React from 'react'
-import FormContent from './components/FormContent'
+import FormContent from '../components/FormContent'
 
 const AddTrade = () => {
     return (
