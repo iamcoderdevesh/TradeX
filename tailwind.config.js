@@ -93,6 +93,9 @@ module.exports = {
       ],
     },
     extend: {
+      screen: {
+        '-md' : { max: '768px'},
+      },
       fontSize: {
         14: "14px",
       },

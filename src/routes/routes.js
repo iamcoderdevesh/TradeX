@@ -3,7 +3,6 @@ import React from "react";
 //Icons
 import { AiOutlineHome, AiOutlineDashboard, AiOutlinePieChart, AiOutlinePlusCircle } from "react-icons/ai";
 import { BsFillBarChartLineFill, BsFillJournalBookmarkFill } from "react-icons/bs";
-//import { LuImport } from "react-icons/lu";
 import { PiCellSignalNoneThin } from "react-icons/pi";
 import { MdOutlineLibraryBooks } from "react-icons/md";
 import { SlCalender } from "react-icons/sl";
@@ -62,7 +61,7 @@ const routes = {
             id: 5,
             order: 6,
             name: "Trades",
-            path: "null",
+            path: "",
             icon: <AiOutlinePlusCircle className="w-5 h-5 transition duration-75" />,
             tooltip: "Trades",
             component: <></>,

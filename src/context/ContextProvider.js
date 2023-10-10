@@ -4,6 +4,8 @@ const StateContext = createContext();
 
 export const ContextProvider = ({ children }) => {
   const [currentMode, setCurrentMode] = useState("light");
+  const [activeMenu, setActiveMenu] = useState(true);
+  const [screenSize, setScreenSize] = useState();
 
   const setMode = () => {
     if (currentMode === "light") {
@@ -30,10 +32,9 @@ export const ContextProvider = ({ children }) => {
   }, [currentMode]);
 
   return (
-    // eslint-disable-next-line react/jsx-no-constructed-context-values
+
     <StateContext.Provider
-      value={{ currentMode, setCurrentMode, setMode }}
-    >
+      value={{ currentMode, setCurrentMode, setMode, activeMenu, setActiveMenu, screenSize, setScreenSize }}>
       {children}
     </StateContext.Provider>
   );

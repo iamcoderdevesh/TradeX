@@ -21,7 +21,7 @@ const FormContent = () => {
 
     return (
         <div className="p-4">
-            <section className="bg-white dark:bg-primary-dark">
+            <section className="dark:bg-primary-dark">
                 <div className="py-8 px-1 max-w-2xl lg:py-2">
                     <h2 className="pb-4 mb-4 sm:mb-5 text-xl border-b font-bold text-gray-900 dark:text-white dark:border-gray-600">Trade Details</h2>
                     <form onSubmit={handleSubmit}>

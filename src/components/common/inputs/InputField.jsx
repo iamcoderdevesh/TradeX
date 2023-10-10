@@ -14,7 +14,7 @@ function InputField(props) {
             <label htmlFor={id} className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{label}</label>
             {type === "textArea"
                 ? <textarea id={id} rows="8" className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white" placeholder={placeholder}></textarea>
-                : <input disabled={disabled} required={require} type={type} id={id} placeholder={placeholder} className={`${inputClass}`} name={htmlName} onChange={handleChange}/>}
+                : <input disabled={disabled} required={require} type={type} id={id} placeholder={placeholder} className={`${inputClass}`} name={htmlName} onChange={handleChange} />}
         </>
     );
 }
