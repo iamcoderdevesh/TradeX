@@ -24,18 +24,14 @@ const SidebarMenu = ({ route }) => {
     
     const [expandedMenu, setExpandedMenu] = useState(false);
 
-    const handleExpandedMenu = () => {
-        expandedMenu ? setExpandedMenu(false) : setExpandedMenu(true);
-    }
-
     return (
         <div key={route.id}>
-            <button type="button" onClick={handleExpandedMenu} className="flex items-center w-full p-2 text-base text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-200 dark:text-white dark:hover:bg-gray-700">
-                <div className={`text-${!expandedMenu ? 'brand-500 dark:text-white' : 'gray-500 dark:text-gray-400'}`}>{route.icon}</div>
-                <span className={`flex-1 font-normal text-sm ml-3 text-left whitespace-nowrap ${!expandedMenu ? 'text-brand-500 dark:text-white font-semibold' : 'dark:text-gray-400'}`}>{route.name}</span>
-                <BiChevronDown className={`text-${!expandedMenu ? 'brand-500 dark:text-white' : 'gray-500 dark:text-gray-400'} w-6 h-6`} />
+            <button type="button" onClick={() => setExpandedMenu(!expandedMenu)} className="flex items-center w-full p-2 text-base text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-200 dark:text-white dark:hover:bg-gray-700">
+                <div className={`text-${expandedMenu ? 'brand-500 dark:text-white' : 'gray-500 dark:text-gray-400'}`}>{route.icon}</div>
+                <span className={`flex-1 font-normal text-sm ml-3 text-left whitespace-nowrap ${expandedMenu ? 'text-brand-500 dark:text-white font-semibold' : 'dark:text-gray-400'}`}>{route.name}</span>
+                <BiChevronDown className={`text-${expandedMenu ? 'brand-500 dark:text-white' : 'gray-500 dark:text-gray-400'} w-6 h-6`} />
             </button>
-            <ul id="dropdown-example" className={`${expandedMenu && 'hidden'} py-2 space-y-2`}>
+            <ul id="dropdown-example" className={`${!expandedMenu && 'hidden'} py-2 space-y-2`}>
                 {routes.submenu.map((link) => (
                     <li key={link.id}>
                         <SidebarLink

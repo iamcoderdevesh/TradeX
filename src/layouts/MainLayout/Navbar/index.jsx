@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { AiOutlineMenuFold, AiOutlineMenuUnfold } from "react-icons/ai";
 import { BsSunFill, BsFillMoonFill } from "react-icons/bs";
 import { useStateContext } from 'context/ContextProvider';
@@ -6,17 +6,14 @@ import { useStateContext } from 'context/ContextProvider';
 const Navbar = () => {
 
     const { setMode, currentMode, activeMenu, setActiveMenu } = useStateContext();
-
-    const handleSidebar = () => {
-        activeMenu ? setActiveMenu(false) : setActiveMenu(true);
-    }
+    const [ showProfile, setShowProfile ] = useState(false);
 
     return (
         <nav className={`fixed top-0 z-40 ${activeMenu && 'md:ml-64 md:w-[calc(100%-256px)]'} w-full bg-white border-b border-gray-200 dark:bg-main-dark dark:border-gray-700`}>
             <div className="px-3 py-3 lg:px-5 lg:pl-3">
                 <div className="flex items-center justify-between">
                     <div className="flex items-center justify-start">
-                        <button type="button" className="inline-flex items-center p-2 text-sm text-gray-500 rounded-lg focus:outline-none dark:text-gray-400" onClick={handleSidebar}>
+                        <button type="button" className="inline-flex items-center p-2 text-sm text-gray-500 rounded-lg focus:outline-none dark:text-gray-400" onClick={() => setActiveMenu(!activeMenu)}>
                             {activeMenu
                                 ? <AiOutlineMenuFold id="open" className="w-6 h-6" />
                                 : <AiOutlineMenuUnfold id="close" className="w-6 h-6" />}
@@ -34,12 +31,13 @@ const Navbar = () => {
                         <div className="flex items-center">
                             <div className="flex items-center ml-3">
                                 <div>
-                                    <button type="button" className="flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600" aria-expanded="false" data-dropdown-toggle="dropdown-user">
+                                    <button type="button" className="flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
+                                    onClick={() => setShowProfile(!showProfile)} >
                                         <span className="sr-only">Open user menu</span>
                                         <img className="w-8 h-8 rounded-full" src="https://www.w3schools.com/howto/img_avatar.png" alt="user photo" />
                                     </button>
                                 </div>
-                                <div className="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded shadow dark:bg-gray-700 dark:divide-gray-600" id="dropdown-user">
+                                <div className={`${ !showProfile && 'hidden'} fixed top-0 right-0 z-50 mt-14 text-base list-none bg-white divide-y divide-gray-100 rounded shadow dark:bg-gray-700 dark:divide-gray-600`}>
                                     <div className="px-4 py-3" role="none">
                                         <p className="text-sm text-gray-900 dark:text-white" role="none">
                                             Neil Sims
