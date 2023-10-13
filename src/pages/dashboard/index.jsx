@@ -1,5 +1,5 @@
 import React from 'react'
-import { AiOutlineLineChart, AiFillSliders } from "react-icons/ai";
+import { AiOutlineLineChart, AiFillCaretUp } from "react-icons/ai";
 import { LuDollarSign } from "react-icons/lu";
 import { MdOutlineBarChart } from "react-icons/md";
 import { PiChartLineUpBold } from "react-icons/pi";
@@ -67,44 +67,40 @@ const Dashboard = () => {
                 </div>
             </div>
 
-            <div className="grid grid-rows-1 gap-7 mb-8 lg:grid-cols-2 h-full">
-                <div className="flex flex-col justify-between rounded-md border border-gray-200 dark:border-gray-900 shadow-sm bg-white dark:bg-main-dark">
-                    <h3 className='text-base font-medium dark:text-white m-4'>Total PnL</h3>
-                    <div className="w-full bg-white rounded-lg shadow dark:bg-main-dark p-4 md:p-6">
-                        <div className="flex justify-between">
-                            <div>
-                                <h5 className="leading-none text-3xl font-bold text-gray-900 dark:text-white pb-2">32.4k</h5>
-                                <p className="text-base font-normal text-gray-500 dark:text-gray-400">Users this week</p>
-                            </div>
-                            <div
-                                className="flex items-center px-2.5 py-0.5 text-base font-semibold text-green dark:text-green text-center">
-                                12.5%
-                                <svg className="w-3 h-3 ml-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 14">
-                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13V1m0 0L1 5m4-4 4 4" />
-                                </svg>
-                            </div>
+            <div className="grid grid-rows-1 gap-7 mb-8 lg:grid-cols-3 h-full">
+                <div className="flex flex-col lg:col-span-2">
+                    <h3 className='text-base font-medium dark:text-white mb-2'>Total PnL</h3>
+                    <div className="rounded-md border border-gray-200 dark:border-gray-900 shadow-sm bg-white dark:bg-main-dark">
+                        <div className="flex m-4 mt-6">
+                            <AiFillCaretUp className="text-green mr-1" />
+                            <h5 className="leading-none text-base font-medium text-green pb-2">$1,12,900 (45.67%)</h5>
+                            <p className="text-base font-normal text-gray-500 dark:text-gray-400"></p>
                         </div>
-                        <LineChart />
+                        <div className="w-full bg-white rounded-lg shadow dark:bg-main-dark p-4 md:p-6 md:pt-0">
+                            <LineChart />
+                        </div>
                     </div>
                 </div>
 
-                <div className="flex flex-col justify-between rounded-md border border-gray-200 dark:border-gray-900 shadow-sm bg-white dark:bg-main-dark">
-                    <h3 className='text-base font-medium dark:text-white m-4'>This Week Statistics</h3>
-                    <div className="w-full bg-white rounded-lg shadow dark:bg-main-dark p-4 md:p-6">
-                        <div className="flex justify-between">
-                            <div>
-                                <h5 className="leading-none text-3xl font-bold text-gray-900 dark:text-white pb-2">2,340</h5>
-                                <p className="text-base font-normal text-gray-500 dark:text-gray-400">PnL this week</p>
+                <div className="flex flex-col">
+                    <h3 className='text-base font-medium dark:text-white mb-2'>Weekly PnL</h3>
+                    <div className="rounded-md border border-gray-200 dark:border-gray-900 shadow-sm bg-white dark:bg-main-dark">
+                        <h3 className='text-base font-medium text-gray-400 dark:text-white m-6'>This Week Statistics</h3>
+                        <div className="w-full bg-white rounded-lg shadow dark:bg-main-dark p-4 md:p-6 md:pt-0">
+                            <div className="flex justify-between">
+                                <div>
+                                    <h5 className="leading-none text-[24px] font-semibold text-gray-900 dark:text-white pb-2">$2,340</h5>
+                                </div>
+                                <div
+                                    className="flex items-center px-2.5 py-0.5 text-base font-semibold text-green dark:text-green text-center">
+                                    32.5%
+                                    <svg className="w-3 h-3 ml-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 14">
+                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13V1m0 0L1 5m4-4 4 4" />
+                                    </svg>
+                                </div>
                             </div>
-                            <div
-                                className="flex items-center px-2.5 py-0.5 text-base font-semibold text-green dark:text-green text-center">
-                                32.5%
-                                <svg className="w-3 h-3 ml-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 14">
-                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13V1m0 0L1 5m4-4 4 4" />
-                                </svg>
-                            </div>
+                            <BarChart />
                         </div>
-                        <BarChart />
                     </div>
                 </div>
             </div>

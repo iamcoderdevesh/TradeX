@@ -11,9 +11,10 @@ const ColumnChart = () => {
                 show: false
             }
         },
+        colors: ["#089981", "#A195FD"],
         plotOptions: {
             bar: {
-                columnWidth: '30%',
+                columnWidth: '35%',
                 borderRadius: 4
             }
         },
@@ -54,7 +55,6 @@ const ColumnChart = () => {
             markers: {
                 width: 16,
                 height: 16,
-                radius: '50%',
                 offsexX: 2,
                 offsexY: 2
             },

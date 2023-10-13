@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { NavLink, useLocation } from 'react-router-dom';
 import { BiChevronDown } from "react-icons/bi";
 import { IoClose } from "react-icons/io5";
+import { IoMdJournal } from "react-icons/io";
 import routes from "routes/routes";
 import { useStateContext } from 'context/ContextProvider';
 
@@ -9,8 +10,8 @@ import { useStateContext } from 'context/ContextProvider';
 const SidebarLink = ({ to, icon, name, active, submenu }) => (
     <NavLink
         to={to}
-        className={`flex items-center p-2 font-${active ? 'bold' : 'normal'} text-${active ? 'brand-500 dark:text-white' : 'gray-900'} rounded-lg dark:text-${active ? 'white' : 'gray-400'} hover:bg-gray-200 dark:hover:bg-gray-700`}>
-        <div className={`${submenu && 'w-5 h-5'} text-${active ? 'brand-500 dark:text-white' : 'gray-500 dark:text-gray-400 dark:group-hover:text-white group-hover:text-black'}`}>{icon}</div>
+        className={`flex items-center py-4 px-5 font-medium text-${active ? 'brand-100' : 'gray-900'} dark:text-${active ? 'white border-r-brand-100 border-r-2 bg-brand-50 dark:bg-gray-700' : 'gray-400'} hover:bg-brand-50 dark:hover:bg-gray-700`}>
+        <div className={`${submenu && 'w-5 h-5'} text-${active ? 'brand-100' : 'gray-500 dark:text-gray-400 dark:group-hover:text-white group-hover:text-black'}`}>{icon}</div>
         <span className="ml-3 text-sm">{name}</span>
     </NavLink>
 );
@@ -26,12 +27,12 @@ const SidebarMenu = ({ route }) => {
 
     return (
         <div key={route.id}>
-            <button type="button" onClick={() => setExpandedMenu(!expandedMenu)} className="flex items-center w-full p-2 text-base text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-200 dark:text-white dark:hover:bg-gray-700">
-                <div className={`text-${expandedMenu ? 'brand-500 dark:text-white' : 'gray-500 dark:text-gray-400'}`}>{route.icon}</div>
-                <span className={`flex-1 font-normal text-sm ml-3 text-left whitespace-nowrap ${expandedMenu ? 'text-brand-500 dark:text-white font-semibold' : 'dark:text-gray-400'}`}>{route.name}</span>
-                <BiChevronDown className={`text-${expandedMenu ? 'brand-500 dark:text-white' : 'gray-500 dark:text-gray-400'} w-6 h-6`} />
+            <button type="button" onClick={() => setExpandedMenu(!expandedMenu)} className="flex items-center w-full py-3 px-5 text-base text-gray-900 transition duration-75 hover:bg-brand-50 dark:text-white dark:hover:bg-gray-700">
+                <div className={`text-${expandedMenu ? 'brand-100 dark:text-white' : 'gray-500 dark:text-gray-400'}`}>{route.icon}</div>
+                <span className={`flex-1 font-normal text-sm ml-3 text-left whitespace-nowrap ${expandedMenu ? 'text-brand-100 dark:text-white font-semibold' : 'dark:text-gray-400'}`}>{route.name}</span>
+                <BiChevronDown className={`text-${expandedMenu ? 'brand-100 dark:text-white' : 'gray-500 dark:text-gray-400'} w-6 h-6`} />
             </button>
-            <ul id="dropdown-example" className={`${!expandedMenu && 'hidden'} py-2 space-y-2`}>
+            <ul id="dropdown-example" className={`${!expandedMenu && 'hidden'}`}>
                 {routes.submenu.map((link) => (
                     <li key={link.id}>
                         <SidebarLink
@@ -62,19 +63,19 @@ const Sidebar = () => {
     return (
         <div>
             <aside id="logo-sidebar" className={`fixed top-0 left-0 z-50 w-64 h-screen transition-transform -translate-x-full ${activeMenu ? 'md:translate-x-0 -translate-x-full' : 'max-md:transform-none'} border-r border-gray-200 dark:border-gray-700`}>
-                <div className="h-full px-3 py-4 overflow-y-auto bg-white dark:bg-main-dark">
-                    <div className="flex justify-between center">
-                        <a href="https://intensional-chair.000webhostapp.com/" className="flex items-center pl-2.5 mb-5">
-                            <img src="https://flowbite.com/docs/images/logo.svg" className="h-6 mr-3 sm:h-7" alt="Flowbite Logo" />
+                <div className="h-full py-4 overflow-y-auto bg-white dark:bg-main-dark">
+                    <div className="flex justify-between center px-3 pb-4">
+                        <a href="https://intensional-chair.000webhostapp.com/" className="flex items-center pl-2.5 mb-2">
+                            <IoMdJournal className="h-6 w-6 text-brand-100 mr-3 sm:h-7" alt="TradeX Logo" />
                             <span className="self-center text-xl font-semibold whitespace-nowrap dark:text-white">TradeX</span>
                         </a>
                         <button onClick={handleSidebar} className="h-6 w-6">
                             <IoClose className="md:hidden block h-6 w-6 dark:text-white" />
                         </button>
                     </div>
-                    <ul className="space-y-2 font-medium">
+                    <ul className="font-medium">
                         {routes.menu.map((route) =>
-                            route.id === 5 ? (
+                            route.id === 4 ? (
                                 <SidebarMenu key={route.id} route={route} />
                             ) : (
                                 <li key={route.id}>
