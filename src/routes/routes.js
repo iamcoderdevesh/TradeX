@@ -8,7 +8,7 @@ import { MdOutlineLibraryBooks } from "react-icons/md";
 import { SlCalender } from "react-icons/sl";
 
 //Pages
-import { Home, Dashboard, Analytics, BackTester, PnLCalendar, AddTrade, ImportTrade, Journal, StrategyLibrary } from 'pages';
+import { Home, Dashboard, Analytics, BackTester, PnLCalendar, AddTrade, ImportTrade, Journal, TradeLogs, StrategyLibrary } from 'pages';
 
 const routes = {
     menu: [
@@ -103,6 +103,15 @@ const routes = {
             icon: <PiCellSignalNoneThin className="w-5 h-5 transition duration-75" />,
             tooltip: "Journal",
             component: <Journal />,
+        },
+        {
+            id: 3,
+            order: 4,
+            name: "TradeLog",
+            path: "tradeLog",
+            icon: <PiCellSignalNoneThin className="w-5 h-5 transition duration-75" />,
+            tooltip: "TradeLog",
+            component: <TradeLogs />,
         },
     ],
 };

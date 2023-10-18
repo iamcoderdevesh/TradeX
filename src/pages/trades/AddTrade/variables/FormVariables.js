@@ -132,7 +132,7 @@ export const Inputs = {
         },
         {
             id: "Status",
-            label: "Setup",
+            label: "Status",
             children: [
                 "Select Status",
                 "Open",

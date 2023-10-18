@@ -5,5 +5,6 @@ export { default as BackTester } from './backtester';
 export { default as PnLCalendar } from './calendar';
 export { default as AddTrade } from './trades/AddTrade';
 export { default as ImportTrade } from './trades/ImportTrade';
+export { default as TradeLogs } from './trades/TradeLog';
 export { default as Journal } from './journal/';
 export { default as StrategyLibrary } from './library';
