@@ -16,6 +16,12 @@ const route = () => {
           {routes.submenu.map((route) => (
             <Route key={route} path={route.path} element={(route.component)} />
           ))}
+          {routes.profile.map((route) => (
+            <Route key={route} path={route.path} element={(route.component)} />
+          ))}
+          {routes.tabs.map((route) => (
+            <Route key={route} path={route.path} element={(route.component)} />
+          ))}
         </Route>
       </Routes>
     </BrowserRouter>

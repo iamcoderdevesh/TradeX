@@ -10,6 +10,9 @@ import { SlCalender } from "react-icons/sl";
 //Pages
 import { Home, Dashboard, Analytics, BackTester, PnLCalendar, AddTrade, ImportTrade, Journal, TradeLogs, StrategyLibrary } from 'pages';
 
+//Tabs
+import { Accounts, General, Imports, Tags, TradeSettings } from "pages/settings/components/index";
+
 const routes = {
     menu: [
         {
@@ -112,6 +115,59 @@ const routes = {
             icon: <PiCellSignalNoneThin className="w-5 h-5 transition duration-75" />,
             tooltip: "TradeLog",
             component: <TradeLogs />,
+        },
+    ],
+    profile: [
+        {
+            id: 0,
+            order: 1,
+            name: "Dashboard",
+            path: "dashboard",
+            component: <Dashboard />,
+        },
+        {
+            id: 1,
+            order: 2,
+            name: "Settings",
+            path: "general-settings",
+            component: <General />,
+        },
+    ],
+    tabs: [
+        {
+            id: 0,
+            order: 1,
+            name: "General",
+            path: "general-settings",
+            component: <General />,
+        },
+        {
+            id: 1,
+            order: 2,
+            name: "Accounts",
+            path: "settings/accounts",
+            component: <Accounts />,
+        },
+        {
+            id: 2,
+            order: 3,
+            name: "Trade Settings",
+            path: "settings/trade-settings",
+            component: <TradeSettings />,
+        },
+        {
+            id: 3,
+            order: 4,
+            name: "Tags Managements",
+            path: "settings/tags-mmanagements",
+            component: <Tags />,
+        },
+        {
+            id: 4,
+            order: 5,
+            name: "Import History",
+            path: "settings/import-history",
+            component: <Imports />,
         },
     ],
 };
