@@ -17,7 +17,7 @@ const TabPanel = () => {
                     <h3 className='text-2xl font-medium dark:text-white'>Account</h3>
                 </div>
                 <div className="sm:w-760 text-sm font-medium text-center text-gray-500 border-b border-gray-200 dark:text-gray-400 dark:border-gray-700">
-                    <ul className="flex flex-nowrap overflow-x-auto -mb-px">
+                    <ul className="flex flex-nowrap overflow-x-auto no-scrollbar -mb-px">
                         {
                             routes.tabs.map((route) =>
                                 <li key={route.id} className="mr-2">

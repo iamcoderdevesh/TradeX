@@ -52,7 +52,8 @@ const Navbar = () => {
                                         {routes.profile.map((route) =>
                                             <li key={route.id}>
                                                 <NavLink
-                                                    to={`/${route.path}`}>
+                                                    to={`/${route.path}`}
+                                                    onClick={() => setShowProfile(!showProfile)}>
                                                     <span className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-200 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white" role="menuitem">{route.name}</span>
                                                 </NavLink>
                                             </li>
