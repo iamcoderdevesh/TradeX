@@ -26,21 +26,12 @@ const areaChartOptions = {
 
 // ==============================|| PnL AREA CHART ||============================== //
 
-const LineChart = ({ slot }) => {
-
+const LineChart = (props) => {
+  const { data } = props;
   const [options, setOptions] = useState(areaChartOptions);
 
-  const [series, setSeries] = useState([
-    {
-      name: 'Page Views',
-      data: [86, 28, 115, 48, 210, 136]
-    },
-    {
-      name: 'Sessions',
-      data: [43, 14, 56, 24, 105, 68]
-    }
-  ]);
-  
+  const [series, setSeries] = useState([data]);
+
 
   return <ReactApexChart options={options} series={series} type="area" height={365} />;
 };

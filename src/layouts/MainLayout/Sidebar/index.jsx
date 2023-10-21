@@ -10,7 +10,7 @@ import { useStateContext } from 'context/ContextProvider';
 const SidebarLink = ({ to, icon, name, active, submenu }) => (
     <NavLink
         to={to}
-        className={`flex items-center py-4 px-5 font-medium text-${active ? 'brand-100' : 'gray-900'} dark:text-${active ? 'white border-r-brand-100 border-r-2 bg-brand-50 dark:bg-gray-700' : 'gray-400'} hover:bg-brand-50 dark:hover:bg-gray-700`}>
+        className={`flex items-center py-3 px-4 font-medium text-${active ? 'brand-100' : 'gray-900'} dark:text-${active ? 'white border-r-brand-100 border-r-2 bg-brand-50 dark:bg-gray-700' : 'gray-400'} hover:bg-brand-50 dark:hover:bg-gray-700`}>
         <div className={`text-${active ? 'brand-100' : 'gray-500 dark:text-gray-400 dark:group-hover:text-white group-hover:text-black'} ${submenu ? 'w-5 h-5' : ''}`}>{icon}</div>
         <span className="ml-3 text-xs">{name}</span>
     </NavLink>
@@ -27,9 +27,9 @@ const SidebarMenu = ({ route }) => {
 
     return (
         <div key={route.id}>
-            <button type="button" onClick={() => setExpandedMenu(!expandedMenu)} className="flex items-center w-full py-3 px-5 text-base text-gray-900 transition duration-75 hover:bg-brand-50 dark:text-white dark:hover:bg-gray-700">
+            <button type="button" onClick={() => setExpandedMenu(!expandedMenu)} className="flex items-center w-full py-3 px-4 text-base text-gray-900 transition duration-75 hover:bg-brand-50 dark:text-white dark:hover:bg-gray-700">
                 <div className={`text-${expandedMenu ? 'brand-100 dark:text-white' : 'gray-500 dark:text-gray-400'}`}>{route.icon}</div>
-                <span className={`flex-1 font-normal text-sm ml-3 text-left whitespace-nowrap ${expandedMenu ? 'text-brand-100 dark:text-white font-semibold' : 'dark:text-gray-400'}`}>{route.name}</span>
+                <span className={`flex-1 font-medium text-xs ml-3 text-left whitespace-nowrap ${expandedMenu ? 'text-brand-100 dark:text-white font-semibold' : 'dark:text-gray-400'}`}>{route.name}</span>
                 <BiChevronDown className={`text-${expandedMenu ? 'brand-100 dark:text-white' : 'gray-500 dark:text-gray-400'} w-6 h-6`} />
             </button>
             <ul id="dropdown-example" className={`${!expandedMenu && 'hidden'}`}>

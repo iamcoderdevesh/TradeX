@@ -9,6 +9,11 @@ import ColumnChart from 'components/charts/ColumnChart';
 
 const Dashboard = () => {
 
+    const lineChartData = {
+        name: 'PnL',
+        data: [86, 28, 115, 48, 210, 136, 300, 335, 250, 300, 400, 380, 410, 390, 450, 420, 425, 300, 400, 500]
+    };
+
     return (
         <>
             <h3 className='text-xl font-medium dark:text-white my-4 mt-8 lg:my-4'>Dashboard</h3>
@@ -77,7 +82,7 @@ const Dashboard = () => {
                             <p className="text-base font-normal text-gray-500 dark:text-gray-400"></p>
                         </div>
                         <div className="w-full bg-white rounded-lg shadow dark:bg-main-dark p-4 md:p-6 md:pt-0">
-                            <LineChart />
+                            <LineChart data={lineChartData} />
                         </div>
                     </div>
                 </div>
