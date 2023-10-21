@@ -11,8 +11,8 @@ const SidebarLink = ({ to, icon, name, active, submenu }) => (
     <NavLink
         to={to}
         className={`flex items-center py-4 px-5 font-medium text-${active ? 'brand-100' : 'gray-900'} dark:text-${active ? 'white border-r-brand-100 border-r-2 bg-brand-50 dark:bg-gray-700' : 'gray-400'} hover:bg-brand-50 dark:hover:bg-gray-700`}>
-        <div className={`${submenu && 'w-5 h-5'} text-${active ? 'brand-100' : 'gray-500 dark:text-gray-400 dark:group-hover:text-white group-hover:text-black'}`}>{icon}</div>
-        <span className="ml-3 text-sm">{name}</span>
+        <div className={`text-${active ? 'brand-100' : 'gray-500 dark:text-gray-400 dark:group-hover:text-white group-hover:text-black'} ${submenu ? 'w-5 h-5' : ''}`}>{icon}</div>
+        <span className="ml-3 text-xs">{name}</span>
     </NavLink>
 );
 
@@ -83,6 +83,7 @@ const Sidebar = () => {
                                         to={`/${route.path}`}
                                         icon={route.icon}
                                         name={route.name}
+                                        submenu={false}
                                         active={isActive(route.path)} />
                                 </li>
                             )

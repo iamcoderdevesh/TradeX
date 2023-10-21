@@ -11,7 +11,7 @@ import { SlCalender } from "react-icons/sl";
 import { Home, Dashboard, Analytics, BackTester, PnLCalendar, AddTrade, ImportTrade, Journal, TradeLogs, StrategyLibrary } from 'pages';
 
 //Tabs
-import { Accounts, General, Imports, Tags, TradeSettings } from "pages/settings/components/index";
+import { Accounts, General, Imports, Tags, TradeSettings } from "pages/settings/index";
 
 const routes = {
     menu: [
@@ -33,15 +33,15 @@ const routes = {
             tooltip: "DashBoard",
             component: <Dashboard />,
         },
-        // {
-        //     id: 2,
-        //     order: 3,
-        //     name: "Analytics",
-        //     path: "analytics",
-        //     icon: <AiOutlinePieChart className="w-5 h-5 transition duration-75" />,
-        //     tooltip: "Analytics",
-        //     component: <Analytics />,
-        // },
+        {
+            id: 2,
+            order: 3,
+            name: "Analytics",
+            path: "analytics",
+            icon: <AiOutlinePieChart className="w-5 h-5 transition duration-75" />,
+            tooltip: "Analytics",
+            component: <Analytics />,
+        },
         {
             id: 3,
             order: 4,

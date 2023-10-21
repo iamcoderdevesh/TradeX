@@ -1,0 +1,184 @@
+{
+    "calendarEvents": [
+        {
+            "title": "Loss : -$50.00",
+            "date": "2023-09-01",
+            "display": "background",
+            "backgroundColor": "#CE2C31"
+        },
+        {
+            "title": "Profit : +$100.00",
+            "date": "2023-09-02",
+            "display": "background",
+            "backgroundColor": "#00FF00"
+        },
+        {
+            "title": "Profit : +$75.00",
+            "date": "2023-09-03",
+            "display": "background",
+            "backgroundColor": "#00FF00"
+        },
+        {
+            "title": "Loss : -$30.00",
+            "date": "2023-09-04",
+            "display": "background",
+            "backgroundColor": "#CE2C31"
+        },
+        {
+            "title": "Loss : -$40.00",
+            "date": "2023-09-05",
+            "display": "background",
+            "backgroundColor": "#CE2C31"
+        },
+        {
+            "title": "Profit : +$120.00",
+            "date": "2023-09-06",
+            "display": "background",
+            "backgroundColor": "#00FF00"
+        },
+        {
+            "title": "Loss : -$60.00",
+            "date": "2023-09-07",
+            "display": "background",
+            "backgroundColor": "#CE2C31"
+        },
+        {
+            "title": "Profit : +$90.00",
+            "date": "2023-09-08",
+            "display": "background",
+            "backgroundColor": "#00FF00"
+        },
+        {
+            "title": "Loss : -$20.00",
+            "date": "2023-09-09",
+            "display": "background",
+            "backgroundColor": "#CE2C31"
+        },
+        {
+            "title": "Profit : +$110.00",
+            "date": "2023-09-10",
+            "display": "background",
+            "backgroundColor": "#00FF00"
+        },
+        {
+            "title": "Loss : -$70.00",
+            "date": "2023-09-11",
+            "display": "background",
+            "backgroundColor": "#CE2C31"
+        },
+        {
+            "title": "Loss : -$45.00",
+            "date": "2023-09-12",
+            "display": "background",
+            "backgroundColor": "#CE2C31"
+        },
+        {
+            "title": "Profit : +$80.00",
+            "date": "2023-09-13",
+            "display": "background",
+            "backgroundColor": "#00FF00"
+        },
+        {
+            "title": "Loss : -$55.00",
+            "date": "2023-09-14",
+            "display": "background",
+            "backgroundColor": "#CE2C31"
+        },
+        {
+            "title": "Profit : +$70.00",
+            "date": "2023-09-15",
+            "display": "background",
+            "backgroundColor": "#00FF00"
+        },
+        {
+            "title": "Loss : -$25.00",
+            "date": "2023-09-16",
+            "display": "background",
+            "backgroundColor": "#CE2C31"
+        },
+        {
+            "title": "Profit : +$130.00",
+            "date": "2023-09-17",
+            "display": "background",
+            "backgroundColor": "#00FF00"
+        },
+        {
+            "title": "Loss : -$35.00",
+            "date": "2023-09-18",
+            "display": "background",
+            "backgroundColor": "#CE2C31"
+        },
+        {
+            "title": "Loss : -$65.00",
+            "date": "2023-09-19",
+            "display": "background",
+            "backgroundColor": "#CE2C31"
+        },
+        {
+            "title": "Profit : +$95.00",
+            "date": "2023-09-20",
+            "display": "background",
+            "backgroundColor": "#00FF00"
+        },
+        {
+            "title": "Profit : +$60.00",
+            "date": "2023-09-21",
+            "display": "background",
+            "backgroundColor": "#00FF00"
+        },
+        {
+            "title": "Loss : -$15.00",
+            "date": "2023-09-22",
+            "display": "background",
+            "backgroundColor": "#CE2C31"
+        },
+        {
+            "title": "Profit : +$85.00",
+            "date": "2023-09-23",
+            "display": "background",
+            "backgroundColor": "#00FF00"
+        },
+        {
+            "title": "Loss : -$75.00",
+            "date": "2023-09-24",
+            "display": "background",
+            "backgroundColor": "#CE2C31"
+        },
+        {
+            "title": "Loss : -$50.00",
+            "date": "2023-09-25",
+            "display": "background",
+            "backgroundColor": "#CE2C31"
+        },
+        {
+            "title": "Profit : +$100.00",
+            "date": "2023-09-26",
+            "display": "background",
+            "backgroundColor": "#00FF00"
+        },
+        {
+            "title": "Loss : -$30.00",
+            "date": "2023-09-27",
+            "display": "background",
+            "backgroundColor": "#CE2C31"
+        },
+        {
+            "title": "Loss : -$40.00",
+            "date": "2023-09-28",
+            "display": "background",
+            "backgroundColor": "#CE2C31"
+        },
+        {
+            "title": "Profit : +$120.00",
+            "date": "2023-09-29",
+            "display": "background",
+            "backgroundColor": "#00FF00"
+        },
+        {
+            "title": "Profit : +$110.00",
+            "date": "2023-09-30",
+            "display": "background",
+            "backgroundColor": "#00FF00"
+        }
+    ]
+}
