@@ -6,9 +6,10 @@ import { BsFillBarChartLineFill, BsFillJournalBookmarkFill } from "react-icons/b
 import { PiCellSignalNoneThin } from "react-icons/pi";
 import { MdOutlineLibraryBooks } from "react-icons/md";
 import { SlCalender } from "react-icons/sl";
+import { HiMiniArrowsRightLeft } from "react-icons/hi2";
 
 //Pages
-import { Home, Dashboard, Analytics, BackTester, PnLCalendar, AddTrade, ImportTrade, Journal, TradeLogs, StrategyLibrary } from 'pages';
+import { Home, Dashboard, Analytics, BackTester, PnLCalendar, AddTrade, ImportTrade, Journal, TradeStatistics, StrategyLibrary } from 'pages';
 
 //Tabs
 import { Accounts, General, Imports, Tags, TradeSettings } from "pages/settings/index";
@@ -63,21 +64,39 @@ const routes = {
         {
             id: 5,
             order: 6,
-            name: "Backtester",
-            path: "backtester",
-            icon: <BsFillBarChartLineFill className="w-5 h-5 transition duration-75" />,
-            tooltip: "Backtester",
-            component: <BackTester />,
+            name: "Journal",
+            path: "journal",
+            icon: <MdOutlineLibraryBooks className="w-5 h-5 transition duration-75" />,
+            tooltip: "Journal",
+            component: <Journal />,
         },
         {
             id: 6,
             order: 7,
-            name: "Strategy Library",
-            path: "strategy-library",
-            icon: <MdOutlineLibraryBooks className="w-5 h-5 transition duration-75" />,
-            tooltip: "Strategy Library",
-            component: <StrategyLibrary />,
+            name: "Trade Statistics",
+            path: "trade-statistics",
+            icon: <HiMiniArrowsRightLeft className="w-5 h-5 transition duration-75" />,
+            tooltip: "Trade Statistics",
+            component: <TradeStatistics />,
         },
+        // {
+        //     id: 5,
+        //     order: 6,
+        //     name: "Backtester",
+        //     path: "backtester",
+        //     icon: <BsFillBarChartLineFill className="w-5 h-5 transition duration-75" />,
+        //     tooltip: "Backtester",
+        //     component: <BackTester />,
+        // },
+        // {
+        //     id: 6,
+        //     order: 7,
+        //     name: "Strategy Library",
+        //     path: "strategy-library",
+        //     icon: <MdOutlineLibraryBooks className="w-5 h-5 transition duration-75" />,
+        //     tooltip: "Strategy Library",
+        //     component: <StrategyLibrary />,
+        // },
     ],
     submenu: [
         {
@@ -97,24 +116,6 @@ const routes = {
             icon: <PiCellSignalNoneThin className="w-5 h-5 transition duration-75" />,
             tooltip: "import-trades",
             component: <ImportTrade />,
-        },
-        {
-            id: 2,
-            order: 3,
-            name: "Journal",
-            path: "journal",
-            icon: <PiCellSignalNoneThin className="w-5 h-5 transition duration-75" />,
-            tooltip: "Journal",
-            component: <Journal />,
-        },
-        {
-            id: 3,
-            order: 4,
-            name: "TradeLog",
-            path: "tradeLog",
-            icon: <PiCellSignalNoneThin className="w-5 h-5 transition duration-75" />,
-            tooltip: "TradeLog",
-            component: <TradeLogs />,
         },
     ],
     profile: [

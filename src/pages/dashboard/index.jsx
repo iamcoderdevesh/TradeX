@@ -15,8 +15,7 @@ const Dashboard = () => {
     };
 
     return (
-        <>
-            <h3 className='text-xl font-medium dark:text-white my-4 mt-8 lg:my-4'>Dashboard</h3>
+        <div className="my-4 mt-8 lg:my-4">
             <div className="grid grid-rows-1 gap-7 mb-8 lg:grid-cols-4">
                 <div className="flex flex-row justify-between h-24 rounded-md border border-gray-200 dark:border-gray-900 shadow-sm bg-white dark:bg-main-dark">
                     <div className="ml-4 flex h-[90px] w-auto flex-row items-center">
@@ -261,7 +260,7 @@ const Dashboard = () => {
                     </div>
                 </div>
             </div>
-        </>
+        </div>
     )
 }
 

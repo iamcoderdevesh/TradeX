@@ -2,13 +2,25 @@ import React, { useState } from 'react'
 import { AiOutlineMenuFold, AiOutlineMenuUnfold } from "react-icons/ai";
 import { BsSunFill, BsFillMoonFill } from "react-icons/bs";
 import { useStateContext } from 'context/ContextProvider';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 import routes from "routes/routes";
 
 const Navbar = () => {
 
+    // Check if the current location is active
+    const location = useLocation();
+
     const { setMode, currentMode, activeMenu, setActiveMenu } = useStateContext();
     const [showProfile, setShowProfile] = useState(false);
+
+    const capitalizeWords = (str) => {
+        if (str.includes("settings")) {
+            str = str.replace(str, "settings");
+        }
+        str = str.replace(/\//i, "");
+        str = str.replace(/-/i, " ");
+        return str.toLowerCase().split(' ').map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' ');
+    };
 
     return (
         <nav className={`fixed top-0 z-40 ${activeMenu && 'md:ml-64 md:w-[calc(100%-256px)]'} w-full bg-white border-b border-gray-200 dark:bg-main-dark dark:border-gray-700`}>
@@ -20,6 +32,9 @@ const Navbar = () => {
                                 ? <AiOutlineMenuFold id="open" className="w-6 h-6" />
                                 : <AiOutlineMenuUnfold id="close" className="w-6 h-6" />}
                         </button>
+                        <div>
+                            <h2 className="text-lg font-semibold text-gray-900 dark:text-white">{capitalizeWords(location.pathname)}</h2>
+                        </div>
                     </div>
                     <div className="flex items-center">
                         <button id="theme-toggle" type="button" className="text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white focus:outline-none rounded-lg text-sm p-2.5"
