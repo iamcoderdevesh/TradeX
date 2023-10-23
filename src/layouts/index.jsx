@@ -7,7 +7,8 @@ import { useStateContext } from 'context/ContextProvider';
 const Layout = () => {
 
     const { activeMenu } = useStateContext();
-    
+    const { showPopup, setShowPopup } = useStateContext();
+
     return (
         <>
             <Navbar />
@@ -17,6 +18,8 @@ const Layout = () => {
                     <Outlet />
                 </div>
             </div>
+            {showPopup && <div className="bg-gray-900 bg-opacity-50 dark:bg-opacity-80 fixed inset-0 z-40" onClick={() => setShowPopup(false)}></div>}
+
         </>
     )
 }

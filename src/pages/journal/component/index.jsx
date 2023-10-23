@@ -36,7 +36,7 @@ const Accordion = ({ status }) => {
             </div>
             <div className="grid grid-cols-2 gap-6 sm:gap-2 my-2 sm:grid-cols-3 lg:grid-cols-6 h-full">
                 <div className="chart h-[85px]">
-                    <AreaChart color={`${status ? '#089981' : '#f23645'}`} />
+                    <AreaChart color={`${status ? '#089981' : '#f23645'}`} height={100} />
                 </div>
                 <div className="flex flex-col justify-end items-center">
                     <h3 className='text-sm font-normal text-gray-400'>Winrate</h3>

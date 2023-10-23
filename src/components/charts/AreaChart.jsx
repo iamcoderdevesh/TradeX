@@ -4,12 +4,12 @@ import ReactApexChart from 'react-apexcharts';
 
 const AreaChart = (props) => {
 
-    const { color } = props;
+    const { color, height } = props;
 
     // chart options
     const options = {
         chart: {
-            height: 100,
+            height: height,
             type: 'area',
             toolbar: {
                 show: false
@@ -51,7 +51,7 @@ const AreaChart = (props) => {
 
     return (
         <div id="chart">
-            <ReactApexChart options={options} series={series} type="area" height={100} />
+            <ReactApexChart options={options} series={series} type="area" height={height} />
         </div>
     )
 }

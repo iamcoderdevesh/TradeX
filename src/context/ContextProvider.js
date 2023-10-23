@@ -6,6 +6,7 @@ export const ContextProvider = ({ children }) => {
   const [currentMode, setCurrentMode] = useState("light");
   const [activeMenu, setActiveMenu] = useState(true);
   const [screenSize, setScreenSize] = useState();
+  const [showPopup, setShowPopup] = useState(false);
 
   const setMode = () => {
     if (currentMode === "light") {
@@ -34,7 +35,7 @@ export const ContextProvider = ({ children }) => {
   return (
 
     <StateContext.Provider
-      value={{ currentMode, setCurrentMode, setMode, activeMenu, setActiveMenu, screenSize, setScreenSize }}>
+      value={{ currentMode, setCurrentMode, setMode, activeMenu, setActiveMenu, screenSize, setScreenSize, showPopup, setShowPopup }}>
       {children}
     </StateContext.Provider>
   );
