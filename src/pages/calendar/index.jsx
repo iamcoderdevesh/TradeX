@@ -1,5 +1,5 @@
 import React from 'react';
-import FullCalendar from 'components/common/calendar';
+import FullCalendar from 'components/common/full-calendar';
 
 const PnLCalendar = () => {
   return (

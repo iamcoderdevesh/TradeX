@@ -4,6 +4,8 @@ import { BsSunFill, BsFillMoonFill } from "react-icons/bs";
 import { useStateContext } from 'context/ContextProvider';
 import { NavLink, useLocation } from 'react-router-dom';
 import routes from "routes/routes";
+import Dropdown from 'components/common/dropdown/index';
+import DateRange from 'components/common/calendar/index';
 
 const Navbar = () => {
 
@@ -37,14 +39,27 @@ const Navbar = () => {
                         </div>
                     </div>
                     <div className="flex items-center">
-                        <button id="theme-toggle" type="button" className="text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white focus:outline-none rounded-lg text-sm p-2.5"
-                            onClick={setMode}>
-                            {currentMode === 'dark' ? (
-                                <BsSunFill className="w-5 h-5" id="theme-toggle-light-icon" />
-                            ) : (
-                                <BsFillMoonFill className="w-4 h-4" id="theme-toggle-dark-icon" />
-                            )}
-                        </button>
+                        <div className='w-56'>
+                            <DateRange />
+                        </div>
+                        <div className='w-48 mx-4'>
+                            <Dropdown id={"ddBroker"} label={''}
+                                children={
+                                    <>
+                                        <option>Default</option>
+                                    </>
+                                } />
+                        </div>
+                        <div>
+                            <button id="theme-toggle" type="button" className="text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white focus:outline-none rounded-lg text-sm p-2.5"
+                                onClick={setMode}>
+                                {currentMode === 'dark' ? (
+                                    <BsSunFill className="w-5 h-5" id="theme-toggle-light-icon" />
+                                ) : (
+                                    <BsFillMoonFill className="w-4 h-4" id="theme-toggle-dark-icon" />
+                                )}
+                            </button>
+                        </div>
                         <div className="flex items-center">
                             <div className="flex items-center ml-3">
                                 <div>

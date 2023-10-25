@@ -16,15 +16,15 @@ import { Accounts, General, Imports, Tags, TradeSettings } from "pages/settings/
 
 const routes = {
     menu: [
-        {
-            id: 0,
-            order: 1,
-            name: "Home",
-            path: "home",
-            icon: <AiOutlineHome className="w-5 h-5 transition duration-75" />,
-            tooltip: "Home",
-            component: <Home />,
-        },
+        // {
+        //     id: 0,
+        //     order: 1,
+        //     name: "Home",
+        //     path: "home",
+        //     icon: <AiOutlineHome className="w-5 h-5 transition duration-75" />,
+        //     tooltip: "Home",
+        //     component: <Home />,
+        // },
         {
             id: 1,
             order: 2,
