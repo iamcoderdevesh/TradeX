@@ -3,6 +3,7 @@ import React from "react";
 //Icons
 import { AiOutlineHome, AiOutlineDashboard, AiOutlinePieChart, AiOutlinePlusCircle } from "react-icons/ai";
 import { BsFillBarChartLineFill, BsFillJournalBookmarkFill } from "react-icons/bs";
+import { BiSolidDashboard } from "react-icons/bi";
 import { PiCellSignalNoneThin } from "react-icons/pi";
 import { MdOutlineLibraryBooks } from "react-icons/md";
 import { SlCalender } from "react-icons/sl";
@@ -30,7 +31,7 @@ const routes = {
             order: 2,
             name: "Dashboard",
             path: "dashboard",
-            icon: <AiOutlineDashboard className="w-5 h-5 transition duration-75" />,
+            icon: <BiSolidDashboard className="w-5 h-5 transition duration-75" />,
             tooltip: "DashBoard",
             component: <Dashboard />,
         },

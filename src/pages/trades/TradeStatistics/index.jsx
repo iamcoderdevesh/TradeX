@@ -510,7 +510,7 @@ const TradeStatistics = () => {
                             <h4 className="text-xl font-medium dark:text-white">$22,450</h4>
                         </div>
                     </div>
-                    <div className="flex item-center rounded-full bg-slate-200 p-3 mr-3 dark:bg-navy-700">
+                    <div className="flex item-center rounded-full p-3 mr-3 dark:bg-navy-700">
                         <span className="flex items-center text-brand-500 dark:text-white">
                             <AiOutlineLineChart className="w-7 h-7 text-gray-400" />
                         </span>
@@ -523,7 +523,7 @@ const TradeStatistics = () => {
                             <h4 className="text-xl font-medium dark:text-white">$450</h4>
                         </div>
                     </div>
-                    <div className="flex item-center rounded-full bg-slate-200 p-3 mr-3 dark:bg-navy-700">
+                    <div className="flex item-center rounded-full p-3 mr-3 dark:bg-navy-700">
                         <span className="flex items-center text-brand-500 dark:text-white">
                             <LuDollarSign className="w-7 h-7 text-gray-400" />
                         </span>
@@ -536,7 +536,7 @@ const TradeStatistics = () => {
                             <h4 className="text-xl font-medium dark:text-white">70%</h4>
                         </div>
                     </div>
-                    <div className="flex item-center rounded-full bg-slate-200 p-3 mr-3 dark:bg-navy-700">
+                    <div className="flex item-center rounded-full p-3 mr-3 dark:bg-navy-700">
                         <span className="flex items-center text-brand-500 dark:text-white">
                             <PiChartLineUpBold className="w-7 h-7 text-gray-400" />
                         </span>
@@ -549,7 +549,7 @@ const TradeStatistics = () => {
                             <h4 className="text-xl font-medium dark:text-white">24</h4>
                         </div>
                     </div>
-                    <div className="flex item-center rounded-full bg-slate-200 p-3 mr-3 dark:bg-navy-700">
+                    <div className="flex item-center rounded-full p-3 mr-3 dark:bg-navy-700">
                         <span className="flex items-center text-brand-500 dark:text-white">
                             <MdOutlineBarChart className="w-7 h-7 text-gray-400" />
                         </span>
