@@ -1,6 +1,6 @@
 import React from 'react'
 import TabPanel from '../'
-import Button from 'components/common/buttons';
+import { SubmitButton, DeleteButton } from 'components/common/buttons';
 
 const Accounts = () => {
   return (
@@ -15,7 +15,7 @@ const Accounts = () => {
                   <h2 className="mb-2 sm:mb-2 text-sm font-bold text-gray-900 dark:text-white">MANAGE ACCOUNTS</h2>
                 </div>
                 <div className="w-full flex sm:justify-end sm:items-start">
-                  <Button type="submit" id="addAccount" label="+ ADD ACCOUNT" buttonClass="inline-flex items-center px-5 py-2.5 text-xs sm:text-sm font-bold text-center text-white bg-primary-100 rounded-lg hover:bg-primary-200 h-10" />
+                  <SubmitButton id="add-account">+ ADD ACCOUNT</SubmitButton>
                 </div>
                 <div className="sm:col-span-2 relative overflow-x-auto shadow-md sm:rounded-lg">
                   <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
@@ -94,7 +94,7 @@ const Accounts = () => {
                   </table>
                 </div>
                 <div className="sm:col-span-2 flex sm:justify-end sm:items-start">
-                  <Button type="submit" id="profileBtn" label="CLEAR ALL TRADES" buttonClass="inline-flex items-center px-5 py-2.5 text-xs sm:text-sm font-bold text-center text-red border border-red rounded-lg hover:bg-red hover:text-white h-10" />
+                  <DeleteButton id="add-account">CLEAR ALL TRADES</DeleteButton>
                 </div>
               </div>
             </form>

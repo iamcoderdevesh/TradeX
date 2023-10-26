@@ -1,7 +1,7 @@
 import React from "react";
 
 //Icons
-import { AiOutlineHome, AiOutlineDashboard, AiOutlinePieChart, AiOutlinePlusCircle } from "react-icons/ai";
+import { AiOutlineHome, AiOutlinePieChart, AiOutlinePlusCircle } from "react-icons/ai";
 import { BsFillBarChartLineFill, BsFillJournalBookmarkFill } from "react-icons/bs";
 import { BiSolidDashboard } from "react-icons/bi";
 import { PiCellSignalNoneThin } from "react-icons/pi";
@@ -10,7 +10,7 @@ import { SlCalender } from "react-icons/sl";
 import { HiMiniArrowsRightLeft } from "react-icons/hi2";
 
 //Pages
-import { Home, Dashboard, Analytics, BackTester, PnLCalendar, AddTrade, ImportTrade, Journal, TradeStatistics, StrategyLibrary } from 'pages';
+import { Home, Dashboard, Analytics, BackTester, StrategyLibrary, PnLCalendar, AddTrade, ImportTrade, Journal, TradeStatistics, Login, Signup } from 'pages';
 
 //Tabs
 import { Accounts, General, Imports, Tags, TradeSettings } from "pages/settings/index";
@@ -170,6 +170,22 @@ const routes = {
             name: "Import History",
             path: "settings/import-history",
             component: <Imports />,
+        },
+    ],
+    auth: [
+        {
+            id: 0,
+            order: 1,
+            name: "Login",
+            path: "auth/login",
+            component: <Login />,
+        },
+        {
+            id: 0,
+            order: 1,
+            name: "Sigup",
+            path: "auth/signup",
+            component: <Signup />,
         },
     ],
 };

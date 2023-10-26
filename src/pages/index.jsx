@@ -8,3 +8,5 @@ export { default as ImportTrade } from './trades/ImportTrade';
 export { default as TradeStatistics } from './trades/TradeStatistics';
 export { default as Journal } from './journal/';
 export { default as StrategyLibrary } from './library';
+export { default as Login } from './auth/login';
+export { default as Signup } from './auth/signup';

@@ -1,6 +1,6 @@
 import React from 'react'
 import Dropdown from 'components/common/dropdown';
-import Button from 'components/common/buttons';
+import { SubmitButton, ResetButton } from 'components/common/buttons';
 import InputField from 'components/common/inputs/InputField';
 
 const ImportTrade = () => {
@@ -38,9 +38,9 @@ const ImportTrade = () => {
                     <InputField label={"Upload Your CSV File"} placeholder={"Choose a file"} id={"fileCSV"} type={"file"} htmlName={"csvfile"} />
                   </div>
                 </div>
-                <div className="flex flex-row items-center mt-5">
-                  <Button type="reset" id="reset" label="Reset" buttonClass="inline-flex items-center px-5 py-2.5  mr-4 text-xs sm:text-sm font-medium text-center text-white bg-gray-500 rounded-lg hover:bg-gray-600" />
-                  <Button type="submit" id="importTrade" label="Import Trade" buttonClass="inline-flex items-center px-5 py-2.5 text-xs sm:text-sm font-medium text-center text-white bg-primary-100 rounded-lg hover:bg-primary-200" />
+                <div className="flex flex-row items-start mt-5">
+                  <ResetButton id="reset">Reset</ResetButton>
+                  <SubmitButton id="importTrade">Submit</SubmitButton>
                 </div>
               </div>
             </form>

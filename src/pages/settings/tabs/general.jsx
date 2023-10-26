@@ -1,6 +1,6 @@
 import React from 'react'
 import TabPanel from '../'
-import Button from 'components/common/buttons';
+import { SubmitButton, DeleteButton } from 'components/common/buttons';
 import InputField from 'components/common/inputs/InputField';
 
 const General = () => {
@@ -32,7 +32,7 @@ const General = () => {
                   <InputField label={"Your avatar"} placeholder={"Choose a file"} id={"ProfileImg"} type={"file"} htmlName={"profileImg"} />
                 </div>
                 <div className="flex flex-row items-center mt-5">
-                  <Button type="submit" id="profileBtn" label="Save Changes" buttonClass="inline-flex items-center px-5 py-2.5 text-xs sm:text-sm font-medium text-center text-white bg-primary-100 rounded-lg hover:bg-primary-200" />
+                <SubmitButton id="profileBtn">Submit</SubmitButton>
                 </div>
               </div>
             </form>
@@ -47,7 +47,7 @@ const General = () => {
                 <span className="text-sm text-gray-600 dark:text-white">Please note, deleting your account is a permanent action and will no be recoverable once completed.</span>
                 </div>
                 <div className="w-full flex sm:justify-end sm:items-start">
-                  <Button type="submit" id="profileBtn" label="Delete" buttonClass="inline-flex items-center px-5 py-2.5 text-xs sm:text-sm font-medium text-center text-red border border-red rounded-lg hover:bg-red hover:text-white" />
+                <DeleteButton id="profileBtn">Delete</DeleteButton>
                 </div>
               </div>
             </form>

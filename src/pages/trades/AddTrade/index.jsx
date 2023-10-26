@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { BiChevronDown, BiChevronUp } from "react-icons/bi";
 import InputField from 'components/common/inputs/InputField';
 import Dropdown from 'components/common/dropdown';
-import Button from 'components/common/buttons';
+import { SubmitButton, ResetButton } from 'components/common/buttons';
 import { Inputs } from "./variables/FormVariables";
 
 const AddTrade = () => {
@@ -76,8 +76,8 @@ const AddTrade = () => {
                             </div>
 
                             <div className="flex flex-row items-center">
-                                <Button type="reset" id="reset" label="Reset" buttonClass="inline-flex items-center px-5 py-2.5  mr-4 text-xs sm:text-sm font-medium text-center text-white bg-gray-500 rounded-lg hover:bg-gray-600" />
-                                <Button type="submit" id="submit" label="Add Trade" buttonClass="inline-flex items-center px-5 py-2.5 text-xs sm:text-sm font-medium text-center text-white bg-primary-100 rounded-lg hover:bg-primary-200" />
+                                <ResetButton type="reset" id="reset" className="inline-flex items-center px-5 py-2.5 mr-4 text-xs sm:text-sm font-medium text-center text-white bg-gray-500 rounded-lg hover:bg-gray-600">Reset</ResetButton>
+                                <SubmitButton type="submit" id="importTrade">Submit</SubmitButton>
                             </div>
                         </form>
                     </div>

@@ -1,8 +1,8 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
 import { AiOutlineMenuFold, AiOutlineMenuUnfold } from "react-icons/ai";
 import { BsSunFill, BsFillMoonFill } from "react-icons/bs";
 import { useStateContext } from 'context/ContextProvider';
-import { NavLink, useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import routes from "routes/routes";
 import Dropdown from 'components/common/dropdown/index';
 import DateRange from 'components/common/calendar/index';
@@ -83,15 +83,19 @@ const Navbar = () => {
                                     <ul className="py-1" role="none">
                                         {routes.profile.map((route) =>
                                             <li key={route.id}>
-                                                <NavLink
+                                                <Link
                                                     to={`/${route.path}`}
                                                     onClick={() => setShowProfile(!showProfile)}>
                                                     <span className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-200 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white" role="menuitem">{route.name}</span>
-                                                </NavLink>
+                                                </Link>
                                             </li>
                                         )}
                                         <li>
-                                            <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-200 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white" role="menuitem">Sign out</a>
+                                            <Link
+                                                to={"/auth/login"}
+                                                onClick={() => setShowProfile(!showProfile)}>
+                                                <span className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-200 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white" role="menuitem">Sign out</span>
+                                            </Link>
                                         </li>
                                     </ul>
                                 </div>

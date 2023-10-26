@@ -23,6 +23,12 @@ const route = () => {
             <Route key={route} path={route.path} element={(route.component)} />
           ))}
         </Route>
+
+        {/* Authentication Routes */}
+        {routes.auth.map((route) => (
+          <Route key={route} path={route.path} element={(route.component)} />
+        ))}
+
       </Routes>
     </BrowserRouter>
   )
