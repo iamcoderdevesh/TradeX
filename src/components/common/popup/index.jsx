@@ -8,7 +8,7 @@ const ModalPopup = (props) => {
     const { header, body } = props;
 
     return (
-        <div className='fixed top-0 left-0 right-0 z-50 w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full justify-center items-center flex'>
+        <div className='fixed top-0 left-0 right-0 z-50 w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 max-h-full justify-center items-center flex'>
             <div className="relative w-full max-w-5xl max-h-full p-8 mt-8 sm:p-4 z-50 bg-white rounded-lg shadow-lg dark:bg-main-dark">
                 <div className="flex justify-between items-center my-2">
                     {header}
