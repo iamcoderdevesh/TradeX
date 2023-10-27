@@ -62,7 +62,7 @@ const Sidebar = () => {
 
     return (
         <div>
-            <aside id="logo-sidebar" className={`fixed top-0 left-0 z-50 0 w-64 h-screen transition-transform -translate-x-full ${activeMenu ? 'md:translate-x-0 -translate-x-full' : 'max-md:transform-none'} border-r border-gray-200 dark:border-gray-700`}>
+            <aside id="logo-sidebar" className={`fixed top-0 left-0 z-30 0 w-64 h-screen transition-transform -translate-x-full ${activeMenu ? 'md:translate-x-0 -translate-x-full' : 'max-md:transform-none'} border-r border-gray-200 dark:border-gray-700`}>
                 <div className="h-full py-4 overflow-y-auto bg-white dark:bg-main-dark">
                     <div className="flex justify-between center px-3 pb-4">
                         <a href="https://intensional-chair.000webhostapp.com/" className="flex items-center pl-2.5 mb-2">

@@ -1,9 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
 
 const TanStackKeyValueTable = (props) => {
 
     const { data } = props;
-    const [columns, setColumns] = useState(data);
 
     return (
         <div className="relative overflow-x-auto no-scrollbar shadow-md dark:shadow-2xl">

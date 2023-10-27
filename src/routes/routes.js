@@ -10,7 +10,7 @@ import { SlCalender } from "react-icons/sl";
 import { HiMiniArrowsRightLeft } from "react-icons/hi2";
 
 //Pages
-import { Home, Dashboard, Analytics, BackTester, StrategyLibrary, PnLCalendar, AddTrade, ImportTrade, Journal, TradeStatistics, Login, Signup } from 'pages';
+import { Home, Dashboard, Analytics, BackTester, StrategyLibrary, PnLCalendar, AddTrade, ImportTrade, Tracking, Journal, TradeStatistics, Login, Signup } from 'pages';
 
 //Tabs
 import { Accounts, General, Imports, Tags, TradeSettings } from "pages/settings/index";
@@ -117,6 +117,15 @@ const routes = {
             icon: <PiCellSignalNoneThin className="w-5 h-5 transition duration-75" />,
             tooltip: "import-trades",
             component: <ImportTrade />,
+        },
+        {
+            id: 2,
+            order: 3,
+            name: "Track",
+            path: "tracking",
+            icon: <PiCellSignalNoneThin className="w-5 h-5 transition duration-75" />,
+            tooltip: "Track",
+            component: <Tracking />,
         },
     ],
     profile: [
