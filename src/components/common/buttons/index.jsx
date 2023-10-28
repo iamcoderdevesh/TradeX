@@ -23,7 +23,7 @@ export const DeleteButton = forwardRef(({ className, ...props }, ref) => (
 
     <button
     type="submit"
-    className="inline-flex items-center px-5 py-2.5 text-sm sm:text-base font-medium text-center text-red border border-red rounded-lg hover:bg-red hover:text-white"
+    className="inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-red border border-red rounded-lg hover:bg-red hover:text-white"
     ref={ref}
     {...props}></button>
 
