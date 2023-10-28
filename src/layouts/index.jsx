@@ -6,7 +6,7 @@ import { useStateContext } from 'context/ContextProvider';
 
 const Layout = () => {
 
-    const { activeMenu, showPopup } = useStateContext();
+    const { activeMenu, showPopup, filterPopup } = useStateContext();
 
     return (
         <>
@@ -17,7 +17,7 @@ const Layout = () => {
                     <Outlet />
                 </div>
             </div>
-            {showPopup && <div className="bg-gray-900 bg-opacity-50 dark:bg-opacity-80 fixed inset-0 z-40"></div>}
+            {(showPopup || filterPopup) && <div className="bg-gray-900 bg-opacity-50 dark:bg-opacity-80 fixed inset-0 z-40"></div>}
 
         </>
     )

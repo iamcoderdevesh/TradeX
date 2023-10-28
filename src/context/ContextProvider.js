@@ -7,6 +7,9 @@ export const ContextProvider = ({ children }) => {
   const [activeMenu, setActiveMenu] = useState(true);
   const [screenSize, setScreenSize] = useState();
   const [showPopup, setShowPopup] = useState(false);
+  const [filterPopup, setFilterPopup] = useState(false);
+
+  //Dark/Light Mode
 
   const setMode = () => {
     if (currentMode === "light") {
@@ -32,10 +35,19 @@ export const ContextProvider = ({ children }) => {
     }
   }, [currentMode]);
 
+  //
+
+  //Full Calendar Click Handler
+  const handleDateClick = (arg) => {
+    setShowPopup(!showPopup);
+  }
+  //
+
+
   return (
 
     <StateContext.Provider
-      value={{ currentMode, setCurrentMode, setMode, activeMenu, setActiveMenu, screenSize, setScreenSize, showPopup, setShowPopup }}>
+      value={{ currentMode, setCurrentMode, setMode, activeMenu, setActiveMenu, screenSize, setScreenSize, showPopup, setShowPopup, filterPopup, setFilterPopup, handleDateClick }}>
       {children}
     </StateContext.Provider>
   );

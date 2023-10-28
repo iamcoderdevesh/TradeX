@@ -1,6 +1,10 @@
-:root{
-    --fc-bg-event-opacity: 0.7;   
+:root {
+    --fc-bg-event-opacity: 1.0;
     --fc-event-text-color: #fff;
+}
+
+.fc-button-primary {
+    @apply bg-white hover:bg-gray-200
 }
 
 .fc-event-title {
@@ -31,4 +35,3 @@
 .fc-day-disabled {
     @apply dark:bg-gray-600
 }
-
