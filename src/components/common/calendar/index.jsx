@@ -21,7 +21,8 @@ const DateRange = (props) => {
             placeholder={"Date Range"}
             value={value}
             onChange={handleValueChange}
-            showShortcuts={true}
+            showShortcuts={false}
+            readOnly={true} 
         />
     );
 };

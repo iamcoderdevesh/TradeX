@@ -22,7 +22,7 @@ const SidebarMenu = ({ route }) => {
 
     // Check if the current location is active
     const isActive = (routeName) => location.pathname.includes(routeName);
-    
+
     const [expandedMenu, setExpandedMenu] = useState(false);
 
     return (
@@ -52,7 +52,12 @@ const Sidebar = () => {
     const location = useLocation();
 
     // Check if the current location is active
-    const isActive = (routeName) => location.pathname.includes(routeName);
+    const isActive = (routeName) => {
+        if (location.pathname === "/" && routeName.includes('dashboard')) {
+            return true;
+        }
+        return location.pathname.includes(routeName)
+    };
 
     const { activeMenu, setActiveMenu } = useStateContext();
 
