@@ -27,7 +27,7 @@ const ColumnChart = () => {
             colors: ['transparent']
         },
         xaxis: {
-            categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun']
+            categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
         },
         yaxis: {
             title: {
@@ -67,11 +67,11 @@ const ColumnChart = () => {
     const series = [
         {
             name: 'Net Profit',
-            data: [180, 90, 135, 114, 120, 145]
+            data: [180, 90, 135, 114, 120, 145, 180, 90, 135, 114, 120, 145]
         },
         {
             name: 'Revenue',
-            data: [120, 45, 78, 150, 168, 99]
+            data: [120, 45, 78, 150, 168, 99, 120, 45, 78, 150, 168, 99]
         }
     ];
 
