@@ -1,13 +1,14 @@
 import React, { useState } from 'react'
+
 import { AiFillCaretUp, AiFillCaretDown } from "react-icons/ai";
 import { BsDot } from "react-icons/bs";
 import { BiChevronDown, BiChevronUp } from "react-icons/bi";
 import { IoClose } from "react-icons/io5";
-import DataTable from 'components/common/table';
-import StatusPill from "components/common/statusPill";
-import { classNames } from "components/utils";
+
 import AreaChart from 'components/charts/AreaChart';
 import { useStateContext } from 'context/ContextProvider';
+import { DefaultTable } from 'components/common/table/index';
+import { TradeColumns } from 'components/common/table/columns';
 
 const PnlPopup = () => {
 
@@ -65,93 +66,6 @@ const PnlPopup = () => {
             "Exit Reason": "Target Hit",
             Emotions: "Normal",
             "Additional Info": "",
-        },
-    ]
-
-    const columns = [
-        {
-            accessorKey: "Symbol",
-            header: () => <span>Symbol</span>,
-            cell: ({ row }) => <div className="capitalize">{row.getValue("Symbol")}</div>
-        },
-        {
-            accessorKey: "Status",
-            header: () => <div className="capitalize">Status</div>,
-            cell: ({ row }) => (
-                <div className="capitalize">
-                    <StatusPill value={row.getValue("Status")} />
-                </div>
-            )
-        },
-        {
-            accessorKey: "Open Date",
-            header: () => <div className="capitalize">Open Date</div>,
-            cell: ({ row }) => <div className="capitalize">{row.getValue("Open Date")}</div>
-        },
-        {
-            accessorKey: "Close Date",
-            header: () => <div className="capitalize">Close Date</div>,
-            cell: ({ row }) => <div className="capitalize">{row.getValue("Close Date")}</div>
-        },
-        {
-            accessorKey: "Action",
-            header: () => <div className="capitalize">Action</div>,
-            cell: ({ row }) => <div className="capitalize">{row.getValue("Action")}</div>
-        },
-        {
-            accessorKey: "Net PnL",
-            header: () => <div className="capitalize">Net PnL</div>,
-            cell: ({ row }) => <div className={classNames("capitalize font-medium", row.getValue("Net PnL").startsWith("-") ? "text-red" : "text-green")}>{row.getValue("Net PnL")}</div>
-        },
-        {
-            accessorKey: "Net ROI",
-            header: () => <div className="capitalize">Net ROI</div>,
-            cell: ({ row }) => <div className={classNames("capitalize font-medium", row.getValue("Net ROI").startsWith("-") ? "text-red" : "text-green")}>{row.getValue("Net ROI")}</div>
-        },
-        {
-            accessorKey: "Entry Price",
-            header: () => <div className="capitalize">Entry Price</div>,
-            cell: ({ row }) => <div className="capitalize">{row.getValue("Entry Price")}</div>
-        },
-        {
-            accessorKey: "Exit Price",
-            header: () => <div className="capitalize">Exit Price</div>,
-            cell: ({ row }) => <div className="capitalize">{row.getValue("Exit Price")}</div>
-        },
-        {
-            accessorKey: "Stop Loss",
-            header: () => <div className="capitalize">Stop Loss</div>,
-            cell: ({ row }) => <div className="capitalize">{row.getValue("Stop Loss")}</div>
-        },
-        {
-            accessorKey: "Quantity",
-            header: () => <div className="capitalize">Quantity</div>,
-            cell: ({ row }) => <div className="capitalize font-medium">{row.getValue("Quantity")}</div>
-        },
-        {
-            accessorKey: "Setup",
-            header: () => <div className="capitalize">Setup</div>,
-            cell: ({ row }) => <div className="capitalize">{row.getValue("Setup")}</div>
-        },
-        {
-            accessorKey: "Entry Reason",
-            header: () => <div className="capitalize">Entry Reason</div>,
-            cell: ({ row }) => <div className="capitalize">{row.getValue("Entry Reason")}</div>
-        },
-        {
-            accessorKey: "Exit Reason",
-            header: () => <div className="capitalize">Exit Reason</div>,
-            cell: ({ row }) => <div className="capitalize">{row.getValue("Exit Reason")}</div>
-        },
-        {
-            accessorKey: "Emotions",
-            header: () => <div className="capitalize">Emotions</div>,
-            cell: ({ row }) => <div className="capitalize">{row.getValue("Emotions")}</div>
-        },
-        {
-            accessorKey: "Additional Info",
-            header: () => <div className="capitalize">Additional Info</div>,
-            cell: ({ row }) => <div className="capitalize">{row.getValue("Additional Info")}</div>
         },
     ]
 
@@ -236,7 +150,7 @@ const PnlPopup = () => {
                             </div>
                         </div>
                         <div className={`${!showTable && 'hidden sm:block'}`}>
-                            <DataTable data={data} columns={columns} pagination={false} />
+                            <DefaultTable data={data} columns={TradeColumns} />
                         </div>
                         <div className="flex flex-row items-center justify-center my-4 sm:hidden">
                             <button onClick={() => setShowTable(!showTable)} className="flex flex-col items-center justify-center">

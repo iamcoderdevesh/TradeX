@@ -14,7 +14,7 @@ const ColumnChart = () => {
         colors: ["#089981", "#A195FD"],
         plotOptions: {
             bar: {
-                columnWidth: '35%',
+                columnWidth: '45%',
                 borderRadius: 4
             }
         },

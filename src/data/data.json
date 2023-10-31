@@ -1,0 +1,78 @@
+{
+    "mock_data": {
+        "recentTrades": [
+            {
+                "Symbol": "NIFTY",
+                "Status": "WIN",
+                "Open Date": "10/18/2023",
+                "Close Date": "10/18/2023",
+                "Action": "BUY / LONG",
+                "Net PnL": "+₹500.00",
+                "Net ROI": "+5.00%",
+                "Entry Price": "₹100.00",
+                "Exit Price": "₹110.00",
+                "Stop Loss": "₹90.00",
+                "Quantity": "50.00",
+                "Setup": "5EMA",
+                "Entry Reason": "Setup Created",
+                "Exit Reason": "Target Hit",
+                "Emotions": "Normal",
+                "Additional Info": ""
+            },
+            {
+                "Symbol": "NIFTY",
+                "Status": "LOSS",
+                "Open Date": "10/16/2023",
+                "Close Date": "10/16/2023",
+                "Net PnL": "-₹500.00",
+                "Net ROI": "-5.00%",
+                "Action": "BUY / LONG",
+                "Entry Price": "₹200.00",
+                "Exit Price": "₹190.00",
+                "Stop Loss": "₹190.00",
+                "Quantity": "50.00",
+                "Setup": "5EMA",
+                "Entry Reason": "Setup Created",
+                "Exit Reason": "Stop Loss Hit",
+                "Emotions": "Normal",
+                "Additional Info": ""
+            },
+            {
+                "Symbol": "NIFTY",
+                "Status": "WIN",
+                "Open Date": "10/18/2023",
+                "Close Date": "10/18/2023",
+                "Action": "BUY / LONG",
+                "Net PnL": "+₹500.00",
+                "Net ROI": "+5.00%",
+                "Entry Price": "₹100.00",
+                "Exit Price": "₹110.00",
+                "Stop Loss": "₹90.00",
+                "Quantity": "50.00",
+                "Setup": "5EMA",
+                "Entry Reason": "Setup Created",
+                "Exit Reason": "Target Hit",
+                "Emotions": "Normal",
+                "Additional Info": ""
+            },
+            {
+                "Symbol": "NIFTY",
+                "Status": "LOSS",
+                "Open Date": "10/16/2023",
+                "Close Date": "10/16/2023",
+                "Net PnL": "-₹500.00",
+                "Net ROI": "-5.00%",
+                "Action": "BUY / LONG",
+                "Entry Price": "₹200.00",
+                "Exit Price": "₹190.00",
+                "Stop Loss": "₹190.00",
+                "Quantity": "50.00",
+                "Setup": "5EMA",
+                "Entry Reason": "Setup Created",
+                "Exit Reason": "Stop Loss Hit",
+                "Emotions": "Normal",
+                "Additional Info": ""
+            }
+        ]
+    }
+}

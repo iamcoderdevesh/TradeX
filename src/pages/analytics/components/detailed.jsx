@@ -1,7 +1,7 @@
 import React from 'react'
 import { AiFillCaretUp } from "react-icons/ai";
 import ReturnsChart from 'components/charts/ReturnsChart';
-import TanStackKeyValueTable from 'components/common/table/table';
+import { KeyValueTable } from 'components/common/table';
 
 const Detailed = () => {
 
@@ -52,8 +52,8 @@ const Detailed = () => {
             <span className="text-sm font-medium dark:text-white">(All Dates)</span>
           </div>
           <div className="grid gap-y-6 md:grid-cols-2 p-4 text-sm font-medium gap-x-8">
-            <TanStackKeyValueTable data={data_1} />
-            <TanStackKeyValueTable data={data_2} />
+            <KeyValueTable data={data_1} />
+            <KeyValueTable data={data_2} />
           </div>
         </div>
       </div>

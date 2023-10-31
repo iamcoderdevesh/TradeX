@@ -159,13 +159,13 @@ const routes = {
             path: "settings/accounts",
             component: <Accounts />,
         },
-        {
-            id: 2,
-            order: 3,
-            name: "Trade Settings",
-            path: "settings/trade-settings",
-            component: <TradeSettings />,
-        },
+        // {
+        //     id: 2,
+        //     order: 3,
+        //     name: "Trade Settings",
+        //     path: "settings/trade-settings",
+        //     component: <TradeSettings />,
+        // },
         {
             id: 3,
             order: 4,

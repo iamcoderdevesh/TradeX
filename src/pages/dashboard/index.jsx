@@ -6,6 +6,9 @@ import { PiChartLineUpBold } from "react-icons/pi";
 import LineChart from 'components/charts/LineChart';
 import BarChart from 'components/charts/BarChart';
 import ColumnChart from 'components/charts/ColumnChart';
+import data from 'data/data.json';
+import { DefaultTable } from 'components/common/table';
+import { RecentTradeCols } from 'components/common/table/columns';
 
 const Dashboard = () => {
 
@@ -121,88 +124,11 @@ const Dashboard = () => {
             <div>
                 <h3 className='text-base font-medium dark:text-white my-4'>Recent Trades</h3>
                 <div className="flex flex-col h-auto mb-4 rounded-md border border-gray-200 dark:border-gray-900 shadow-sm bg-white dark:bg-main-dark">
-                    <div className="relative overflow-x-auto shadow-md">
-                        <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-                            <thead className="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-400">
-                                <tr>
-                                    <th scope="col" className="px-6 py-3">
-                                        Product name
-                                    </th>
-                                    <th scope="col" className="px-6 py-3">
-                                        Color
-                                    </th>
-                                    <th scope="col" className="px-6 py-3">
-                                        Category
-                                    </th>
-                                    <th scope="col" className="px-6 py-3">
-                                        Price
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr className="bg-white border-b dark:bg-main-dark dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                                    <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                        Apple MacBook Pro 17"
-                                    </th>
-                                    <td className="px-6 py-4">
-                                        Silver
-                                    </td>
-                                    <td className="px-6 py-4">
-                                        Laptop
-                                    </td>
-                                    <td className="px-6 py-4">
-                                        $2999
-                                    </td>
-                                </tr>
-                                <tr className="bg-white border-b dark:bg-main-dark dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                                    <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                        Microsoft Surface Pro
-                                    </th>
-                                    <td className="px-6 py-4">
-                                        White
-                                    </td>
-                                    <td className="px-6 py-4">
-                                        Laptop PC
-                                    </td>
-                                    <td className="px-6 py-4">
-                                        $1999
-                                    </td>
-                                </tr>
-                                <tr className="bg-white dark:bg-main-dark hover:bg-gray-50 dark:hover:bg-gray-600">
-                                    <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                        Magic Mouse 2
-                                    </th>
-                                    <td className="px-6 py-4">
-                                        Black
-                                    </td>
-                                    <td className="px-6 py-4">
-                                        Accessories
-                                    </td>
-                                    <td className="px-6 py-4">
-                                        $99
-                                    </td>
-                                </tr>
-                                <tr className="bg-white dark:bg-main-dark hover:bg-gray-50 dark:hover:bg-gray-600">
-                                    <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                        Magic Mouse 2
-                                    </th>
-                                    <td className="px-6 py-4">
-                                        Black
-                                    </td>
-                                    <td className="px-6 py-4">
-                                        Accessories
-                                    </td>
-                                    <td className="px-6 py-4">
-                                        $99
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
+                    <DefaultTable columns={RecentTradeCols} data={data.mock_data.recentTrades} />
                 </div>
             </div>
         </div>
     )
 }
 
-export default Dashboard
+export default Dashboard;
