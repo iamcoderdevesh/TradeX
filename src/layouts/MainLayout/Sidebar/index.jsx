@@ -4,7 +4,9 @@ import { BiChevronDown } from "react-icons/bi";
 import { IoClose } from "react-icons/io5";
 import { IoMdJournal } from "react-icons/io";
 import routes from "routes/routes";
-import { useStateContext } from 'context/ContextProvider';
+
+import { useDispatch, useSelector } from 'react-redux';
+import { setActiveSidebar } from 'state'
 
 // SidebarLink component for individual links
 const SidebarLink = ({ to, icon, name, active, submenu }) => (
@@ -59,11 +61,8 @@ const Sidebar = () => {
         return location.pathname.includes(routeName)
     };
 
-    const { activeMenu, setActiveMenu } = useStateContext();
-
-    const handleSidebar = () => {
-        activeMenu ? setActiveMenu(false) : setActiveMenu(true);
-    }
+    const activeMenu = useSelector((state) => state.activeSidebar);
+    const dispatch = useDispatch();
 
     return (
         <div>
@@ -74,7 +73,7 @@ const Sidebar = () => {
                             <IoMdJournal className="h-6 w-6 text-brand-100 mr-3 sm:h-7" alt="TradeX Logo" />
                             <span className="self-center text-xl font-semibold whitespace-nowrap dark:text-white">TradeX</span>
                         </a>
-                        <button onClick={handleSidebar} className="h-6 w-6">
+                        <button onClick={() => dispatch(setActiveSidebar())} className="h-6 w-6">
                             <IoClose className="md:hidden block h-6 w-6 dark:text-white" />
                         </button>
                     </div>

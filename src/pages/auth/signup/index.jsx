@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from 'components/common/buttons';
-import Logo from 'components/common/logo';
+import Logo from 'assets/logo';
 import Checkbox from 'components/common/checkbox/index';
 import InputField from 'components/common/inputs/InputField';
 

@@ -2,19 +2,40 @@ import React, { useState } from 'react';
 import { AiOutlineMenuFold, AiOutlineMenuUnfold } from "react-icons/ai";
 import { BsSunFill, BsFillMoonFill } from "react-icons/bs";
 import { FaFilter } from "react-icons/fa";
-import { useStateContext } from 'context/ContextProvider';
+
 import { Link, useLocation } from 'react-router-dom';
 import routes from "routes/routes";
 import Dropdown from 'components/common/dropdown';
 import DateRange from 'components/common/calendar';
 import ModalPopup from 'components/common/popup';
+import { useDispatch, useSelector } from 'react-redux';
+import { setMode, setActiveSidebar, setFilterPopup } from 'state';
 
 const Navbar = () => {
 
+    //Theme Config
+    const currentMode = useSelector((state) => state.mode);
+    const dispatch = useDispatch();
+
+    const setTheme = () => {
+        currentMode === "light" ? setAppTheme("dark") : setAppTheme("light");
+    };
+
+    const setAppTheme = (mode) => {
+        const root = window.document.documentElement;
+        root.classList.remove(mode === "light" ? "dark" : "light");
+        root.classList.add(mode);
+        dispatch(setMode(mode));
+        sessionStorage.setItem("themeMode", mode);
+    };
+    //------------------------------------------------------------------------
+
+    const activeMenu = useSelector((state) => state.activeSidebar);
+    
     // Check if the current location is active
     const location = useLocation();
 
-    const { setMode, currentMode, activeMenu, setActiveMenu, filterPopup, setFilterPopup } = useStateContext();
+    const filterPopup = useSelector((state) => state.filterPopup);
     const [showProfile, setShowProfile] = useState(false);
 
     const capitalizeWords = (str) => {
@@ -32,7 +53,7 @@ const Navbar = () => {
                 <div className="px-3 py-3 lg:px-5 lg:pl-3">
                     <div className="flex items-center justify-between">
                         <div className="flex items-center justify-start">
-                            <button type="button" className="inline-flex items-center p-2 text-sm text-gray-500 rounded-lg focus:outline-none dark:text-gray-400" onClick={() => setActiveMenu(!activeMenu)}>
+                            <button type="button" className="inline-flex items-center p-2 text-sm text-gray-500 rounded-lg focus:outline-none dark:text-gray-400" onClick={() => dispatch(setActiveSidebar())}>
                                 {activeMenu
                                     ? <AiOutlineMenuFold id="open" className="w-6 h-6" />
                                     : <AiOutlineMenuUnfold id="close" className="w-6 h-6" />}
@@ -43,7 +64,7 @@ const Navbar = () => {
                         </div>
                         <div className="flex items-center">
                             <div className='lg:hidden'>
-                                <button type="button" className="text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white focus:outline-none rounded-lg text-sm p-2.5" onClick={() => setFilterPopup(!filterPopup)}>
+                                <button type="button" className="text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white focus:outline-none rounded-lg text-sm p-2.5" onClick={() => dispatch(setFilterPopup())}>
                                     <FaFilter className="w-4 h-4" />
                                 </button>
                             </div>
@@ -62,7 +83,7 @@ const Navbar = () => {
                             </div>
                             <div>
                                 <button id="theme-toggle" type="button" className="text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white focus:outline-none rounded-lg text-sm p-2.5"
-                                    onClick={setMode}>
+                                    onClick={setTheme}>
                                     {currentMode === 'dark' ? (
                                         <BsSunFill className="w-5 h-5" id="theme-toggle-light-icon" />
                                     ) : (

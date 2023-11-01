@@ -1,5 +1,7 @@
 import React from 'react'
-import { useStateContext } from 'context/ContextProvider';
+
+import { useDispatch } from 'react-redux';
+import { handleDateClick } from 'state';
 
 //Calendar Imports
 import FullCalendar from '@fullcalendar/react'
@@ -11,7 +13,7 @@ import './calendar.css'
 
 const Calendar = () => {
 
-    const { handleDateClick } = useStateContext();
+    const dispatch = useDispatch();
 
     return (
         <>
@@ -23,7 +25,7 @@ const Calendar = () => {
                     right: 'multiMonthYear,dayGridMonth',
                 }}
                 events={Events.calendarEvents}
-                dateClick={handleDateClick}
+                dateClick={(args) => dispatch(handleDateClick({ date: args.dateStr }))}
                 height={"80vh"} />
         </>
     )

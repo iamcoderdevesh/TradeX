@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import Logo from 'components/common/logo';
+import Logo from 'assets/logo';
 import InputField from 'components/common/inputs/InputField';
 import Checkbox from 'components/common/checkbox';
 import {Button} from 'components/common/buttons';

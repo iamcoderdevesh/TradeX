@@ -2,11 +2,13 @@ import React from 'react'
 import Navbar from 'layouts/MainLayout/Navbar';
 import Sidebar from 'layouts/MainLayout/Sidebar';
 import { Outlet } from "react-router-dom";
-import { useStateContext } from 'context/ContextProvider';
+import { useSelector } from 'react-redux';
 
 const Layout = () => {
 
-    const { activeMenu, showPopup, filterPopup } = useStateContext();
+    const activeMenu = useSelector((state) => state.activeSidebar);
+    const showPopup = useSelector((state) => state.showPopup);
+    const filterPopup = useSelector((state) => state.filterPopup);
 
     return (
         <>
