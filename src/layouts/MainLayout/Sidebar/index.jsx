@@ -7,6 +7,7 @@ import routes from "routes/routes";
 
 import { useDispatch, useSelector } from 'react-redux';
 import { setActiveSidebar } from 'state'
+import Logo from "assets/logo/index";
 
 // SidebarLink component for individual links
 const SidebarLink = ({ to, icon, name, active, submenu }) => (
@@ -36,7 +37,7 @@ const SidebarMenu = ({ route }) => {
             </button>
             <ul id="dropdown-example" className={`${!expandedMenu && 'hidden'}`}>
                 {routes.submenu.map((link) => (
-                    <li key={link.id}>
+                    link.id !== 2 && <li key={link.id}>
                         <SidebarLink
                             to={`/${link.path}`}
                             name={link.name}
@@ -69,10 +70,7 @@ const Sidebar = () => {
             <aside id="logo-sidebar" className={`fixed top-0 left-0 z-30 0 w-64 h-screen transition-transform -translate-x-full ${activeMenu ? 'md:translate-x-0 -translate-x-full' : 'max-md:transform-none'} border-r border-gray-200 dark:border-gray-700`}>
                 <div className="h-full py-4 overflow-y-auto bg-white dark:bg-main-dark">
                     <div className="flex justify-between center px-3 pb-4">
-                        <a href="https://intensional-chair.000webhostapp.com/" className="flex items-center pl-2.5 mb-2">
-                            <IoMdJournal className="h-6 w-6 text-brand-100 mr-3 sm:h-7" alt="TradeX Logo" />
-                            <span className="self-center text-xl font-semibold whitespace-nowrap dark:text-white">TradeX</span>
-                        </a>
+                        <Logo margin={"mb-2"} height={"sm:h-7"} />
                         <button onClick={() => dispatch(setActiveSidebar())} className="h-6 w-6">
                             <IoClose className="md:hidden block h-6 w-6 dark:text-white" />
                         </button>

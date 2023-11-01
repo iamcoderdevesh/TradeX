@@ -83,7 +83,7 @@ const Dashboard = () => {
                             <h5 className="leading-none text-base font-medium text-green pb-2">$1,12,900 (45.67%)</h5>
                             <p className="text-base font-normal text-gray-500 dark:text-gray-400"></p>
                         </div>
-                        <div className="w-full bg-white rounded-lg shadow dark:bg-main-dark p-4 md:p-6 md:pt-0">
+                        <div className="w-full p-4 md:p-6 md:pt-0">
                             <LineChart data={lineChartData} />
                         </div>
                     </div>
@@ -93,7 +93,7 @@ const Dashboard = () => {
                     <h3 className='text-base font-medium dark:text-white mb-2'>Weekly PnL</h3>
                     <div className="rounded-md border border-gray-200 dark:border-gray-900 shadow-sm bg-white dark:bg-main-dark">
                         <h3 className='text-base font-medium text-gray-400 dark:text-white m-6'>This Week Statistics</h3>
-                        <div className="w-full bg-white rounded-lg shadow dark:bg-main-dark p-4 md:p-6 md:pt-0">
+                        <div className="w-full p-4 md:p-6 md:pt-0">
                             <div className="flex justify-between">
                                 <div>
                                     <h5 className="leading-none text-[24px] font-semibold text-gray-900 dark:text-white pb-2">$2,340</h5>

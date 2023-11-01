@@ -8,68 +8,11 @@ import { BiChevronDown, BiChevronUp } from "react-icons/bi";
 import { IoClose } from "react-icons/io5";
 
 import AreaChart from 'components/charts/AreaChart';
-
+import data from 'data/data.json';
 import { DefaultTable } from 'components/common/table/index';
 import { TradeColumns } from 'components/common/table/columns';
 
 const PnlPopup = () => {
-
-    const data = [
-        {
-            Symbol: "NIFTY",
-            Status: "WIN",
-            "Open Date": "10/18/2023",
-            "Close Date": "10/18/2023",
-            Action: "BUY / LONG",
-            "Net PnL": "+₹500.00",
-            "Net ROI": "+5.00%",
-            "Entry Price": "₹100.00",
-            "Exit Price": "₹110.00",
-            "Stop Loss": "₹90.00",
-            Quantity: "50.00",
-            Setup: "5EMA",
-            "Entry Reason": "Setup Created",
-            "Exit Reason": "Target Hit",
-            Emotions: "Normal",
-            "Additional Info": "",
-        },
-        {
-            Symbol: "NIFTY",
-            Status: "LOSS",
-            "Open Date": "10/16/2023",
-            "Close Date": "10/16/2023",
-            "Net PnL": "-₹500.00",
-            "Net ROI": "-5.00%",
-            Action: "BUY / LONG",
-            "Entry Price": "₹200.00",
-            "Exit Price": "₹190.00",
-            "Stop Loss": "₹190.00",
-            Quantity: "50.00",
-            Setup: "5EMA",
-            "Entry Reason": "Setup Created",
-            "Exit Reason": "Stop Loss Hit",
-            Emotions: "Normal",
-            "Additional Info": "",
-        },
-        {
-            Symbol: "NIFTY",
-            Status: "WIN",
-            "Open Date": "10/18/2023",
-            "Close Date": "10/18/2023",
-            Action: "BUY / LONG",
-            "Net PnL": "+₹500.00",
-            "Net ROI": "+5.00%",
-            "Entry Price": "₹100.00",
-            "Exit Price": "₹110.00",
-            "Stop Loss": "₹90.00",
-            Quantity: "50.00",
-            Setup: "5EMA",
-            "Entry Reason": "Setup Created",
-            "Exit Reason": "Target Hit",
-            Emotions: "Normal",
-            "Additional Info": "",
-        },
-    ]
 
     const showPopup = useSelector((state) => state.showPopup);
     const dispatch = useDispatch();
@@ -154,7 +97,7 @@ const PnlPopup = () => {
                             </div>
                         </div>
                         <div className={`${!showTable && 'hidden sm:block'}`}>
-                            <DefaultTable data={data} columns={TradeColumns} />
+                            <DefaultTable data={data.mock_data.recentTrades} columns={TradeColumns} />
                         </div>
                         <div className="flex flex-row items-center justify-center my-4 sm:hidden">
                             <button onClick={() => setShowTable(!showTable)} className="flex flex-col items-center justify-center">

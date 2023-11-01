@@ -3,7 +3,7 @@ import React, { forwardRef } from "react"
 export const Button = forwardRef(({ className, ...props }, ref) => (
 
     <button
-    className="w-full px-5 py-2.5 text-sm sm:text-base font-medium text-center text-white bg-primary-100 rounded-lg hover:bg-primary-200"
+    className="w-full px-5 py-2.5 text-sm sm:text-base font-medium text-center text-white bg-brand-300 rounded-lg hover:bg-brand-200"
     ref={ref}
     {...props}></button>
 
@@ -13,7 +13,7 @@ export const SubmitButton = forwardRef(({ className, ...props }, ref) => (
 
     <button
     type="submit"
-    className="inline-flex items-center px-5 py-2 text-sm font-medium text-center text-white bg-primary-100 rounded-lg hover:bg-primary-200"
+    className="inline-flex items-center px-5 py-2 text-sm font-medium text-center text-white bg-brand-300 rounded-lg hover:bg-brand-200"
     ref={ref}
     {...props}></button>
 

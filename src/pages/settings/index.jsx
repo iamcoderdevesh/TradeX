@@ -24,7 +24,7 @@ const TabPanel = () => {
                                     <NavLink
                                         to={`/${route.path}`}>
                                         <span className={classNames("text-sm inline-block p-4 border-b-2 rounded-t-lg whitespace-nowrap",
-                                            isActive(route.path) ? "active text-primary-200 border-primary-200 dark:text-white dark:border-primary-100"
+                                            isActive(route.path) ? "active text-brand-100 border-brand-100 dark:text-white dark:border-brand-100"
                                                 : "border-transparent hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
                                         )}>{route.name}</span>
                                     </NavLink>

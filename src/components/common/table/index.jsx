@@ -23,7 +23,7 @@ export const KeyValueTable = (props) => {
 
 export const DefaultTable = (props) => {
 
-    const { columns, data } = props;
+    const { columns, data, isEdit } = props;
 
     const table = useReactTable({
         data,
@@ -39,7 +39,7 @@ export const DefaultTable = (props) => {
                         <tr key={headerGroup.id}>
                             {headerGroup.headers.map(header => {
                                 return (
-                                    <th key={header.id} className="capitalize px-6 py-3 whitespace-nowrap">
+                                    <th key={header.id} className="capitalize px-6 py-3 text-center whitespace-nowrap">
                                         {header.isPlaceholder
                                             ? null
                                             : flexRender(
@@ -49,9 +49,11 @@ export const DefaultTable = (props) => {
                                     </th>
                                 )
                             })}
-                            <th scope="col" className="px-6 py-3">
-                                <span className="sr-only">Edit</span>
-                            </th>
+                            {
+                                isEdit && <th scope="col" className="px-6 py-3">
+                                    <span className="sr-only">Edit</span>
+                                </th>
+                            }
                         </tr>
                     ))}
                 </thead>
@@ -64,13 +66,16 @@ export const DefaultTable = (props) => {
                                     ${i % 2 === 0 ? "bg-white dark:bg-main-dark" : "bg-gray-100 dark:bg-primary-dark"}
                                     `}>
                                 {row.getVisibleCells().map((cell) => (
-                                    <td key={cell.id} className="px-6 py-4 whitespace-nowrap">
+                                    <td key={cell.id} className="px-6 py-4 text-center whitespace-nowrap">
                                         {flexRender(cell.column.columnDef.cell, cell.getContext())}
                                     </td>
                                 ))}
-                                <td className="px-6 py-4 text-right">
-                                    <a href="#" className="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
-                                </td>
+
+                                {
+                                    isEdit && <td className="px-6 py-4 text-right">
+                                        <a href="#" className="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
+                                    </td>
+                                }
                             </tr>
                         ))
                     ) : (

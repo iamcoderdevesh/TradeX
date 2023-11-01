@@ -1,71 +1,82 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import ReactApexChart from 'react-apexcharts';
+
+const CircleChartOptions = {
+    chart: {
+        type: 'radialBar',
+        offsetY: -20,
+        sparkline: {
+            enabled: true
+        }
+    },
+    colors: ["#7265e6", "#A195FD"],
+    plotOptions: {
+        radialBar: {
+            startAngle: -90,
+            endAngle: 90,
+            track: {
+                background: "#e7e7e7",
+                strokeWidth: '97%',
+                margin: 5, // margin is in pixels
+            },
+            dataLabels: {
+                name: {
+                    show: true
+                },
+                value: {
+                    offsetY: -40,
+                    fontSize: '24px'
+                }
+            }
+        }
+    },
+    grid: {
+        padding: {
+            top: -10
+        }
+    },
+    stroke: {
+        lineCap: 'round'
+    },
+    fill: {
+        type: 'gradient',
+        gradient: {
+            shade: 'light',
+            shadeIntensity: 0.4,
+            inverseColors: false,
+            opacityFrom: 1,
+            opacityTo: 1,
+            stops: [0, 50, 53, 91]
+        },
+    },
+    labels: ['Winrate'],
+};
 
 const CircleChart = () => {
 
-    const CircleChartOptions = {
-        chart: {
-            type: 'radialBar',
-            offsetY: -20,
-            sparkline: {
-                enabled: true
-            }
-        },
-        plotOptions: {
-            radialBar: {
-                startAngle: -90,
-                endAngle: 90,
-                track: {
-                    background: "#e7e7e7",
-                    strokeWidth: '97%',
-                    margin: 5, // margin is in pixels
-                    dropShadow: {
-                        enabled: true,
-                        top: 2,
-                        left: 0,
-                        color: '#999',
-                        opacity: 1,
-                        blur: 2
-                    }
-                },
-                dataLabels: {
-                    name: {
-                        show: true
-                    },
-                    value: {
-                        offsetY: -40,
-                        fontSize: '24px'
+    const [series] = useState([76]);
+    const [options, setOptions] = useState(CircleChartOptions);
+    const currentMode = useSelector((state) => state.mode);
+
+    useEffect(() => {
+        setOptions((prevState) => ({
+            ...prevState,
+            plotOptions: {
+                radialBar: {
+                    dataLabels: {
+                        value: {
+                            color: `${currentMode === 'light' ? '#111827' : '#f3f4f6'}`,
+                        },
                     }
                 }
             }
-        },
-        grid: {
-            padding: {
-                top: -10
-            }
-        },
-        stroke: {
-            lineCap: 'round'
-        },
-        fill: {
-            type: 'gradient',
-            gradient: {
-                shade: 'light',
-                shadeIntensity: 0.4,
-                inverseColors: false,
-                opacityFrom: 1,
-                opacityTo: 1,
-                stops: [0, 50, 53, 91]
-            },
-        },
-        labels: ['Winrate'],
-    };
-
-    const [series] = useState([76]);
+        }));
+    }, [currentMode]);
 
     return (
         <div id="chart">
-            <ReactApexChart options={CircleChartOptions} series={series} type="radialBar" height={280} width={250} />
+            <ReactApexChart options={options} series={series} type="radialBar" height={280} width={250} />
         </div>
     )
 }

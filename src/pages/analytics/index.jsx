@@ -6,7 +6,7 @@ const Analytics = () => {
 
   const [showTab, setShowTab] = useState(false);
 
-  const activeTab = "inline-block p-4 border-b-2 rounded-t-lg text-primary-100 border-primary-100 active dark:text-white dark:border-primary-200";
+  const activeTab = "inline-block p-4 border-b-2 rounded-t-lg text-brand-100 border-brand-100 active dark:text-white dark:border-brand-200";
   const inActiveTab = "inline-block p-4 border-b-2 rounded-t-lg border-transparent hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300";
 
   return (

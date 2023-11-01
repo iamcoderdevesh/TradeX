@@ -5,7 +5,7 @@ import InputField from 'components/common/inputs/InputField';
 
 const ImportTrade = () => {
   return (
-    <div className="h-screen">
+    <>
       <div className="flex">
         <div className="w-full max-w-3xl p-6 mt-8 space-y-8 sm:p-8 bg-white rounded-lg shadow dark:bg-main-dark">
           <div className="py-8 px-1 max-w-2xl lg:py-2">
@@ -48,7 +48,7 @@ const ImportTrade = () => {
           </div>
         </div>
       </div>
-    </div>
+    </>
   )
 }
 

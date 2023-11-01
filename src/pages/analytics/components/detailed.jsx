@@ -65,7 +65,7 @@ const Detailed = () => {
             <h5 className="leading-none text-base font-medium text-green pb-2">$2,450 (2.25%)</h5>
             <p className="text-base font-normal text-gray-500 dark:text-gray-400"></p>
           </div>
-          <div className="w-full bg-white rounded-lg shadow dark:bg-main-dark p-4 md:p-6 md:pt-0">
+          <div className="w-full p-4 md:p-6 md:pt-0">
             <ReturnsChart />
           </div>
         </div>

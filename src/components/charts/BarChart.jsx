@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 // third-party
 import ReactApexChart from 'react-apexcharts';
 
@@ -48,6 +49,20 @@ const BarChart = () => {
     ]);
 
     const [options, setOptions] = useState(barChartOptions);
+    const currentMode = useSelector((state) => state.mode);
+    
+    useEffect(() => {
+        setOptions((prevState) => ({
+            ...prevState,
+            xaxis: {
+                labels: {
+                    style: {
+                        colors: `${currentMode === 'light' ? '#111827' : '#9ca3af'}`
+                    }
+                }
+            }
+        }));
+    }, [currentMode]);
 
     return (
         <div id="chart">

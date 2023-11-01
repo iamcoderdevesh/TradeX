@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 // third-party
 import ReactApexChart from 'react-apexcharts';
 
@@ -6,7 +7,10 @@ import ReactApexChart from 'react-apexcharts';
 const ReturnsChartOptions = {
     chart: {
         type: 'bar',
-        height: 350
+        height: 350,
+        toolbar: {
+            show: false
+        }
     },
     colors: ["#089981"],
     plotOptions: {
@@ -18,7 +22,8 @@ const ReturnsChartOptions = {
                     color: '#f23645'
                 }]
             },
-            columnWidth: '75%',
+            columnWidth: '45%',
+            borderRadius: 4
         }
     },
     dataLabels: {
@@ -63,6 +68,30 @@ const ReturnsChart = () => {
         ]
     }]);
 
+    const currentMode = useSelector((state) => state.mode);
+
+    useEffect(() => {
+        setOptions((prevState) => ({
+            ...prevState,
+            grid: {
+                borderColor: `${currentMode === 'light' ? '#e5e7eb' : '#4b5563'}`,
+            },
+            xaxis: {
+                labels: {
+                    style: {
+                        colors: `${currentMode === 'light' ? '#111827' : '#9ca3af'}`,
+                    }
+                }
+            },
+            yaxis: {
+                labels: {
+                    style: {
+                        colors: `${currentMode === 'light' ? '#111827' : '#9ca3af'}`,
+                    }
+                }
+            }
+        }));
+    }, [currentMode]);
 
     return <ReactApexChart options={options} series={series} type="bar" height={365} />;
 };

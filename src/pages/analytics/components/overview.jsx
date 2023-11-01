@@ -20,7 +20,7 @@ const Overview = () => {
           <div className="flex justify-between my-2">
             <div className="flex flex-col">
               <p className="font-dm text-xs font-medium text-gray-400 mb-1">Net P&L</p>
-              <h4 className="text-base font-bold text-green">$2,450.00</h4>
+              <h4 className="text-base font-medium text-green">$2,450.00</h4>
             </div>
             <div className="divider border-r-2 border-gray-300"></div>
           </div>
@@ -114,7 +114,7 @@ const Overview = () => {
             <h5 className="leading-none text-base font-medium text-green pb-2">$2,450 (45.67%)</h5>
             <p className="text-base font-normal text-gray-500 dark:text-gray-400"></p>
           </div>
-          <div className="w-full bg-white rounded-lg shadow dark:bg-main-dark p-4 md:p-6 md:pt-0">
+          <div className="w-full p-4 md:p-6 md:pt-0">
             <LineChart data={lineChartData} />
           </div>
         </div>
