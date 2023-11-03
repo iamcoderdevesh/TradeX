@@ -12,7 +12,7 @@ const ImportTrade = () => {
             <h2 className="pb-4 mb-4 sm:mb-5 text-xl border-b font-bold text-gray-900 dark:text-white dark:border-gray-600">Import Your Trades</h2>
             <form>
               <div className="grid gap-4 sm:grid-cols-2 sm:gap-6">
-                <div>
+                <div className='col-span-2 sm:col-span-1'>
                   <Dropdown label={"Select Broker"} id={"ddBroker"}
                     children={
                       <>
@@ -24,11 +24,11 @@ const ImportTrade = () => {
                       </>
                     } />
                 </div>
-                <div>
-                  <Dropdown label={"Select Profolio"} id={"ddPortfolio"}
+                <div className='col-span-2 sm:col-span-1'>
+                  <Dropdown label={"Select Account"} id={"ddPortfolio"}
                     children={
                       <>
-                        <option>Select Broker</option>
+                        <option>Select Account</option>
                         <option>Default</option>
                       </>
                     } />
