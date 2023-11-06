@@ -1,4 +1,5 @@
 import User from "../models/userInfo.js";
+import UserDetails from "../models/userDetails.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { validationResult } from 'express-validator';
@@ -27,8 +28,18 @@ export const register = async (req, res) => {
                 CreatedBy,
             });
 
-            const savedUser = await newUser.save();
-            res.status(201).send("success");
+            const UserDetail = new UserDetails({
+                UserDetId: Math.floor(Math.random() * 10000),
+                UserId,
+                FullName: UserName,
+                Email,
+                CreatedBy,
+            });
+
+            await newUser.save();
+            await UserDetail.save();
+
+            res.status(201).send("Register Successfully!!!");
 
         } catch (err) {
             res.status(500).json({ error: err.message });

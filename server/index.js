@@ -2,7 +2,11 @@ import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
 import authRoutes from "./src/routes/auth.js";
+import accountRoutes from "./src/routes/account.js";
+import tagRoutes from "./src/routes/tag.js";
+import tradeRoutes from "./src/routes/trade.js";
 import dotenv from "dotenv";
+import helmet from "helmet";
 
 // #region CONFIGURATIONS
 dotenv.config();
@@ -20,6 +24,9 @@ app.get('/', (req, res) => {
 
 /* Routes */
 app.use("/", authRoutes);
+app.use("/", accountRoutes);
+app.use("/", tagRoutes);
+app.use("/", tradeRoutes);
 
 //#region MONGOOSE SETUP
 mongoose.connect(process.env.MONGO_URL).then(() => {
