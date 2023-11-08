@@ -40,14 +40,12 @@ const TradeAddDetailSechma = new mongoose.Schema(
         AccountId: {
             type: Number,
             required: true,
-            unique: true,
             ref: "Accounts",
         },
         UserId: {
             type: Number, 
             ref: "UserInfo",
             required: true,
-            unique: true,
         },
         CreatedBy: {
             type: Number,

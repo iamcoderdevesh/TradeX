@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const TradeStatsSechma = new mongoose.Schema(
+const TradeJournalSechma = new mongoose.Schema(
     {
         JournalId: {
             type: Number,
@@ -8,7 +8,7 @@ const TradeStatsSechma = new mongoose.Schema(
             unique: true,
         },
         JournalDate: {
-            type: String, 
+            type: Date, 
             required: true,
         },
         TotalNetPnL: {
@@ -64,14 +64,12 @@ const TradeStatsSechma = new mongoose.Schema(
         AccountId: {
             type: Number,
             required: true,
-            unique: true,
             ref: "Accounts",
         },
         UserId: {
             type: Number, 
-            ref: "UserInfo",
             required: true,
-            unique: true,
+            ref: "UserInfo",
         },
         CreatedBy: {
             type: Number,
@@ -87,5 +85,5 @@ const TradeStatsSechma = new mongoose.Schema(
     { timestamps: true }
 );
 
-const TradeStats = mongoose.model('TradeStats', TradeStatsSechma, 'TradeStats');
-export default TradeStats;
+const TradeJournal = mongoose.model('TradeJournal', TradeJournalSechma, 'TradeJournal');
+export default TradeJournal;

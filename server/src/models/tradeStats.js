@@ -43,6 +43,10 @@ const TradeStatsSechma = new mongoose.Schema(
             type: Number,
             required: true,
         },
+        TradeDate: {
+            type: Date, 
+            required: true,
+        },
         TradeId: {
             type: Number,
             required: true,
@@ -52,14 +56,12 @@ const TradeStatsSechma = new mongoose.Schema(
         AccountId: {
             type: Number,
             required: true,
-            unique: true,
             ref: "Accounts",
         },
         UserId: {
             type: Number, 
             ref: "UserInfo",
             required: true,
-            unique: true,
         },
         CreatedBy: {
             type: Number,

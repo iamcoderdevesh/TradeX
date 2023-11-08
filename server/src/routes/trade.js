@@ -5,10 +5,11 @@ import { ImportTrades } from "../controllers/tradeImport.js";
 import { AddTrade } from "../controllers/tradeDetail.js";
 import { AddTradeDetail } from "../controllers/tradeAddDetails.js";
 import { AddTradeStats } from "../controllers/tradeStats.js";
+import { AddTradeJournal } from "../controllers/tradeJournal.js";
 
 /* Routes */
 const router = express.Router();
 router.post("/api/trade/importTrade", verifyToken, ImportTrades);
-router.post("/api/trade/addTrade", verifyToken, AddTrade, AddTradeDetail, AddTradeStats);
+router.post("/api/trade/addTrade", verifyToken, AddTrade, AddTradeDetail, AddTradeStats, AddTradeJournal);
 
 export default router;
