@@ -1,6 +1,7 @@
 import { validationResult } from 'express-validator';
 import TradeDetails from "../models/tradeDetails.js";
 import { CalculateTradeStats } from '../utils/calculate.js';
+import { getJournalDateDetails } from './tradeJournal.js';
 
 /* Creating Trade */
 export const AddTrade = async (req, res, next) => {
@@ -11,6 +12,13 @@ export const AddTrade = async (req, res, next) => {
     else {
         try {
             const { TradeName, Market, Broker, Setup, TradeStatus, Action, Symbol, EntryDate, ExitDate, EntryPrice, ExitPrice, StopLoss, Quantity, UserId, AccountId } = req.body;
+
+            //DateTime Validation for Journal
+            const getJournal = await getJournalDateDetails(EntryDate);
+
+            if (getJournal !== null) {
+                return res.status(400).json({ errors: "Unable to save the trade as there is already an existing trade with the same date and time." });
+            }
 
             const TradeId = Math.floor(Math.random() * 10000);
             const Fees = 50.00;

@@ -11,6 +11,10 @@ const TradeJournalSechma = new mongoose.Schema(
             type: Date, 
             required: true,
         },
+        JournalDateTime: {
+            type: [String], 
+            required: true,
+        },
         TotalNetPnL: {
             type: Number,
             required: true,
