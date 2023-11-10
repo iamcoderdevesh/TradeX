@@ -11,7 +11,10 @@ export const CreateAccount = async (req, res) => {
         try {
             const { UserId, AccountName, Market, Broker, InitialBalance, Currency } = req.body;
 
-            const AccountId = Math.floor(Math.random() * 10000);
+            // Find the last Id from Collection. If record does'nt exist, start with 1, otherwise increment the last Id
+            let lastId = await Accounts.findOne().sort('-AccountId');            
+            const AccountId = lastId ? lastId.AccountId + 1 : 1;
+
             const newAccount = new Accounts({
                 AccountId,
                 AccountName,

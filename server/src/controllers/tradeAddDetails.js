@@ -11,7 +11,10 @@ export const AddTradeDetail = async (req, res, next) => {
         try {
             const { EntryReason, ExitReason, Emotions, MarketCondition, TradeAddInfo, TradeId, AccountId, UserId } = req.body;
 
-            const TradeAddId = Math.floor(Math.random() * 10000);
+            // Find the last Id from Collection. If record does'nt exist, start with 1, otherwise increment the last Id
+            let lastId = await TradeAddDetails.findOne().sort('-TradeAddId');
+            const TradeAddId = lastId ? lastId.TradeAddId + 1 : 1;
+
             const newTrade = new TradeAddDetails({
                 TradeAddId,
                 EntryReason,

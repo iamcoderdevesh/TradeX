@@ -11,7 +11,10 @@ export const ImportTrades = async (req, res) => {
         try {
             const { UserId, Broker, AccountName, ImportDesc, AccountId } = req.body;
 
-            const ImportId = Math.floor(Math.random() * 10000);
+            // Find the last Id from Collection. If record does'nt exist, start with 1, otherwise increment the last Id
+            let lastId = await TradeImport.findOne().sort('-ImportId');
+            const ImportId = lastId ? lastId.ImportId + 1 : 1;
+
             const TotalTrades = 80;
             const Import = new TradeImport({
                 ImportId,

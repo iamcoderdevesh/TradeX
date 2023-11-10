@@ -10,8 +10,11 @@ export const CreateTag = async (req, res) => {
     else {
         try {
             const { UserId, TagName, TagType, TagDesc } = req.body;
+            
+            // Find the last Id from Collection. If record does'nt exist, start with 1, otherwise increment the last Id
+            let lastId = await Tags.findOne().sort('-TagId');
+            const TagId = lastId ? lastId.TagId + 1 : 1;
 
-            const TagId = Math.floor(Math.random() * 10000);
             const newTag = new Tags({
                 TagId,
                 TagName,

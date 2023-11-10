@@ -32,13 +32,13 @@ export const CalculateHandleJournal = async (TradeId, UserId, AccountId, current
 
     // Fetch account details
     const account = await Accounts.findOne({ AccountId });
-    const _capital = account.TotalBalance;
+    const _capital = account.InitialBalance;
 
     // Initialize variables
     const { tradeStatus, netPnL, grossPnL, riskReward, totalFees } = currentStats;
 
     let _totalNetPnL = netPnL, _totalTrades = 1, _totalWins = tradeStatus === 'WIN' ? 1 : 0, _totalLoss = tradeStatus === 'LOSS' ? 1 : 0, _winrate = 0, _totalFees = totalFees, _totalGrossPnL = grossPnL, _totalRR = riskReward, _netRevenue = netPnL, _grossRevenue = (totalFees + _netRevenue + _capital), _totalRevenue = _netRevenue + _capital;
-    
+
     // Define date range for today's trades
     let end = new Date(todaysDate);
     let start = new Date(end);
@@ -51,17 +51,27 @@ export const CalculateHandleJournal = async (TradeId, UserId, AccountId, current
             $lt: end
         }
     });
-    
+
     // If a journal entry exists for today, update it. Otherwise, create a new entry.
     if (getJournal !== null) {
-        
+
         //Reseting the variables for calculating
-        _totalNetPnL = 0, _totalTrades = 0, _totalWins = 0, _totalLoss = 0, _winrate = 0, _totalFees = 0, _totalGrossPnL = 0, _totalRR = 0, _netRevenue = 0, _grossRevenue = 0, _totalRevenue = 0;
-        
+        _totalNetPnL = 0;
+        _totalTrades = 0;
+        _totalWins = 0;
+        _totalLoss = 0;
+        _winrate = 0;
+        _totalFees = 0;
+        _totalGrossPnL = 0;
+        _totalRR = 0;
+        _netRevenue = 0;
+        _grossRevenue = 0;
+        _totalRevenue = 0;
+
         const _journalDate = new Date(getJournal.JournalDate).toLocaleDateString();
-        
+
         if (_journalDate === end.toLocaleDateString()) {
-            
+
             // Define date range for today's trades
             end.setHours(23, 59, 59, 999); // Set the time to the end of the day
             start = new Date(end);
@@ -80,15 +90,15 @@ export const CalculateHandleJournal = async (TradeId, UserId, AccountId, current
             getTradeStats.forEach(trade => {
                 _totalTrades++;
                 _totalFees += trade.TotalFees;
-                _totalGrossPnL += trade.GrossPnL;
                 _totalRR += trade.RiskReward;
-
+                _totalGrossPnL += trade.GrossPnL;
+                
                 if (trade.TradeStatus === 'WIN') {
                     _totalWins++;
-                    _totalNetPnL += trade.NetPnL;
+                    _totalNetPnL = (_totalNetPnL + trade.NetPnL);
                 } else {
                     _totalLoss++;
-                    _totalNetPnL -= trade.NetPnL;
+                    _totalNetPnL = (_totalNetPnL + trade.NetPnL);
                 }
             });
 
@@ -98,8 +108,8 @@ export const CalculateHandleJournal = async (TradeId, UserId, AccountId, current
             // Calculate additional fields
             _winrate = (_totalWins / _totalTrades) * 100;
             _netRevenue = _totalNetPnL;
-            _grossRevenue = _totalGrossPnL + _capital;
-            _totalRevenue += netPnL;
+            _grossRevenue = (_totalGrossPnL + _capital);
+            _totalRevenue = (_totalRevenue + netPnL);
 
             // Update today's journal entry
             await TradeJournal.updateOne(
@@ -130,10 +140,12 @@ export const CalculateHandleJournal = async (TradeId, UserId, AccountId, current
             );
         }
     }
-    //Creating a new entry
+    //Creating a new entry. Insert a new journal entry for today
     else {
-        // Insert a new journal entry for today
-        const JournalId = Math.floor(Math.random() * 10000);
+        // Find the last Id from Collection. If record does'nt exist, start with 1, otherwise increment the last Id
+        let lastId = await TradeJournal.findOne().sort('-JournalId');
+        const JournalId = lastId ? lastId.JournalId + 1 : 1;
+
         const newJournal = new TradeJournal({
             JournalId: JournalId,
             JournalDate: todaysDate,
@@ -160,7 +172,10 @@ export const CalculateHandleJournal = async (TradeId, UserId, AccountId, current
 
     //Insert Profit/Loss in Transaction Collection 
     const _tradeStatus = tradeStatus === 'WIN' ? 'PROFIT' : 'LOSS'
-    const TransactionId = Math.floor(Math.random() * 10000);
+
+    // Find the last Id from Collection. If record does'nt exist, start with 1, otherwise increment the last Id
+    let lastId = await Transaction.findOne().sort('-TransactionId');
+    const TransactionId = lastId ? lastId.TransactionId + 1 : 1;
 
     const newTransaction = new Transaction({
         TransactionId: TransactionId,

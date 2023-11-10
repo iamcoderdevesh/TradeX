@@ -1,4 +1,4 @@
-import User from "../models/userInfo.js";
+import UserInfo from "../models/userInfo.js";
 import UserDetails from "../models/userDetails.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
@@ -17,10 +17,14 @@ export const register = async (req, res) => {
             const salt = await bcrypt.genSalt();
             const passwordHash = await bcrypt.hash(Password, salt);
 
-            const UserId = Math.floor(Math.random() * 10000)
+            // Find the last UserId from UserInfo Collection
+            let lastId = await UserInfo.findOne().sort('-UserId');
+
+            // If no users exist, start with 1, otherwise increment the last UserId
+            const UserId = lastId ? lastId.UserId + 1 : 1;
             const CreatedBy = UserId;
 
-            const newUser = new User({
+            const newUser = new UserInfo({
                 UserId,
                 UserName,
                 Email,
@@ -28,8 +32,12 @@ export const register = async (req, res) => {
                 CreatedBy,
             });
 
+            // Find the last UserDetId from UserDetail Collection
+            lastId = await UserDetails.findOne().sort('-UserDetId');
+            const UserDetId = lastId ? lastId.UserDetId + 1 : 1;
+
             const UserDetail = new UserDetails({
-                UserDetId: Math.floor(Math.random() * 10000),
+                UserDetId,
                 UserId,
                 FullName: UserName,
                 Email,
@@ -56,7 +64,7 @@ export const login = async (req, res) => {
     else {
         try {
             const { UserName, Password } = req.body;
-            const user = await User.findOne({ UserName: UserName });
+            const user = await UserInfo.findOne({ UserName: UserName });
             if (!user) return res.status(400).json({ msg: "Username does not exist." });
 
             const isMatch = await bcrypt.compare(Password, user.Password);

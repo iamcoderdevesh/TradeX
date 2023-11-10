@@ -7,7 +7,10 @@ export const AddTradeStats = async (req, res, next) => {
         const { TradeId, AccountId, UserId, Stats, EntryDate } = req.body;
         const { tradeStatus, netProfit, netLoss, netPnL, netRoi, grossPnL, totalFees, tradeRisk, riskReward } = Stats;
 
-        const TradeStatsId = Math.floor(Math.random() * 10000);
+        // Find the last Id from Collection. If record does'nt exist, start with 1, otherwise increment the last Id
+        let lastId = await TradeStats.findOne().sort('-TradeStatsId');
+        const TradeStatsId = lastId ? lastId.TradeStatsId + 1 : 1;
+
         const newStats = new TradeStats({
             TradeStatsId,
             TradeStatus: tradeStatus,
