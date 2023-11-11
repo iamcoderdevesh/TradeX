@@ -10,7 +10,7 @@ export const CalculateTradeStats = async (Action, EntryPrice, ExitPrice, StopLos
 
     const _grossPnL = parseFloat((ExitPrice - EntryPrice) * Quantity).toFixed(2);
     const _netPnL = parseFloat((_grossPnL - Fees).toFixed(2));
-    const _tradeRisk = parseFloat((EntryPrice - StopLoss) * Quantity).toFixed(2);
+    const _tradeRisk = parseFloat((EntryPrice - StopLoss) * Quantity + Fees).toFixed(2);
     const _tradeStatus = EntryPrice < ExitPrice ? (Action === 'Buy' ? 'WIN' : 'LOSS') : (EntryPrice > ExitPrice ? (Action === 'Sell' ? 'WIN' : 'LOSS') : 'BREAKEVEN');
     const _netProfit = _tradeStatus === 'WIN' ? _netPnL : 0;
     const _netLoss = _tradeStatus === 'LOSS' ? _netPnL : 0;
@@ -68,6 +68,7 @@ export const CalculateHandleJournal = async (TradeId, UserId, AccountId, current
         _netRevenue = 0;
         _grossRevenue = 0;
         _totalRevenue = 0;
+        _totalStopLoss = 0;
 
         const _journalDate = new Date(getJournal.JournalDate).toLocaleDateString();
 
