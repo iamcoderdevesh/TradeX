@@ -14,6 +14,7 @@ export const CalculateTradeStats = async (Action, EntryPrice, ExitPrice, StopLos
     const _tradeStatus = EntryPrice < ExitPrice ? (Action === 'Buy' ? 'WIN' : 'LOSS') : (EntryPrice > ExitPrice ? (Action === 'Sell' ? 'WIN' : 'LOSS') : 'BREAKEVEN');
     const _netProfit = _tradeStatus === 'WIN' ? _netPnL : 0;
     const _netLoss = _tradeStatus === 'LOSS' ? _netPnL : 0;
+    const riskReward = ((ExitPrice - EntryPrice) / (EntryPrice - StopLoss)).toFixed(2);
 
     return {
         tradeStatus: _tradeStatus,
@@ -24,7 +25,7 @@ export const CalculateTradeStats = async (Action, EntryPrice, ExitPrice, StopLos
         grossPnL: parseFloat(_grossPnL).toFixed(2),
         totalFees: Fees,
         tradeRisk: _tradeRisk,
-        riskReward: parseFloat((_grossPnL / _tradeRisk).toFixed(2))
+        riskReward: riskReward
     };
 }
 
@@ -115,7 +116,6 @@ export const CalculateHandleJournal = async (TradeId, UserId, AccountId, current
             await TradeJournal.updateOne(
                 { JournalDate: { $gte: start, $lt: end } },
                 {
-                    $push: { JournalDateTime: todaysDate },
                     TotalNetPnL: _totalNetPnL,
                     TotalTrades: _totalTrades,
                     TotalWins: _totalWins,
@@ -145,11 +145,12 @@ export const CalculateHandleJournal = async (TradeId, UserId, AccountId, current
         // Find the last Id from Collection. If record does'nt exist, start with 1, otherwise increment the last Id
         let lastId = await TradeJournal.findOne().sort('-JournalId');
         const JournalId = lastId ? lastId.JournalId + 1 : 1;
+        end.setDate(end.getDate());
+        end.setHours(0, 0, 0, 0);
 
         const newJournal = new TradeJournal({
             JournalId: JournalId,
-            JournalDate: todaysDate,
-            JournalDateTime: [todaysDate],
+            JournalDate: end,
             TotalNetPnL: _totalNetPnL,
             TotalTrades: _totalTrades,
             TotalWins: _totalWins,
