@@ -82,18 +82,39 @@ export const getTradeData = async (req, res) => {
         return res.status(400).json({ errors: errors.array() });
     }
     else {
-        const { UserId, AccountId } = req.body;
+
         const getTrade = await TradeDetails.aggregate([
-            { $match: { UserId: UserId, AccountId: AccountId } },
+            { $match: { UserId: req.body.UserId, AccountId: parseInt(req.params.accountId) } },
             {
-              $lookup: {
-                from: "TradeAddDetails",
-                localField: "TradeId",
-                foreignField: "TradeId",
-                as: "TradeAddDetails",
-              },
+                $lookup: {
+                    from: "TradeAddDetails",
+                    localField: "TradeId",
+                    foreignField: "TradeId",
+                    as: "TradeAddDetails",
+                },
             },
-          ]);
+            {
+                $project: {
+                    "_id": 0,
+                    "AccountId": 0,
+                    "UserId": 0,
+                    "CreatedBy": 0,
+                    "UpdatedBy": 0,
+                    "createdAt": 0,
+                    "updatedAt": 0,
+                    "__v": 0,
+                    "TradeAddDetails._id": 0,
+                    "TradeAddDetails.TradeId": 0,
+                    "TradeAddDetails.AccountId": 0,
+                    "TradeAddDetails.UserId": 0,
+                    "TradeAddDetails.CreatedBy": 0,
+                    "TradeAddDetails.UpdatedBy": 0,
+                    "TradeAddDetails.createdAt": 0,
+                    "TradeAddDetails.updatedAt": 0,
+                    "TradeAddDetails.__v": 0
+                }
+            }
+        ]);
         res.status(200).json(getTrade);
     }
 }

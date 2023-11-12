@@ -34,10 +34,13 @@ const importValidations = [
 //
 
 /* Routes */
+/* Insert/Create Trade */
 const router = express.Router();
 router.post("/api/trade/importTrade", importValidations, verifyToken, ImportTrades);
 router.post("/api/trade/addTrade", tradeValidations, verifyToken, AddTrade, AddTradeStats, AddTradeJournal);
-router.post("/api/trade/getTrade", verifyToken, getTradeData);
-router.post("/api/trade/getJounral", verifyToken, getJournalData);
+
+//Fetch Trade Data
+router.get("/api/trade/:accountId/getTrade", verifyToken, getTradeData);
+router.get("/api/trade/:accountId/getJounral", verifyToken, getJournalData);
 
 export default router;

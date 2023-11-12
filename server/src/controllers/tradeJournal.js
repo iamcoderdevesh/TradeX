@@ -1,5 +1,6 @@
 import TradeJournal from "../models/tradeJournal.js";
 import { CalculateHandleJournal } from "../utils/calculate.js";
+import { excludeFields } from "../utils/general.js";
 
 /* Inserting Data in TradeJournal */
 export const AddTradeJournal = async (req, res) => {
@@ -15,8 +16,9 @@ export const AddTradeJournal = async (req, res) => {
 };
 
 /* Getting all Trade Data */
+
 export const getJournalData = async (req, res) => {
-    const { UserId, AccountId } = req.body;
-    const JounralTrade = await TradeJournal.find({ UserId: UserId, AccountId: AccountId });
+    const JounralTrade = await TradeJournal.find({ UserId: req.body.UserId, AccountId: req.params.accountId })
+        .select(excludeFields());
     res.status(200).json(JounralTrade);
 }
