@@ -68,7 +68,6 @@ export const CalculateHandleJournal = async (TradeId, UserId, AccountId, current
         _netRevenue = 0;
         _grossRevenue = 0;
         _totalRevenue = 0;
-        _totalStopLoss = 0;
 
         const _journalDate = new Date(getJournal.JournalDate).toLocaleDateString();
 

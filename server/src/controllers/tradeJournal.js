@@ -1,8 +1,8 @@
+import TradeJournal from "../models/tradeJournal.js";
 import { CalculateHandleJournal } from "../utils/calculate.js";
 
 /* Inserting Data in TradeJournal */
 export const AddTradeJournal = async (req, res) => {
-
     try {
         const { TradeId, AccountId, UserId, Stats, EntryDate } = req.body;
 
@@ -13,3 +13,10 @@ export const AddTradeJournal = async (req, res) => {
         res.status(500).json({ error: err.message });
     }
 };
+
+/* Getting all Trade Data */
+export const getJournalData = async (req, res) => {
+    const { UserId, AccountId } = req.body;
+    const JounralTrade = await TradeJournal.find({ UserId: UserId, AccountId: AccountId });
+    res.status(200).json(JounralTrade);
+}

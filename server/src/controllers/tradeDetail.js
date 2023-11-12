@@ -1,8 +1,7 @@
 import { validationResult } from 'express-validator';
 import TradeDetails from "../models/tradeDetails.js";
-import TradeJournal from "../models/tradeJournal.js";
-import { CalculateTradeStats } from '../utils/calculate.js';
 import TradeAddDetails from '../models/tradeAddDetails.js';
+import { CalculateTradeStats } from '../utils/calculate.js';
 
 /* Creating Trade */
 export const AddTrade = async (req, res, next) => {
@@ -75,3 +74,26 @@ export const AddTrade = async (req, res, next) => {
         }
     }
 };
+
+/* Getting all Trade Data */
+export const getTradeData = async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+    else {
+        const { UserId, AccountId } = req.body;
+        const getTrade = await TradeDetails.aggregate([
+            { $match: { UserId: UserId, AccountId: AccountId } },
+            {
+              $lookup: {
+                from: "TradeAddDetails",
+                localField: "TradeId",
+                foreignField: "TradeId",
+                as: "TradeAddDetails",
+              },
+            },
+          ]);
+        res.status(200).json(getTrade);
+    }
+}

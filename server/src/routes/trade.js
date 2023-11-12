@@ -2,9 +2,9 @@ import express from "express";
 import { body } from 'express-validator';
 import { verifyToken } from "../middleware/authorise.js";
 import { ImportTrades } from "../controllers/tradeImport.js";
-import { AddTrade } from "../controllers/tradeDetail.js";
+import { AddTrade, getTradeData } from "../controllers/tradeDetail.js";
 import { AddTradeStats } from "../controllers/tradeStats.js";
-import { AddTradeJournal } from "../controllers/tradeJournal.js";
+import { AddTradeJournal, getJournalData } from "../controllers/tradeJournal.js";
 
 //Validation
 const tradeValidations = [
@@ -37,5 +37,7 @@ const importValidations = [
 const router = express.Router();
 router.post("/api/trade/importTrade", importValidations, verifyToken, ImportTrades);
 router.post("/api/trade/addTrade", tradeValidations, verifyToken, AddTrade, AddTradeStats, AddTradeJournal);
+router.post("/api/trade/getTrade", verifyToken, getTradeData);
+router.post("/api/trade/getJounral", verifyToken, getJournalData);
 
 export default router;

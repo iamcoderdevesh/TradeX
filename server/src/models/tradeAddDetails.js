@@ -34,8 +34,9 @@ const TradeAddDetailSechma = new mongoose.Schema(
         TradeId: {
             type: Number,
             required: true,
-            unique: true,
             ref: "TradeDetails",
+            localField: 'TradeId',
+            foreignField: 'TradeId'
         },
         AccountId: {
             type: Number,
