@@ -5,6 +5,7 @@ import { ImportTrades } from "../controllers/tradeImport.js";
 import { AddTrade, getTradeData } from "../controllers/tradeDetail.js";
 import { AddTradeStats } from "../controllers/tradeStats.js";
 import { AddTradeJournal, getJournalData } from "../controllers/tradeJournal.js";
+import { CalculateStatistics } from "../utils/calculate.js";
 
 //Validation
 const tradeValidations = [
@@ -42,5 +43,8 @@ router.post("/api/trade/addTrade", tradeValidations, verifyToken, AddTrade, AddT
 //Fetch Trade Data
 router.get("/api/trade/:accountId/getTrade", verifyToken, getTradeData);
 router.get("/api/trade/:accountId/getJounral", verifyToken, getJournalData);
+
+//Fetch Trade Statistics
+router.get("/api/trade/:accountId/getStats", verifyToken, CalculateStatistics);
 
 export default router;

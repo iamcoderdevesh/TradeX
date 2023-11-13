@@ -94,6 +94,14 @@ export const getTradeData = async (req, res) => {
                 },
             },
             {
+                $lookup: {
+                    from: "TradeStats",
+                    localField: "TradeId",
+                    foreignField: "TradeId",
+                    as: "TradeStats"
+                },
+            },
+            {
                 $project: {
                     "_id": 0,
                     "AccountId": 0,
@@ -111,7 +119,17 @@ export const getTradeData = async (req, res) => {
                     "TradeAddDetails.UpdatedBy": 0,
                     "TradeAddDetails.createdAt": 0,
                     "TradeAddDetails.updatedAt": 0,
-                    "TradeAddDetails.__v": 0
+                    "TradeAddDetails.__v": 0,
+                    "TradeStats._id": 0,
+                    "TradeStats.TradeId": 0,
+                    "TradeStats.AccountId": 0,
+                    "TradeStats.UserId": 0,
+                    "TradeStats.CreatedBy": 0,
+                    "TradeStats.UpdatedBy": 0,
+                    "TradeStats.createdAt": 0,
+                    "TradeStats.updatedAt": 0,
+                    "TradeStats.__v": 0,
+
                 }
             }
         ]);

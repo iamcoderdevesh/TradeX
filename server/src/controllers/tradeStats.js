@@ -11,6 +11,10 @@ export const AddTradeStats = async (req, res, next) => {
         let lastId = await TradeStats.findOne().sort('-TradeStatsId');
         const TradeStatsId = lastId ? lastId.TradeStatsId + 1 : 1;
 
+        //Date Time Reset
+        const _tradeDate = new Date(EntryDate);
+        _tradeDate.setHours(0, 0, 0, 0);
+
         const newStats = new TradeStats({
             TradeStatsId,
             TradeStatus: tradeStatus,
@@ -22,7 +26,7 @@ export const AddTradeStats = async (req, res, next) => {
             GrossPnL: grossPnL,
             TradeRisk: tradeRisk,
             RiskReward: riskReward,
-            TradeDate: EntryDate,
+            TradeDate: _tradeDate,
             TradeId,
             AccountId,
             UserId,
