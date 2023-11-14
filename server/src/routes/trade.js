@@ -3,7 +3,7 @@ import { body } from 'express-validator';
 import { verifyToken } from "../middleware/authorise.js";
 import { ImportTrades } from "../controllers/tradeImport.js";
 import { AddTrade, getTradeData } from "../controllers/tradeDetail.js";
-import { AddTradeStats } from "../controllers/tradeStats.js";
+import { AddTradeStats, getMonthlyPnLAndRevenue, getTotalPnL, getWeeklyPnL } from "../controllers/tradeStats.js";
 import { AddTradeJournal, getJournalData } from "../controllers/tradeJournal.js";
 import { CalculateStatistics } from "../utils/calculate.js";
 
@@ -46,5 +46,14 @@ router.get("/api/trade/:accountId/getJounral", verifyToken, getJournalData);
 
 //Fetch Trade Statistics
 router.get("/api/trade/:accountId/getStats", verifyToken, CalculateStatistics);
+
+//Fetch Dashboard Data (TotalNetPnL)
+router.post("/api/trade/getTotalPnlStats", verifyToken, getTotalPnL);
+
+//Fetch Dashboard Data (Weekly PnL)
+router.post("/api/trade/getWeeklyStats", verifyToken, getWeeklyPnL);
+
+//Fetch Dashboard Data (Monthly PnL & Revenue)
+router.post("/api/trade/getMonthlyStats", verifyToken, getMonthlyPnLAndRevenue);
 
 export default router;

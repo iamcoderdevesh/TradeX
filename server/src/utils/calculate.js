@@ -38,16 +38,8 @@ export const CalculateHandleJournal = async (TradeId, UserId, AccountId, current
     const _capital = account.InitialBalance;
     const _totalCapital = account.TotalBalance;
 
-    // Update the Account's Collection
-    await Accounts.updateOne(
-        { AccountId: AccountId },
-        {
-            TotalBalance: (_totalCapital + netPnL)
-        }
-    );
-
     // Initialize variables
-    let _totalNetPnL = netPnL, _totalTrades = 1, _totalWins = tradeStatus === 'WIN' ? 1 : 0, _totalLoss = tradeStatus === 'LOSS' ? 1 : 0, _Winrate = 0, _totalFees = totalFees, _totalGrossPnL = grossPnL, _totalRR = riskReward, _netRevenue = netPnL, _grossRevenue = (totalFees + _netRevenue + _capital), _totalRevenue = _netRevenue + _capital;
+    let _totalNetPnL = netPnL, _totalTrades = 1, _totalWins = tradeStatus === 'WIN' ? 1 : 0, _totalLoss = tradeStatus === 'LOSS' ? 1 : 0, _Winrate = 0, _totalFees = totalFees, _totalGrossPnL = grossPnL, _totalRR = riskReward, _netRevenue = netPnL, _grossRevenue = (totalFees + _netRevenue + _capital), _totalRevenue = _netRevenue + _totalCapital;
 
     // Define date range for today's trades
     let end = new Date(todaysDate);
@@ -186,6 +178,14 @@ export const CalculateHandleJournal = async (TradeId, UserId, AccountId, current
         CreatedBy: UserId
     });
     await newTransaction.save();
+
+    // Update the Account's Collection
+    await Accounts.updateOne(
+        { AccountId: AccountId },
+        {
+            TotalBalance: (_totalCapital + netPnL)
+        }
+    );
 }
 
 /* Fetching and calculating for dashboard & analytics*/
@@ -316,7 +316,7 @@ export const CalculateStatistics = async (req, res) => {
                 }
             }
         ]);
-        
+
         if (result.length > 0 && getMinProfit.length > 0 && getMinLoss.length > 0 && getDays.length > 0 && getConsecutive.length > 0) {
             // Extract the fields from the result
             const { totalProfit, totalLoss, averagePnl, maxProfit, maxLoss, totalFees, avgProfit, avgLoss, countWin, countLoss } = result[0];
@@ -342,8 +342,8 @@ export const CalculateStatistics = async (req, res) => {
             _winDays = totalWinDays;
             _lossDays = totalLossDays;
             _netDailyPnl = netDailyPnl;
-            _convWins = maxWinStreak; 
-            _convLoss = maxLossStreak; 
+            _convWins = maxWinStreak;
+            _convLoss = maxLossStreak;
         }
 
         const _totalRevenue = _tradeCount === 0 ? 0 : parseFloat(TotalBalance).toFixed(2);
@@ -384,10 +384,10 @@ export const CalculateStatistics = async (req, res) => {
             TimeWinTrades: 0, //TODO :- To be calculated
             TimeLossTrades: 0, //TODO :- To be calculated
             OpenedTrades: 0, //TODO :- To be calculated
-            ProfitFactor: _profitFactor, 
+            ProfitFactor: _profitFactor,
             TotalTradeDays: _totalTradeDays,
-            TotalWinsDays: _winDays, 
-            TotalLossDays: _lossDays, 
+            TotalWinsDays: _winDays,
+            TotalLossDays: _lossDays,
         };
         res.status(200).json(responseData);
     }
