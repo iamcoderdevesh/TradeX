@@ -2,7 +2,7 @@ import TradeStats from "../models/tradeStats.js";
 import TradeJournal from "../models/tradeJournal.js";
 import Accounts from "../models/accounts.js";
 
-/* Inserting Additional Info in TradeAddDetails */
+/* Inserting Calculated Trade statistics in TradeStats */
 export const AddTradeStats = async (req, res, next) => {
 
     try {
@@ -54,6 +54,7 @@ export const getTotalPnL = async (req, res) => {
 }
 
 export const getWeeklyPnL = async (req, res) => {
+    const { UserId, AccountId } = req.body;
     try {
         const dayMap = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
         const today = new Date();
@@ -69,6 +70,8 @@ export const getWeeklyPnL = async (req, res) => {
         const getStats = await TradeJournal.aggregate([
             {
                 $match: {
+                    UserId: UserId,
+                    AccountId: AccountId,
                     JournalDate: {
                         $gte: startDate,
                         $lte: today,
@@ -123,7 +126,7 @@ export const getWeeklyPnL = async (req, res) => {
 }
 
 export const getMonthlyPnLAndRevenue = async (req, res) => {
-    //TODO :- Year codition remains
+
     const { UserId, AccountId } = req.body;
 
     try {
@@ -131,6 +134,7 @@ export const getMonthlyPnLAndRevenue = async (req, res) => {
         if (account) {
             const { InitialBalance } = account;
             const monthMap = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'];
+            const currentYear = new Date().getFullYear();
             const monthlyStats = monthMap.map(month => ({
                 Month: month,
                 TotalNetPnL: 0,
@@ -138,6 +142,15 @@ export const getMonthlyPnLAndRevenue = async (req, res) => {
             }));
 
             const getStats = await TradeJournal.aggregate([
+                {
+                    $match: {
+                        UserId: UserId,
+                        AccountId: parseInt(AccountId),
+                        $expr: {
+                            $eq: [{ $year: "$JournalDate" }, currentYear]
+                        }
+                    },
+                },
                 {
                     $group: {
                         _id: {
@@ -193,6 +206,7 @@ export const getMonthlyPnLAndRevenue = async (req, res) => {
 }
 //
 
+//Analytics Charts
 export const getDailyPnLAndReturns = async (req,res) => {
     const { AccountId, UserId } = req.body;
     const getStats = await TradeJournal.find({ UserId: UserId, AccountId: AccountId }).select('JournalDate TotalNetPnL TotalRoi -_id');
@@ -206,3 +220,4 @@ export const getDailyPnLAndReturns = async (req,res) => {
     });
     res.status(200).json(getStats);
 }
+//

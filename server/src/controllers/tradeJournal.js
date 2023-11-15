@@ -16,7 +16,6 @@ export const AddTradeJournal = async (req, res) => {
 };
 
 /* Getting all Trade Data */
-
 export const getJournalData = async (req, res) => {
     const JounralTrade = await TradeJournal.find({ UserId: req.body.UserId, AccountId: req.params.accountId })
         .select(excludeFields());

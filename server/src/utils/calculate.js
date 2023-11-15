@@ -197,205 +197,217 @@ export const CalculateStatistics = async (req, res) => {
     const { UserId } = req.body;
     const { accountId } = req.params;
 
-    const account = await Accounts.findOne({ UserId: UserId, AccountId: req.params.accountId }).select(['TotalBalance', 'InitialBalance']);
+    const AccountId = parseInt(accountId);
+    try {
+        const account = await Accounts.findOne({ UserId: UserId, AccountId: req.params.accountId }).select(['TotalBalance', 'InitialBalance']);
 
-    if (account) {
-        const { TotalBalance, InitialBalance } = account;
-        const _tradeCount = await TradeStats.where({ UserId: UserId, AccountId: accountId }).countDocuments();
-        const _totalTradeDays = await TradeJournal.where({ UserId: UserId, AccountId: accountId }).countDocuments();
-
-        let _totalProfit = 0, _totalLoss = 0, _averagePnl = 0, _maxProfit = 0, _maxLoss = 0, _minProfit = 0, _minLoss = 0, _totalFees = 0, _avgProfit = 0, _avgLoss = 0, _totalWins = 0, _totalLosses = 0, _winDays = 0, _lossDays = 0, _netDailyPnl = 0, _convWins, _convLoss;
-
-        const result = await TradeStats.aggregate([
-            {
-                $group: {
-                    _id: null,
-                    totalProfit: { $sum: '$NetProfit' },
-                    totalLoss: { $sum: '$NetLoss' },
-                    averagePnl: { $avg: '$NetPnL' },
-                    maxProfit: { $max: '$NetProfit' },
-                    minProfit: { $min: '$NetProfit' },
-                    maxLoss: { $min: '$NetLoss' },
-                    minLoss: { $max: '$NetLoss' },
-                    totalFees: { $sum: '$TotalFees' },
-                    avgProfit: { $avg: { $cond: [{ $eq: ["$TradeStatus", "WIN"] }, "$NetPnL", 0] } },
-                    avgLoss: { $avg: { $cond: [{ $eq: ["$TradeStatus", "LOSS"] }, "$NetPnL", 0] } },
-                    countWin: { $sum: { $cond: [{ $eq: ["$TradeStatus", "WIN"] }, 1, 0] } },
-                    countLoss: { $sum: { $cond: [{ $eq: ["$TradeStatus", "LOSS"] }, 1, 0] } },
-                }
-            }
-        ]);
-
-        const getMinProfit = await TradeStats.aggregate([
-            {
-                $match: {
-                    NetProfit: { $ne: 0 },
-                }
-            },
-            {
-                $group: {
-                    _id: null,
-                    minProfit: { $min: '$NetProfit' },
-                }
-            }
-        ]);
-
-        const getMinLoss = await TradeStats.aggregate([
-            {
-                $match: {
-                    NetLoss: { $ne: 0 },
-                }
-            },
-            {
-                $group: {
-                    _id: null,
-                    minLoss: { $max: '$NetLoss' },
-                }
-            }
-        ]);
-
-        const getDays = await TradeJournal.aggregate([
-            {
-                $group: {
-                    _id: null,
-                    totalWinDays: { $sum: { $cond: [{ $gt: ['$TotalNetPnL', 0] }, 1, 0,], }, },
-                    totalLossDays: { $sum: { $cond: [{ $lt: ['$TotalNetPnL', 0] }, 1, 0,], }, },
-                    netDailyPnl: { $avg: '$TotalNetPnL' },
-                },
-            },
-        ]);
-
-        const getConsecutive = await TradeStats.aggregate([
-            {
-                $sort: { TradeDate: 1 }
-            },
-            {
-                $group: {
-                    _id: null,
-                    trades: {
-                        $push: "$$ROOT"
+        if (account) {
+            const { TotalBalance, InitialBalance } = account;
+            const _tradeCount = await TradeStats.where({ UserId: UserId, AccountId: accountId }).countDocuments();
+            const _totalTradeDays = await TradeJournal.where({ UserId: UserId, AccountId: accountId }).countDocuments();
+    
+            let _totalProfit = 0, _totalLoss = 0, _averagePnl = 0, _maxProfit = 0, _maxLoss = 0, _minProfit = 0, _minLoss = 0, _totalFees = 0, _avgProfit = 0, _avgLoss = 0, _totalWins = 0, _totalLosses = 0, _winDays = 0, _lossDays = 0, _netDailyPnl = 0, _convWins, _convLoss;
+    
+            const result = await TradeStats.aggregate([
+                { $match: { UserId: UserId, AccountId: AccountId } },
+                {
+                    $group: {
+                        _id: null,
+                        totalProfit: { $sum: '$NetProfit' },
+                        totalLoss: { $sum: '$NetLoss' },
+                        averagePnl: { $avg: '$NetPnL' },
+                        maxProfit: { $max: '$NetProfit' },
+                        minProfit: { $min: '$NetProfit' },
+                        maxLoss: { $min: '$NetLoss' },
+                        minLoss: { $max: '$NetLoss' },
+                        totalFees: { $sum: '$TotalFees' },
+                        avgProfit: { $avg: { $cond: [{ $eq: ["$TradeStatus", "WIN"] }, "$NetPnL", 0] } },
+                        avgLoss: { $avg: { $cond: [{ $eq: ["$TradeStatus", "LOSS"] }, "$NetPnL", 0] } },
+                        countWin: { $sum: { $cond: [{ $eq: ["$TradeStatus", "WIN"] }, 1, 0] } },
+                        countLoss: { $sum: { $cond: [{ $eq: ["$TradeStatus", "LOSS"] }, 1, 0] } },
                     }
                 }
-            },
-            {
-                $project: {
-                    _id: 0,
-                    maxStreaks: {
-                        $reduce: {
-                            input: "$trades",
-                            initialValue: { winStreak: 0, lossStreak: 0, maxWinStreak: 0, maxLossStreak: 0, prevStatus: "" },
-                            in: {
-                                winStreak: {
-                                    $cond: [
-                                        { $eq: ["$$this.TradeStatus", "WIN"] },
-                                        { $add: ["$$value.winStreak", 1] },
-                                        0
-                                    ]
-                                },
-                                lossStreak: {
-                                    $cond: [
-                                        { $eq: ["$$this.TradeStatus", "LOSS"] },
-                                        { $add: ["$$value.lossStreak", 1] },
-                                        0
-                                    ]
-                                },
-                                maxWinStreak: {
-                                    $cond: [
-                                        { $eq: ["$$this.TradeStatus", "WIN"] },
-                                        { $max: ["$$value.maxWinStreak", { $add: ["$$value.winStreak", 1] }] },
-                                        "$$value.maxWinStreak"
-                                    ]
-                                },
-                                maxLossStreak: {
-                                    $cond: [
-                                        { $eq: ["$$this.TradeStatus", "LOSS"] },
-                                        { $max: ["$$value.maxLossStreak", { $add: ["$$value.lossStreak", 1] }] },
-                                        "$$value.maxLossStreak"
-                                    ]
-                                },
-                                prevStatus: "$$this.TradeStatus"
+            ]);
+            
+            const getMinProfit = await TradeStats.aggregate([
+                {
+                    $match: {
+                        UserId: UserId, 
+                        AccountId: AccountId,
+                        NetProfit: { $ne: 0 },
+                    }
+                },
+                {
+                    $group: {
+                        _id: null,
+                        minProfit: { $min: '$NetProfit' },
+                    }
+                }
+            ]);
+    
+            const getMinLoss = await TradeStats.aggregate([
+                {
+                    $match: {
+                        UserId: UserId, 
+                        AccountId: AccountId,
+                        NetLoss: { $ne: 0 },
+                    }
+                },
+                {
+                    $group: {
+                        _id: null,
+                        minLoss: { $max: '$NetLoss' },
+                    }
+                }
+            ]);
+    
+            const getDays = await TradeJournal.aggregate([
+                { $match: { UserId: UserId, AccountId: AccountId } },
+                {
+                    $group: {
+                        _id: null,
+                        totalWinDays: { $sum: { $cond: [{ $gt: ['$TotalNetPnL', 0] }, 1, 0,], }, },
+                        totalLossDays: { $sum: { $cond: [{ $lt: ['$TotalNetPnL', 0] }, 1, 0,], }, },
+                        netDailyPnl: { $avg: '$TotalNetPnL' },
+                    },
+                },
+            ]);
+    
+            const getConsecutive = await TradeStats.aggregate([
+                { $match: { UserId: UserId, AccountId: AccountId } },
+                {
+                    $sort: { TradeDate: 1 }
+                },
+                {
+                    $group: {
+                        _id: null,
+                        trades: {
+                            $push: "$$ROOT"
+                        }
+                    }
+                },
+                {
+                    $project: {
+                        _id: 0,
+                        maxStreaks: {
+                            $reduce: {
+                                input: "$trades",
+                                initialValue: { winStreak: 0, lossStreak: 0, maxWinStreak: 0, maxLossStreak: 0, prevStatus: "" },
+                                in: {
+                                    winStreak: {
+                                        $cond: [
+                                            { $eq: ["$$this.TradeStatus", "WIN"] },
+                                            { $add: ["$$value.winStreak", 1] },
+                                            0
+                                        ]
+                                    },
+                                    lossStreak: {
+                                        $cond: [
+                                            { $eq: ["$$this.TradeStatus", "LOSS"] },
+                                            { $add: ["$$value.lossStreak", 1] },
+                                            0
+                                        ]
+                                    },
+                                    maxWinStreak: {
+                                        $cond: [
+                                            { $eq: ["$$this.TradeStatus", "WIN"] },
+                                            { $max: ["$$value.maxWinStreak", { $add: ["$$value.winStreak", 1] }] },
+                                            "$$value.maxWinStreak"
+                                        ]
+                                    },
+                                    maxLossStreak: {
+                                        $cond: [
+                                            { $eq: ["$$this.TradeStatus", "LOSS"] },
+                                            { $max: ["$$value.maxLossStreak", { $add: ["$$value.lossStreak", 1] }] },
+                                            "$$value.maxLossStreak"
+                                        ]
+                                    },
+                                    prevStatus: "$$this.TradeStatus"
+                                }
                             }
                         }
                     }
                 }
+            ]);
+    
+            if (result.length > 0 && getMinProfit.length > 0 && getMinLoss.length > 0 && getDays.length > 0 && getConsecutive.length > 0) {
+                // Extract the fields from the result
+                const { totalProfit, totalLoss, averagePnl, maxProfit, maxLoss, totalFees, avgProfit, avgLoss, countWin, countLoss } = result[0];
+    
+                const { minProfit } = getMinProfit[0];
+                const { minLoss } = getMinLoss[0];
+                const { totalWinDays, totalLossDays, netDailyPnl } = getDays[0];
+                const { maxWinStreak, maxLossStreak } = getConsecutive[0].maxStreaks;
+    
+                // Update the local variables with the values from the database
+                _totalProfit = totalProfit;
+                _totalLoss = totalLoss;
+                _averagePnl = averagePnl.toFixed(2);
+                _maxProfit = maxProfit;
+                _minProfit = minProfit;
+                _minLoss = minLoss;
+                _maxLoss = maxLoss;
+                _totalFees = totalFees;
+                _avgProfit = avgProfit.toFixed(2);
+                _avgLoss = avgLoss.toFixed(2);
+                _totalWins = countWin;
+                _totalLosses = countLoss;
+                _winDays = totalWinDays;
+                _lossDays = totalLossDays;
+                _netDailyPnl = netDailyPnl;
+                _convWins = maxWinStreak;
+                _convLoss = maxLossStreak;
             }
-        ]);
-
-        if (result.length > 0 && getMinProfit.length > 0 && getMinLoss.length > 0 && getDays.length > 0 && getConsecutive.length > 0) {
-            // Extract the fields from the result
-            const { totalProfit, totalLoss, averagePnl, maxProfit, maxLoss, totalFees, avgProfit, avgLoss, countWin, countLoss } = result[0];
-
-            const { minProfit } = getMinProfit[0];
-            const { minLoss } = getMinLoss[0];
-            const { totalWinDays, totalLossDays, netDailyPnl } = getDays[0];
-            const { maxWinStreak, maxLossStreak } = getConsecutive[0].maxStreaks;
-
-            // Update the local variables with the values from the database
-            _totalProfit = totalProfit;
-            _totalLoss = totalLoss;
-            _averagePnl = averagePnl.toFixed(2);
-            _maxProfit = maxProfit;
-            _minProfit = minProfit;
-            _minLoss = minLoss;
-            _maxLoss = maxLoss;
-            _totalFees = totalFees;
-            _avgProfit = avgProfit.toFixed(2);
-            _avgLoss = avgLoss.toFixed(2);
-            _totalWins = countWin;
-            _totalLosses = countLoss;
-            _winDays = totalWinDays;
-            _lossDays = totalLossDays;
-            _netDailyPnl = netDailyPnl;
-            _convWins = maxWinStreak;
-            _convLoss = maxLossStreak;
+    
+            const _totalRevenue = _tradeCount === 0 ? 0 : parseFloat(TotalBalance).toFixed(2);
+            const _totalPnl = _tradeCount === 0 ? 0 : parseInt((TotalBalance - InitialBalance));
+            const _Winrate = _tradeCount === 0 ? 0 : parseFloat((_totalWins / _tradeCount) * 100).toFixed(2);
+            const _roi = parseFloat((TotalBalance - InitialBalance) / InitialBalance * 100).toFixed(2);
+    
+            const _totalRR = Math.abs(((_totalProfit / InitialBalance) * 100) / ((_totalLoss / InitialBalance) * 100)).toFixed(2);
+            const _grossPnl = (_totalPnl + _totalFees).toFixed(2);
+            const _profitFactor = Math.abs((_totalProfit / _totalLoss)).toFixed(2);
+    
+            const responseData = {
+                totalRevenue: _totalRevenue,
+                totalPnl: _totalPnl,
+                Winrate: _Winrate,
+                totalTrades: _tradeCount,
+                roi: _roi,
+                totalProfit: _totalProfit,
+                totalLoss: _totalLoss,
+                averagePnl: _averagePnl,
+                maxProfit: _maxProfit,
+                maxLoss: _maxLoss,
+                minProfit: _minProfit,
+                minLoss: _minLoss,
+                totalFees: _totalFees,
+                totalRR: _totalRR,
+                avgProfit: _avgProfit,
+                avgLoss: _avgLoss,
+                TotalWins: _totalWins,
+                TotalLosses: _totalLosses,
+                GrossPnl: _grossPnl,
+                netDailyPnl: _netDailyPnl,
+                maxConsecutiveWins: _convWins,
+                maxConsecutiveLosses: _convLoss,
+                netDailyPnl: _netDailyPnl,
+                Breakeven: 0, //TODO :- To be calculated
+                TimeAllTrades: 0, //TODO :- To be calculated
+                TimeWinTrades: 0, //TODO :- To be calculated
+                TimeLossTrades: 0, //TODO :- To be calculated
+                OpenedTrades: 0, //TODO :- To be calculated
+                ProfitFactor: _profitFactor,
+                TotalTradeDays: _totalTradeDays,
+                TotalWinsDays: _winDays,
+                TotalLossDays: _lossDays,
+            };
+            res.status(200).json(responseData);
         }
-
-        const _totalRevenue = _tradeCount === 0 ? 0 : parseFloat(TotalBalance).toFixed(2);
-        const _totalPnl = _tradeCount === 0 ? 0 : parseInt((TotalBalance - InitialBalance));
-        const _Winrate = _tradeCount === 0 ? 0 : parseFloat((_totalWins / _tradeCount) * 100).toFixed(2);
-        const _roi = parseFloat((TotalBalance - InitialBalance) / InitialBalance * 100).toFixed(2);
-
-        const _totalRR = Math.abs(((_totalProfit / InitialBalance) * 100) / ((_totalLoss / InitialBalance) * 100)).toFixed(2);
-        const _grossPnl = (_totalPnl + _totalFees).toFixed(2);
-        const _profitFactor = Math.abs((_totalProfit / _totalLoss)).toFixed(2);
-
-        const responseData = {
-            totalRevenue: _totalRevenue,
-            totalPnl: _totalPnl,
-            Winrate: _Winrate,
-            totalTrades: _tradeCount,
-            roi: _roi,
-            totalProfit: _totalProfit,
-            totalLoss: _totalLoss,
-            averagePnl: _averagePnl,
-            maxProfit: _maxProfit,
-            maxLoss: _maxLoss,
-            minProfit: _minProfit,
-            minLoss: _minLoss,
-            totalFees: _totalFees,
-            totalRR: _totalRR,
-            avgProfit: _avgProfit,
-            avgLoss: _avgLoss,
-            TotalWins: _totalWins,
-            TotalLosses: _totalLosses,
-            GrossPnl: _grossPnl,
-            netDailyPnl: _netDailyPnl,
-            maxConsecutiveWins: _convWins,
-            maxConsecutiveLosses: _convLoss,
-            netDailyPnl: _netDailyPnl,
-            Breakeven: 0, //TODO :- To be calculated
-            TimeAllTrades: 0, //TODO :- To be calculated
-            TimeWinTrades: 0, //TODO :- To be calculated
-            TimeLossTrades: 0, //TODO :- To be calculated
-            OpenedTrades: 0, //TODO :- To be calculated
-            ProfitFactor: _profitFactor,
-            TotalTradeDays: _totalTradeDays,
-            TotalWinsDays: _winDays,
-            TotalLossDays: _lossDays,
-        };
-        res.status(200).json(responseData);
-    }
-    else {
-        res.status(404).json({ error: "Account not found" });
+        else {
+            res.status(404).json({ error: "Account not found" });
+        }
+    } catch (err) {
+        res.status(500).json({ error: err.message });
     }
 }
