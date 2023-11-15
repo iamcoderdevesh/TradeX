@@ -44,6 +44,7 @@ export const AddTradeStats = async (req, res, next) => {
     }
 };
 
+//Dashboard Charts
 export const getTotalPnL = async (req, res) => {
     const { AccountId, UserId } = req.body;
     const tradeStats = await TradeStats.find({ UserId: UserId, AccountId: AccountId }).select('NetPnL -_id');
@@ -189,4 +190,19 @@ export const getMonthlyPnLAndRevenue = async (req, res) => {
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
+}
+//
+
+export const getDailyPnLAndReturns = async (req,res) => {
+    const { AccountId, UserId } = req.body;
+    const getStats = await TradeJournal.find({ UserId: UserId, AccountId: AccountId }).select('JournalDate TotalNetPnL TotalRoi -_id');
+
+    if (!getStats) return res.status(404).send('No Data Found!');
+    getStats.forEach(function(item) {
+        let date = new Date(item.JournalDate);
+        let ISTOffset = 5.5 * 60 * 60 * 1000; 
+        let ISTDate = new Date(date.getTime() + ISTOffset);
+        item.JournalDate = ISTDate;
+    });
+    res.status(200).json(getStats);
 }

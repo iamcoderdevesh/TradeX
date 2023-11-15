@@ -55,6 +55,10 @@ const TradeJournalSechma = new mongoose.Schema(
             type: Number,
             required: true,
         },
+        TotalRoi: {
+            type: Number,
+            required: true,
+        },
         TradeId: {
             type: Number,
             required: true,

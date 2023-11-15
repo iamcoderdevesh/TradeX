@@ -39,7 +39,7 @@ export const CalculateHandleJournal = async (TradeId, UserId, AccountId, current
     const _totalCapital = account.TotalBalance;
 
     // Initialize variables
-    let _totalNetPnL = netPnL, _totalTrades = 1, _totalWins = tradeStatus === 'WIN' ? 1 : 0, _totalLoss = tradeStatus === 'LOSS' ? 1 : 0, _Winrate = 0, _totalFees = totalFees, _totalGrossPnL = grossPnL, _totalRR = riskReward, _netRevenue = netPnL, _grossRevenue = (totalFees + _netRevenue + _capital), _totalRevenue = _netRevenue + _totalCapital;
+    let _totalNetPnL = netPnL, _totalTrades = 1, _totalWins = tradeStatus === 'WIN' ? 1 : 0, _totalLoss = tradeStatus === 'LOSS' ? 1 : 0, _Winrate = 0, _totalFees = totalFees, _totalGrossPnL = grossPnL, _totalRR = riskReward, _netRevenue = netPnL, _grossRevenue = (totalFees + _netRevenue + _capital), _totalRevenue = _netRevenue + _totalCapital, _netRoi = parseFloat((netPnL / _capital * 100).toFixed(2));
 
     // Define date range for today's trades
     let end = new Date(todaysDate);
@@ -69,6 +69,7 @@ export const CalculateHandleJournal = async (TradeId, UserId, AccountId, current
         _netRevenue = 0;
         _grossRevenue = 0;
         _totalRevenue = 0;
+        _netRoi = 0;
 
         const _journalDate = new Date(getJournal.JournalDate).toLocaleDateString();
 
@@ -105,9 +106,10 @@ export const CalculateHandleJournal = async (TradeId, UserId, AccountId, current
             });
 
             // Calculate additional fields
-            _Winrate = (_totalWins / _totalTrades) * 100;
+            _Winrate = ((_totalWins / _totalTrades) * 100).toFixed(2);
             _netRevenue = _totalNetPnL;
             _grossRevenue = (_totalGrossPnL + _capital);
+            _netRoi = ((_totalNetPnL / _capital) * 100).toFixed(2);
             _totalRevenue = _totalCapital + netPnL;
 
             // Update today's journal entry
@@ -121,10 +123,11 @@ export const CalculateHandleJournal = async (TradeId, UserId, AccountId, current
                     Winrate: _Winrate,
                     TotalFees: _totalFees,
                     TotalGrossPnL: _totalGrossPnL,
-                    TotalRR: parseFloat(_totalRR).toFixed(2),
+                    TotalRR: (_totalRR).toFixed(2),
                     NetRevenue: _netRevenue,
                     GrossRevenue: _grossRevenue,
                     TotalRevenue: _totalRevenue,
+                    TotalRoi: _netRoi,
                     UpdatedBy: UserId
                 }
             );
@@ -153,6 +156,7 @@ export const CalculateHandleJournal = async (TradeId, UserId, AccountId, current
             NetRevenue: _netRevenue,
             GrossRevenue: _grossRevenue,
             TotalRevenue: _totalRevenue,
+            TotalRoi: _netRoi,
             TradeId,
             AccountId,
             UserId,
@@ -188,7 +192,7 @@ export const CalculateHandleJournal = async (TradeId, UserId, AccountId, current
     );
 }
 
-/* Fetching and calculating for dashboard & analytics*/
+/* Fetching and calculating data for dashboard & analytics*/
 export const CalculateStatistics = async (req, res) => {
     const { UserId } = req.body;
     const { accountId } = req.params;
