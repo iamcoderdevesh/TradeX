@@ -26,7 +26,7 @@ const UserDetailSechma = new mongoose.Schema(
             unique: true,
         },
         PhoneNo: {
-            type: BigInt,
+            type: String,
             default: null,
             min: 5,
             max: 250,

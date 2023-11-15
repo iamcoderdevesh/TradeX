@@ -77,3 +77,33 @@ export const login = async (req, res) => {
         }
     }
 };
+
+/* Update Profile */
+export const UpdateProfile = async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+    else {
+        try {
+            const { UserId, UserDetId, FullName, Email, Phone, BirthDate } = req.body;
+
+            const userDetails = await UserDetails.findOneAndUpdate(
+                { UserId: UserId, UserDetId: UserDetId },
+                { FullName: FullName, Email: Email, PhoneNo: Phone, BirthDate: BirthDate, UpdatedBy: UserId },
+            );
+
+            await UserInfo.findOneAndUpdate(
+                { UserId: UserId },
+                { Email: Email },
+            );
+
+            if (userDetails) {
+                const { FullName, Email, PhoneNo, BirthDate } = userDetails;
+                res.status(200).json({ FullName, Email, PhoneNo, BirthDate });
+            }
+        } catch (err) {
+            res.status(500).json({ error: err.message });
+        }
+    }
+}

@@ -1,6 +1,7 @@
-import { register, login } from "../controllers/auth.js";
+import { register, login, UpdateProfile } from "../controllers/auth.js";
 import express from "express";
 import { body } from 'express-validator';
+import { verifyToken } from "../middleware/authorise.js";
 
 //Validation
 const registerValidations = [
@@ -19,5 +20,8 @@ const loginValidations = [
 const router = express.Router();
 router.post("/api/auth/register", registerValidations, register);
 router.post("/api/auth/login", loginValidations, login);
+
+/* Update Profile */
+router.post("/api/accounts/updateProfile", verifyToken, UpdateProfile);
 
 export default router;

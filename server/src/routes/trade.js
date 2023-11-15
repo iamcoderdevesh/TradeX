@@ -48,15 +48,15 @@ router.get("/api/trade/:accountId/getJounral", verifyToken, getJournalData);
 router.get("/api/trade/:accountId/getStats", verifyToken, CalculateStatistics);
 
 //Fetch Dashboard Chart Data (TotalNetPnL)
-router.post("/api/trade/getTotalPnlStats", verifyToken, getTotalPnL);
+router.get("/api/trade/:accountId/getTotalPnlStats", verifyToken, getTotalPnL);
 
 //Fetch Dashboard Chart Data (Weekly PnL)
-router.post("/api/trade/getWeeklyStats", verifyToken, getWeeklyPnL);
+router.get("/api/trade/:accountId/getWeeklyStats", verifyToken, getWeeklyPnL);
 
 //Fetch Dashboard Chart Data (Monthly PnL & Revenue)
-router.post("/api/trade/getMonthlyStats", verifyToken, getMonthlyPnLAndRevenue);
+router.get("/api/trade/:accountId/getMonthlyStats", verifyToken, getMonthlyPnLAndRevenue);
 
 //Fetch Analytics Chart Data (Daily PnL)
-router.post("/api/trade/getDailyStats", verifyToken, getDailyPnLAndReturns);
+router.get("/api/trade/:accountId/getDailyStats", verifyToken, getDailyPnLAndReturns);
 
 export default router;

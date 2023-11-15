@@ -46,15 +46,15 @@ export const AddTradeStats = async (req, res, next) => {
 
 //Dashboard Charts
 export const getTotalPnL = async (req, res) => {
-    const { AccountId, UserId } = req.body;
-    const tradeStats = await TradeStats.find({ UserId: UserId, AccountId: AccountId }).select('NetPnL -_id');
+    const { UserId } = req.body;
+    const tradeStats = await TradeStats.find({ UserId: UserId, AccountId: parseInt(req.params.accountId) }).select('NetPnL -_id');
 
     if (!tradeStats) return res.status(404).send('No Data Found!');
     res.status(200).json(tradeStats);
 }
 
 export const getWeeklyPnL = async (req, res) => {
-    const { UserId, AccountId } = req.body;
+    const { UserId } = req.body;
     try {
         const dayMap = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
         const today = new Date();
@@ -71,7 +71,7 @@ export const getWeeklyPnL = async (req, res) => {
             {
                 $match: {
                     UserId: UserId,
-                    AccountId: AccountId,
+                    AccountId: parseInt(req.params.accountId),
                     JournalDate: {
                         $gte: startDate,
                         $lte: today,
@@ -127,10 +127,10 @@ export const getWeeklyPnL = async (req, res) => {
 
 export const getMonthlyPnLAndRevenue = async (req, res) => {
 
-    const { UserId, AccountId } = req.body;
+    const { UserId } = req.body;
 
     try {
-        const account = await Accounts.findOne({ UserId: UserId, AccountId: AccountId }).select('InitialBalance');
+        const account = await Accounts.findOne({ UserId: UserId, AccountId: parseInt(req.params.accountId) }).select('InitialBalance');
         if (account) {
             const { InitialBalance } = account;
             const monthMap = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'];
@@ -145,7 +145,7 @@ export const getMonthlyPnLAndRevenue = async (req, res) => {
                 {
                     $match: {
                         UserId: UserId,
-                        AccountId: parseInt(AccountId),
+                        AccountId: parseInt(req.params.accountId),
                         $expr: {
                             $eq: [{ $year: "$JournalDate" }, currentYear]
                         }
@@ -208,8 +208,8 @@ export const getMonthlyPnLAndRevenue = async (req, res) => {
 
 //Analytics Charts
 export const getDailyPnLAndReturns = async (req,res) => {
-    const { AccountId, UserId } = req.body;
-    const getStats = await TradeJournal.find({ UserId: UserId, AccountId: AccountId }).select('JournalDate TotalNetPnL TotalRoi -_id');
+    const { UserId } = req.body;
+    const getStats = await TradeJournal.find({ UserId: UserId, AccountId: parseInt(req.params.accountId) }).select('JournalDate TotalNetPnL TotalRoi -_id');
 
     if (!getStats) return res.status(404).send('No Data Found!');
     getStats.forEach(function(item) {
