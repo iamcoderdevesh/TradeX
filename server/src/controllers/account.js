@@ -1,5 +1,6 @@
 import { validationResult } from 'express-validator';
 import AccountDetails from "../models/accounts.js";
+import { DeleteTrades } from './tradeDetail.js';
 
 /* Creating/Updating Account */
 export const CreateUpdateAccount = async (req, res) => {
@@ -21,7 +22,7 @@ export const CreateUpdateAccount = async (req, res) => {
                     { AccountName, Market, Broker, InitialBalance, Currency, UpdatedBy: UserId },
                     { new: true }
                 );
-    
+
                 if (updateAccount) {
                     const { AccountId, AccountName, Market, Broker, InitialBalance, Currency } = updateAccount;
                     res.status(200).json({ AccountId, AccountName, Market, Broker, InitialBalance, Currency });
@@ -52,5 +53,32 @@ export const CreateUpdateAccount = async (req, res) => {
         } catch (err) {
             res.status(500).json({ error: err.message });
         }
+    }
+};
+
+/* Deleting Account */
+export const DeleteAccount = async (req, res) => {
+
+    const { AccountId, UserId } = req.body;
+
+    //Checking the records exists or not
+    const account = await AccountDetails.findOne({ UserId, AccountId });
+    if (account) {
+        try {
+            const deleteAccount = await AccountDetails.findOneAndDelete({ UserId, AccountId });
+            if (deleteAccount.deletedCount > 0) {
+                if (DeleteTrades(req, res)) {
+                    return res.status(201).send("Account Deleted Successfully!!!");
+                }
+            }
+            res.status(400).json({ errors: "Unable to delete account" });
+        }
+        catch (err) {
+            res.status(500).json({ error: err.message });
+        }
+    }
+
+    else {
+        res.status(400).json({ errors: "Account Doesn't Exists" });
     }
 };

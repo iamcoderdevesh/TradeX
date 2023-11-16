@@ -2,7 +2,7 @@ import express from "express";
 import { body } from 'express-validator';
 import { verifyToken } from "../middleware/authorise.js";
 import { ImportTrades } from "../controllers/tradeImport.js";
-import { AddUpdateTrade, getTradeData } from "../controllers/tradeDetail.js";
+import { AddUpdateTrade, DeleteTrades, getTradeData } from "../controllers/tradeDetail.js";
 import { AddUpdateTradeStats, getDailyPnLAndReturns, getMonthlyPnLAndRevenue, getTotalPnL, getWeeklyPnL } from "../controllers/tradeStats.js";
 import { AddTradeJournal, getJournalData } from "../controllers/tradeJournal.js";
 import { CalculateStatistics } from "../utils/calculate.js";
@@ -60,5 +60,7 @@ router.get("/api/trade/:accountId/getMonthlyStats", verifyToken, getMonthlyPnLAn
 //Fetch Analytics Chart Data (Daily PnL)
 router.get("/api/trade/:accountId/getDailyStats", verifyToken, getDailyPnLAndReturns);
 //#endregion
+
+router.delete("/api/trade/deleteTrade", verifyToken, DeleteTrades);
 
 export default router;

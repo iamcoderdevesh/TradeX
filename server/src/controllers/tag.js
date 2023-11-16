@@ -21,18 +21,18 @@ export const CreateUpdateTag = async (req, res) => {
                     { TagName, TagType, TagDesc, UpdatedBy: UserId },
                     { new: true }
                 );
-    
+
                 if (updateTags) {
                     const { TagId, TagName, TagType, TagDesc } = updateTags;
                     res.status(200).json({ TagId, TagName, TagType, TagDesc });
                 }
             }
-            
+
             else {
                 // Find the last Id from Collection. If record does'nt exist, start with 1, otherwise increment the last Id
                 let lastId = await Tags.findOne().sort('-TagId');
                 const TagId = lastId ? lastId.TagId + 1 : 1;
-    
+
                 const newTag = new Tags({
                     TagId,
                     TagName,
@@ -41,7 +41,7 @@ export const CreateUpdateTag = async (req, res) => {
                     UserId,
                     CreatedBy: UserId,
                 });
-    
+
                 await newTag.save();
                 res.status(201).send("Tag Created Successfully!!!");
             }
@@ -49,5 +49,32 @@ export const CreateUpdateTag = async (req, res) => {
         } catch (err) {
             res.status(500).json({ error: err.message });
         }
+    }
+};
+
+/* Deleting Tags */
+export const DeleteTag = async (req, res) => {
+
+    const { UserId, AccountId, TagId } = req.body;
+
+    const tagFilter = { UserId, AccountId };
+
+    if (TagId) {
+        tagFilter.TagId = TagId;
+    }
+
+    //Checking the records exists or not
+    try {
+        const tag = await Tags.findOne(tagFilter);
+        if (tag) {
+            const deleteTag = await Tags.deleteMany(tagFilter);
+            if (deleteTag.deletedCount > 0) {
+                return res.status(201).send("Tags Deleted Successfully!!!");
+            }
+        }
+        res.status(400).json({ errors: "Tag Doesn't Exists" });
+    }
+    catch (err) {
+        res.status(500).json({ error: err.message });
     }
 };

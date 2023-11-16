@@ -1,6 +1,6 @@
 import express from "express";
 import { verifyToken } from "../middleware/authorise.js";
-import { CreateUpdateTag } from "../controllers/tag.js";
+import { CreateUpdateTag, DeleteTag } from "../controllers/tag.js";
 import { body } from 'express-validator';
 
 // Validation
@@ -15,5 +15,8 @@ const router = express.Router();
 
 /* Create Tag */
 router.post("/api/tags/createUpdateTag", validations, verifyToken, CreateUpdateTag);
+
+/* Delete Tag */
+router.delete("/api/tags/deleteTag", verifyToken, DeleteTag);
 
 export default router;

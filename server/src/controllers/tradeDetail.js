@@ -2,6 +2,9 @@ import { validationResult } from 'express-validator';
 import TradeDetails from "../models/tradeDetails.js";
 import TradeAddDetails from '../models/tradeAddDetails.js';
 import { CalculateTradeStats } from '../utils/calculate.js';
+import TradeStats from '../models/tradeStats.js';
+import TradeJournal from '../models/tradeJournal.js';
+import Transaction from '../models/transaction.js';
 
 /* Inserting/Updating TradeDetails */
 export const AddUpdateTrade = async (req, res, next) => {
@@ -156,3 +159,34 @@ export const getTradeData = async (req, res) => {
         res.status(200).json(getTrade);
     }
 };
+
+/* Deleting Trade */
+export const DeleteTrades = async (req, res) => {
+    const { AccountId, UserId, TradeId } = req.body;
+
+    try {
+        const tradeFilter = { UserId, AccountId };
+
+        if (TradeId) {
+            tradeFilter.TradeId = TradeId;
+        }
+
+        const deleteTrade = await TradeDetails.deleteMany(tradeFilter);
+        const deleteTradeAdd = await TradeAddDetails.deleteMany(tradeFilter);
+        const deleteTradeStat = await TradeStats.deleteMany(tradeFilter);
+        const deleteTradeJournal = await TradeJournal.deleteMany(tradeFilter);
+        const deleteTransaction = await Transaction.deleteMany({ UserId, AccountId });
+
+        if (deleteTrade.deletedCount > 0 && deleteTradeAdd.deletedCount > 0 && deleteTradeStat.deletedCount > 0 && deleteTradeJournal.deletedCount > 0 && deleteTransaction.deletedCount > 0) {
+            if (TradeId) return res.status(201).send("Trade Deleted Successfully");
+
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+    catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+}
