@@ -89,8 +89,9 @@ export const UpdateProfile = async (req, res) => {
             const { UserId, UserDetId, FullName, Email, Phone, BirthDate } = req.body;
 
             const userDetails = await UserDetails.findOneAndUpdate(
-                { UserId: UserId, UserDetId: UserDetId },
-                { FullName: FullName, Email: Email, PhoneNo: Phone, BirthDate: BirthDate, UpdatedBy: UserId },
+                { UserId, UserDetId },
+                { FullName, Email, PhoneNo: Phone, BirthDate, UpdatedBy: UserId },
+                { new: true }
             );
 
             await UserInfo.findOneAndUpdate(

@@ -1,7 +1,7 @@
 import express from "express";
 import { body } from 'express-validator';
 import { verifyToken } from "../middleware/authorise.js";
-import { CreateAccount } from "../controllers/account.js";
+import { CreateUpdateAccount } from "../controllers/account.js";
 
 //Validation
 const accountValidations = [
@@ -15,6 +15,8 @@ const accountValidations = [
 
 /* Routes */
 const router = express.Router();
-router.post("/api/accounts/createAccount", accountValidations, verifyToken, CreateAccount);
+
+/*Create/Update Account */
+router.post("/api/accounts/createUpdateAccount", accountValidations, verifyToken, CreateUpdateAccount);
 
 export default router;

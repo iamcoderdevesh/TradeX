@@ -2,8 +2,8 @@ import express from "express";
 import { body } from 'express-validator';
 import { verifyToken } from "../middleware/authorise.js";
 import { ImportTrades } from "../controllers/tradeImport.js";
-import { AddTrade, getTradeData } from "../controllers/tradeDetail.js";
-import { AddTradeStats, getDailyPnLAndReturns, getMonthlyPnLAndRevenue, getTotalPnL, getWeeklyPnL } from "../controllers/tradeStats.js";
+import { AddUpdateTrade, getTradeData } from "../controllers/tradeDetail.js";
+import { AddUpdateTradeStats, getDailyPnLAndReturns, getMonthlyPnLAndRevenue, getTotalPnL, getWeeklyPnL } from "../controllers/tradeStats.js";
 import { AddTradeJournal, getJournalData } from "../controllers/tradeJournal.js";
 import { CalculateStatistics } from "../utils/calculate.js";
 
@@ -35,11 +35,12 @@ const importValidations = [
 //
 
 /* Routes */
-/* Insert/Create Trade */
+/* Insert/Update Trade */
 const router = express.Router();
 router.post("/api/trade/importTrade", importValidations, verifyToken, ImportTrades);
-router.post("/api/trade/addTrade", tradeValidations, verifyToken, AddTrade, AddTradeStats, AddTradeJournal);
+router.post("/api/trade/addUpdateTrade", tradeValidations, verifyToken, AddUpdateTrade, AddUpdateTradeStats, AddTradeJournal);
 
+//#region Fetch Data
 //Fetch Trade Data
 router.get("/api/trade/:accountId/getTrade", verifyToken, getTradeData);
 router.get("/api/trade/:accountId/getJounral", verifyToken, getJournalData);
@@ -58,5 +59,6 @@ router.get("/api/trade/:accountId/getMonthlyStats", verifyToken, getMonthlyPnLAn
 
 //Fetch Analytics Chart Data (Daily PnL)
 router.get("/api/trade/:accountId/getDailyStats", verifyToken, getDailyPnLAndReturns);
+//#endregion
 
 export default router;

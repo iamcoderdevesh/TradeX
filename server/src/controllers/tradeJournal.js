@@ -5,10 +5,10 @@ import { excludeFields } from "../utils/general.js";
 /* Inserting Data in TradeJournal */
 export const AddTradeJournal = async (req, res) => {
     try {
-        const { TradeId, AccountId, UserId, Stats, EntryDate } = req.body;
+        const { TradeId, AccountId, UserId, Stats, EntryDate, TradeState } = req.body;
 
         await CalculateHandleJournal(TradeId, UserId, AccountId, Stats, EntryDate);
-        res.status(201).send("Trade Added Successfully!!!");
+        res.status(201).send("Trade " + TradeState + " Successfully!!!");
 
     } catch (err) {
         res.status(500).json({ error: err.message });

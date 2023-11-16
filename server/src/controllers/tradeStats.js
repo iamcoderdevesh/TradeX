@@ -2,42 +2,47 @@ import TradeStats from "../models/tradeStats.js";
 import TradeJournal from "../models/tradeJournal.js";
 import Accounts from "../models/accounts.js";
 
-/* Inserting Calculated Trade statistics in TradeStats */
-export const AddTradeStats = async (req, res, next) => {
+/* Inserting/Updating Calculated Trade statistics in TradeStats */
+export const AddUpdateTradeStats = async (req, res, next) => {
 
     try {
         const { TradeId, AccountId, UserId, Stats, EntryDate } = req.body;
         const { tradeStatus, netProfit, netLoss, netPnL, netRoi, grossPnL, totalFees, tradeRisk, riskReward } = Stats;
 
-        // Find the last Id from Collection. If record does'nt exist, start with 1, otherwise increment the last Id
-        let lastId = await TradeStats.findOne().sort('-TradeStatsId');
-        const TradeStatsId = lastId ? lastId.TradeStatsId + 1 : 1;
-
         //Date Time Reset
         const _tradeDate = new Date(EntryDate);
         _tradeDate.setHours(0, 0, 0, 0);
 
-        const newStats = new TradeStats({
-            TradeStatsId,
-            TradeStatus: tradeStatus,
-            NetProfit: netProfit,
-            NetLoss: netLoss,
-            NetPnL: netPnL,
-            NetRoi: netRoi,
-            TotalFees: totalFees,
-            GrossPnL: grossPnL,
-            TradeRisk: tradeRisk,
-            RiskReward: riskReward,
-            TradeDate: _tradeDate,
-            TradeId,
-            AccountId,
-            UserId,
-            CreatedBy: UserId,
-        });
+        //Checking the records exists or not
+        const tradeStats = await TradeStats.findOne({ UserId, AccountId, TradeId });
 
-        await newStats.save();
+        //If record exists Update TradeStats
+        if (tradeStats) {
+            const updateTrade = await TradeStats.findOneAndUpdate(
+                { UserId, AccountId, TradeId },
+                { TradeStatus: tradeStatus, NetProfit: netProfit, NetLoss: netLoss, NetPnL: netPnL, NetRoi: netRoi, TotalFees: totalFees, GrossPnL: grossPnL, TradeRisk: tradeRisk, RiskReward: riskReward, TradeDate: _tradeDate, AccountId, CreatedBy: UserId },
+            );
+
+            if (!updateTrade) {
+                res.status(400).json({ error: "Oops Something Went! Unable to Update Trade Stats" });
+            }
+        }
+        //Else Insert new TradeStats
+        else {
+            // Find the last Id from Collection. If record does'nt exist, start with 1, otherwise increment the last Id
+            let lastId = await TradeStats.findOne().sort('-TradeStatsId');
+            const TradeStatsId = lastId ? lastId.TradeStatsId + 1 : 1;
+
+            const newStats = new TradeStats({
+                TradeStatsId, TradeStatus: tradeStatus, NetProfit: netProfit, NetLoss: netLoss, NetPnL: netPnL, NetRoi: netRoi, TotalFees: totalFees, GrossPnL: grossPnL, TradeRisk: tradeRisk, RiskReward: riskReward, TradeDate: _tradeDate, TradeId, AccountId, UserId, CreatedBy: UserId,
+            });
+
+            const tradeStats = await newStats.save();
+            if (!tradeStats) {
+                res.status(400).json({ error: "Oops Something Went! Unable to Insert Trade Stats" });
+            }
+        }
         next();
-        // res.status(201).send("Trade Added Successfully!!!");
 
     } catch (err) {
         res.status(500).json({ error: err.message });
@@ -207,14 +212,14 @@ export const getMonthlyPnLAndRevenue = async (req, res) => {
 //
 
 //Analytics Charts
-export const getDailyPnLAndReturns = async (req,res) => {
+export const getDailyPnLAndReturns = async (req, res) => {
     const { UserId } = req.body;
     const getStats = await TradeJournal.find({ UserId: UserId, AccountId: parseInt(req.params.accountId) }).select('JournalDate TotalNetPnL TotalRoi -_id');
 
     if (!getStats) return res.status(404).send('No Data Found!');
-    getStats.forEach(function(item) {
+    getStats.forEach(function (item) {
         let date = new Date(item.JournalDate);
-        let ISTOffset = 5.5 * 60 * 60 * 1000; 
+        let ISTOffset = 5.5 * 60 * 60 * 1000;
         let ISTDate = new Date(date.getTime() + ISTOffset);
         item.JournalDate = ISTDate;
     });
