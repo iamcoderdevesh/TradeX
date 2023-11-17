@@ -2,6 +2,7 @@ import Accounts from "../models/accounts.js";
 import TradeStats from "../models/tradeStats.js";
 import TradeJournal from "../models/tradeJournal.js";
 import Transaction from "../models/transaction.js";
+import TradeDetails from "../models/tradeDetails.js";
 
 export const CalculateTradeStats = async (Action, EntryPrice, ExitPrice, StopLoss, Quantity, Fees, AccountId) => {
 
@@ -205,8 +206,9 @@ export const CalculateStatistics = async (req, res) => {
             const { TotalBalance, InitialBalance } = account;
             const _tradeCount = await TradeStats.where({ UserId: UserId, AccountId: accountId }).countDocuments();
             const _totalTradeDays = await TradeJournal.where({ UserId: UserId, AccountId: accountId }).countDocuments();
+            const _tradeOpenedCount = await TradeDetails.where({ UserId: UserId, AccountId: accountId, TradeStatus: 'Opened' }).countDocuments();
     
-            let _totalProfit = 0, _totalLoss = 0, _averagePnl = 0, _maxProfit = 0, _maxLoss = 0, _minProfit = 0, _minLoss = 0, _totalFees = 0, _avgProfit = 0, _avgLoss = 0, _totalWins = 0, _totalLosses = 0, _winDays = 0, _lossDays = 0, _netDailyPnl = 0, _convWins, _convLoss;
+            let _totalProfit = 0, _totalLoss = 0, _averagePnl = 0, _maxProfit = 0, _maxLoss = 0, _minProfit = 0, _minLoss = 0, _totalFees = 0, _avgProfit = 0, _avgLoss = 0, _totalWins = 0, _totalLosses = 0, _winDays = 0, _lossDays = 0, _netDailyPnl = 0, _convWins, _convLoss, averageHoldTime = 0, averageWinHoldTime = 0, averageLossHoldTime = 0;
     
             const result = await TradeStats.aggregate([
                 { $match: { UserId: UserId, AccountId: AccountId } },
@@ -329,7 +331,57 @@ export const CalculateStatistics = async (req, res) => {
                     }
                 }
             ]);
+
+            //Calculating Trade Hold Time
+            const tradeHoldTime = await TradeDetails.aggregate([
+                {
+                    $lookup: {
+                        from: "TradeStats",
+                        localField: "TradeId",
+                        foreignField: "TradeId",
+                        as: "TradeStats"
+                    }
+                },
+                {
+                    $unwind: "$TradeStats"
+                },
+                {
+                    $project: {
+                        TradeId: 1,
+                        TradeName: 1,
+                        EntryDate: 1,
+                        ExitDate: 1,
+                        HoldTime: { $subtract: ["$ExitDate", "$EntryDate"] },
+                        TradeStatus: "$TradeStats.TradeStatus"
+                    }
+                }
+            ]);
     
+            if (tradeHoldTime.length > 0) {
+                let totalHoldTime = 0;
+                let winHoldTime = 0;
+                let lossHoldTime = 0;
+                let winCount = 0;
+                let lossCount = 0;
+    
+                tradeHoldTime.forEach(trade => {
+                    totalHoldTime += trade.HoldTime;
+    
+                    if (trade.TradeStatus === 'WIN') {
+                        winHoldTime += trade.HoldTime;
+                        winCount++;
+                    } else if (trade.TradeStatus === 'LOSS') {
+                        lossHoldTime += trade.HoldTime;
+                        lossCount++;
+                    }
+                });
+    
+                averageHoldTime = totalHoldTime / tradeHoldTime.length;
+                averageWinHoldTime = winCount > 0 ? winHoldTime / winCount : 0;
+                averageLossHoldTime = lossCount > 0 ? lossHoldTime / lossCount : 0;
+            }
+            //
+
             if (result.length > 0 && getMinProfit.length > 0 && getMinLoss.length > 0 && getDays.length > 0 && getConsecutive.length > 0) {
                 // Extract the fields from the result
                 const { totalProfit, totalLoss, averagePnl, maxProfit, maxLoss, totalFees, avgProfit, avgLoss, countWin, countLoss } = result[0];
@@ -393,10 +445,10 @@ export const CalculateStatistics = async (req, res) => {
                 maxConsecutiveLosses: _convLoss,
                 netDailyPnl: _netDailyPnl,
                 Breakeven: 0, //TODO :- To be calculated
-                TimeAllTrades: 0, //TODO :- To be calculated
-                TimeWinTrades: 0, //TODO :- To be calculated
-                TimeLossTrades: 0, //TODO :- To be calculated
-                OpenedTrades: 0, //TODO :- To be calculated
+                TimeAllTrades: `${Math.floor(averageHoldTime / 1000 / 60 / 60)} Hours ${Math.floor((averageHoldTime / 1000 / 60) % 60)} Minutes`,
+                TimeWinTrades: `${Math.floor(averageWinHoldTime / 1000 / 60 / 60)} Hours ${Math.floor((averageWinHoldTime / 1000 / 60) % 60)} Minutes`,
+                TimeLossTrades: `${Math.floor(averageLossHoldTime / 1000 / 60 / 60)} Hours ${Math.floor((averageLossHoldTime / 1000 / 60) % 60)} Minutes`,
+                OpenedTrades: _tradeOpenedCount,
                 ProfitFactor: _profitFactor,
                 TotalTradeDays: _totalTradeDays,
                 TotalWinsDays: _winDays,

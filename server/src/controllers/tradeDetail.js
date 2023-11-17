@@ -53,15 +53,21 @@ export const AddUpdateTrade = async (req, res, next) => {
                 }
             }
 
-            req.body.Stats = await CalculateTradeStats(Action, EntryPrice, ExitPrice, StopLoss, Quantity, Fees, AccountId);
-
             //If isAdd Boolean is true then insert data in TradeAddDetails
             if (isAdd) {
                 if (!AddUpdateTradeAddDetails(req)) {
                     res.status(400).json({ error: "Oops Something Went! Unable to Update Trade" });
                 }
             }
-            next();
+
+            //Calculate Stats only if tradeStatus is Closed
+            if(TradeStatus === "Closed") {
+                req.body.Stats = await CalculateTradeStats(Action, EntryPrice, ExitPrice, StopLoss, Quantity, Fees, AccountId);
+                next();
+            }
+            else {
+                res.status(201).send("Trade " + req.body.TradeState + " Successfully!!!");
+            }
         } catch (err) {
             res.status(500).json({ error: err.message });
         }
