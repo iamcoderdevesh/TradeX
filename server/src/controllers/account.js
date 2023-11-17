@@ -1,6 +1,8 @@
 import { validationResult } from 'express-validator';
 import AccountDetails from "../models/accounts.js";
 import { DeleteTrades } from './tradeDetail.js';
+import { DeleteTag } from './tag.js';
+import { DeleteTradeImport } from './tradeImport.js';
 
 /* Creating/Updating Account */
 export const CreateUpdateAccount = async (req, res) => {
@@ -59,26 +61,31 @@ export const CreateUpdateAccount = async (req, res) => {
 /* Deleting Account */
 export const DeleteAccount = async (req, res) => {
 
-    const { AccountId, UserId } = req.body;
+    const { AccountId, UserId, isVerified } = req.body;
 
-    //Checking the records exists or not
-    const account = await AccountDetails.findOne({ UserId, AccountId });
-    if (account) {
-        try {
+    try {
+        //Checking the records exists or not
+        const account = await AccountDetails.findOne({ UserId, AccountId });
+        if (account) {
             const deleteAccount = await AccountDetails.findOneAndDelete({ UserId, AccountId });
-            if (deleteAccount.deletedCount > 0) {
-                if (DeleteTrades(req, res)) {
+            if (deleteAccount) {
+                if (await DeleteTrades(req, res)) {
+                    //If isVerified is true that means user is verified and can delete everthing
+                    if (isVerified) {
+                        await DeleteTag(req, res);
+                        await DeleteTradeImport(req, res);
+                    }
                     return res.status(201).send("Account Deleted Successfully!!!");
                 }
             }
             res.status(400).json({ errors: "Unable to delete account" });
         }
-        catch (err) {
-            res.status(500).json({ error: err.message });
+
+        else {
+            res.status(400).json({ errors: "Account Doesn't Exists" });
         }
     }
-
-    else {
-        res.status(400).json({ errors: "Account Doesn't Exists" });
+    catch (err) {
+        res.status(500).json({ error: err.message });
     }
 };

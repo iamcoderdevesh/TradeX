@@ -171,19 +171,25 @@ export const DeleteTrades = async (req, res) => {
             tradeFilter.TradeId = TradeId;
         }
 
-        const deleteTrade = await TradeDetails.deleteMany(tradeFilter);
-        const deleteTradeAdd = await TradeAddDetails.deleteMany(tradeFilter);
-        const deleteTradeStat = await TradeStats.deleteMany(tradeFilter);
-        const deleteTradeJournal = await TradeJournal.deleteMany(tradeFilter);
-        const deleteTransaction = await Transaction.deleteMany({ UserId, AccountId });
+        //Checking the records exists or not
+        const tradeDetail = await TradeDetails.find(tradeFilter);
+        if (tradeDetail) {
+            const deleteTrade = await TradeDetails.deleteMany(tradeFilter);
+            const deleteTradeAdd = await TradeAddDetails.deleteMany(tradeFilter);
+            const deleteTradeStat = await TradeStats.deleteMany(tradeFilter);
+            const deleteTradeJournal = await TradeJournal.deleteMany(tradeFilter);
+            const deleteTransaction = await Transaction.deleteMany({ UserId, AccountId });
 
-        if (deleteTrade.deletedCount > 0 && deleteTradeAdd.deletedCount > 0 && deleteTradeStat.deletedCount > 0 && deleteTradeJournal.deletedCount > 0 && deleteTransaction.deletedCount > 0) {
-            if (TradeId) return res.status(201).send("Trade Deleted Successfully");
-
-            return true;
+            if (deleteTrade.deletedCount > 0 && deleteTradeAdd.deletedCount > 0 && deleteTradeStat.deletedCount > 0 && deleteTradeJournal.deletedCount > 0 && deleteTransaction.deletedCount > 0) {
+                if (TradeId) return res.status(201).send("Trade Deleted Successfully");
+                return true;
+            }
+            else {
+                return false;
+            }
         }
         else {
-            return false;
+            return true;
         }
     }
     catch (err) {

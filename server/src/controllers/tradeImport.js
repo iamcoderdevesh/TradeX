@@ -36,3 +36,38 @@ export const ImportTrades = async (req, res) => {
         }
     }
 };
+
+
+/* Deleting TradeImport */
+export const DeleteTradeImport = async (req, res) => {
+
+    const { UserId, AccountId, ImportId } = req.body;
+
+    const importFilter = { UserId, AccountId };
+
+    if (ImportId) {
+        importFilter.ImportId = ImportId;
+    }
+
+    //Checking the records exists or not
+    try {
+        const tradeImport = await TradeImport.find(importFilter);
+        if (tradeImport) {
+            const deleteTradeImport = await TradeImport.deleteMany(importFilter);
+            if (deleteTradeImport.deletedCount > 0) {
+                if (!ImportId) {
+                    return true;
+                }
+                res.status(201).send("Imports Deleted Successfully!!!");
+            }
+            return false;
+        }
+        if (!ImportId) {
+            return true;
+        }
+        res.status(400).json({ errors: "Import Doesn't Exists" });
+    }
+    catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+};

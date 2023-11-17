@@ -1,4 +1,4 @@
-import { register, login, UpdateProfile } from "../controllers/auth.js";
+import { register, login, UpdateProfile, DeleteAll } from "../controllers/auth.js";
 import express from "express";
 import { body } from 'express-validator';
 import { verifyToken } from "../middleware/authorise.js";
@@ -22,6 +22,9 @@ router.post("/api/auth/register", registerValidations, register);
 router.post("/api/auth/login", loginValidations, login);
 
 /* Update Profile */
-router.post("/api/accounts/updateProfile", verifyToken, UpdateProfile);
+router.post("/api/auth/updateProfile", verifyToken, UpdateProfile);
+
+/* Delete All */
+router.delete("/api/auth/deleteAll", verifyToken, DeleteAll);
 
 export default router;

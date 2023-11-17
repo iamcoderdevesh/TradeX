@@ -55,9 +55,9 @@ export const CreateUpdateTag = async (req, res) => {
 /* Deleting Tags */
 export const DeleteTag = async (req, res) => {
 
-    const { UserId, AccountId, TagId } = req.body;
+    const { UserId, TagId } = req.body;
 
-    const tagFilter = { UserId, AccountId };
+    const tagFilter = { UserId };
 
     if (TagId) {
         tagFilter.TagId = TagId;
@@ -69,8 +69,15 @@ export const DeleteTag = async (req, res) => {
         if (tag) {
             const deleteTag = await Tags.deleteMany(tagFilter);
             if (deleteTag.deletedCount > 0) {
-                return res.status(201).send("Tags Deleted Successfully!!!");
+                if(!TagId) {
+                    return true;
+                }
+                res.status(201).send("Tags Deleted Successfully!!!");
             }
+            return false;
+        }
+        if(!TagId) {
+            return true;
         }
         res.status(400).json({ errors: "Tag Doesn't Exists" });
     }

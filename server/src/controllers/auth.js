@@ -3,6 +3,7 @@ import UserDetails from "../models/userDetails.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { validationResult } from 'express-validator';
+import { DeleteAccount } from "./account.js";
 
 /* REGISTER USER */
 export const register = async (req, res) => {
@@ -106,5 +107,31 @@ export const UpdateProfile = async (req, res) => {
         } catch (err) {
             res.status(500).json({ error: err.message });
         }
+    }
+}
+
+/* Delete Everthing */
+export const DeleteAll = async (req, res) => {
+    const { UserId, Password } = req.body;
+
+    try {
+        //Checking the records exists or not
+        const user = await UserInfo.findOne({ UserId: UserId });
+        if (!user) return res.status(400).json({ msg: "User doesn't exist." });
+
+        const isMatch = await bcrypt.compare(Password, user.Password);
+        if (!isMatch) return res.status(400).json({ msg: "Incorrect Password!!!" });
+
+        const deleteUser = await UserInfo.findOneAndDelete({ UserId });
+        const deleteUserDet = await UserDetails.findOneAndDelete({ UserId });
+
+        if (deleteUser && deleteUserDet) {
+            req.body.isVerified = true;
+            await DeleteAccount(req, res); 
+        }
+        res.status(400).json({ errors: "Unable to delete account" });
+    }
+    catch (err) {
+        res.status(500).json({ error: err.message });
     }
 }

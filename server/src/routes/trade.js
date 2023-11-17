@@ -1,7 +1,7 @@
 import express from "express";
 import { body } from 'express-validator';
 import { verifyToken } from "../middleware/authorise.js";
-import { ImportTrades } from "../controllers/tradeImport.js";
+import { DeleteTradeImport, ImportTrades } from "../controllers/tradeImport.js";
 import { AddUpdateTrade, DeleteTrades, getTradeData } from "../controllers/tradeDetail.js";
 import { AddUpdateTradeStats, getDailyPnLAndReturns, getMonthlyPnLAndRevenue, getTotalPnL, getWeeklyPnL } from "../controllers/tradeStats.js";
 import { AddTradeJournal, getJournalData } from "../controllers/tradeJournal.js";
@@ -61,6 +61,8 @@ router.get("/api/trade/:accountId/getMonthlyStats", verifyToken, getMonthlyPnLAn
 router.get("/api/trade/:accountId/getDailyStats", verifyToken, getDailyPnLAndReturns);
 //#endregion
 
+/* Delete Trade */
 router.delete("/api/trade/deleteTrade", verifyToken, DeleteTrades);
+router.delete("/api/trade/deleteImport", verifyToken, DeleteTradeImport);
 
 export default router;
