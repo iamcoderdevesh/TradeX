@@ -61,7 +61,7 @@ export const AddUpdateTrade = async (req, res, next) => {
             }
 
             //Calculate Stats only if tradeStatus is Closed
-            if(TradeStatus === "Closed") {
+            if (TradeStatus === "Closed") {
                 req.body.Stats = await CalculateTradeStats(Action, EntryPrice, ExitPrice, StopLoss, Quantity, Fees, AccountId);
                 next();
             }
@@ -111,17 +111,68 @@ export const getTradeData = async (req, res) => {
         return res.status(400).json({ errors: errors.array() });
     }
     else {
+        try {
+            const getTrade = await TradeDetails.aggregate([
+                { $match: { UserId: req.body.UserId, AccountId: parseInt(req.params.accountId) } },
+                {
+                    $lookup: {
+                        from: "TradeAddDetails",
+                        localField: "TradeId",
+                        foreignField: "TradeId",
+                        as: "TradeAddDetails",
+                    },
+                },
+                {
+                    $lookup: {
+                        from: "TradeStats",
+                        localField: "TradeId",
+                        foreignField: "TradeId",
+                        as: "TradeStats"
+                    },
+                },
+                {
+                    $project: {
+                        "_id": 0,
+                        "AccountId": 0,
+                        "UserId": 0,
+                        "CreatedBy": 0,
+                        "UpdatedBy": 0,
+                        "createdAt": 0,
+                        "updatedAt": 0,
+                        "__v": 0,
+                        "TradeAddDetails._id": 0,
+                        "TradeAddDetails.TradeId": 0,
+                        "TradeAddDetails.AccountId": 0,
+                        "TradeAddDetails.UserId": 0,
+                        "TradeAddDetails.CreatedBy": 0,
+                        "TradeAddDetails.UpdatedBy": 0,
+                        "TradeAddDetails.createdAt": 0,
+                        "TradeAddDetails.updatedAt": 0,
+                        "TradeAddDetails.__v": 0,
+                        "TradeStats._id": 0,
+                        "TradeStats.TradeId": 0,
+                        "TradeStats.AccountId": 0,
+                        "TradeStats.UserId": 0,
+                        "TradeStats.CreatedBy": 0,
+                        "TradeStats.UpdatedBy": 0,
+                        "TradeStats.createdAt": 0,
+                        "TradeStats.updatedAt": 0,
+                        "TradeStats.__v": 0,
+                    }
+                }
+            ]);
+            res.status(200).json(getTrade);
+        } catch (err) {
+            res.status(500).json({ error: err.message });
+        }
+    }
+};
 
+/* Dashboard Fetch Recent Trade */
+export const GetRecentTrade = async (req, res) => {
+    try {
         const getTrade = await TradeDetails.aggregate([
             { $match: { UserId: req.body.UserId, AccountId: parseInt(req.params.accountId) } },
-            {
-                $lookup: {
-                    from: "TradeAddDetails",
-                    localField: "TradeId",
-                    foreignField: "TradeId",
-                    as: "TradeAddDetails",
-                },
-            },
             {
                 $lookup: {
                     from: "TradeStats",
@@ -130,41 +181,26 @@ export const getTradeData = async (req, res) => {
                     as: "TradeStats"
                 },
             },
+            { $sort: { _id: -1 } },
+            { $limit: 4 },
             {
                 $project: {
                     "_id": 0,
-                    "AccountId": 0,
-                    "UserId": 0,
-                    "CreatedBy": 0,
-                    "UpdatedBy": 0,
-                    "createdAt": 0,
-                    "updatedAt": 0,
-                    "__v": 0,
-                    "TradeAddDetails._id": 0,
-                    "TradeAddDetails.TradeId": 0,
-                    "TradeAddDetails.AccountId": 0,
-                    "TradeAddDetails.UserId": 0,
-                    "TradeAddDetails.CreatedBy": 0,
-                    "TradeAddDetails.UpdatedBy": 0,
-                    "TradeAddDetails.createdAt": 0,
-                    "TradeAddDetails.updatedAt": 0,
-                    "TradeAddDetails.__v": 0,
-                    "TradeStats._id": 0,
-                    "TradeStats.TradeId": 0,
-                    "TradeStats.AccountId": 0,
-                    "TradeStats.UserId": 0,
-                    "TradeStats.CreatedBy": 0,
-                    "TradeStats.UpdatedBy": 0,
-                    "TradeStats.createdAt": 0,
-                    "TradeStats.updatedAt": 0,
-                    "TradeStats.__v": 0,
-
+                    "Symbol": 1,
+                    "EntryDate": 1,
+                    "ExitDate": 1,
+                    "Action": 1,
+                    "TradeStats.TradeStatus": 1,
+                    "TradeStats.NetPnL": 1,
+                    "TradeStats.NetRoi": 1,
                 }
             }
         ]);
         res.status(200).json(getTrade);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
     }
-};
+}
 
 /* Deleting Trade */
 export const DeleteTrades = async (req, res) => {

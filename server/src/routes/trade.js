@@ -2,7 +2,7 @@ import express from "express";
 import { body } from 'express-validator';
 import { verifyToken } from "../middleware/authorise.js";
 import { DeleteTradeImport, ImportTrades } from "../controllers/tradeImport.js";
-import { AddUpdateTrade, DeleteTrades, getTradeData } from "../controllers/tradeDetail.js";
+import { AddUpdateTrade, DeleteTrades, GetRecentTrade, getTradeData } from "../controllers/tradeDetail.js";
 import { AddUpdateTradeStats, getDailyPnLAndReturns, getMonthlyPnLAndRevenue, getTotalPnL, getWeeklyPnL } from "../controllers/tradeStats.js";
 import { AddTradeJournal, getJournalData } from "../controllers/tradeJournal.js";
 import { CalculateStatistics } from "../utils/calculate.js";
@@ -44,6 +44,7 @@ router.post("/api/trade/addUpdateTrade", tradeValidations, verifyToken, AddUpdat
 //Fetch Trade Data
 router.get("/api/trade/:accountId/getTrade", verifyToken, getTradeData);
 router.get("/api/trade/:accountId/getJounral", verifyToken, getJournalData);
+router.get("/api/trade/:accountId/getRecentTrades", verifyToken, GetRecentTrade);
 
 //Fetch Trade Statistics
 router.get("/api/trade/:accountId/getStats", verifyToken, CalculateStatistics);
