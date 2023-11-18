@@ -1,6 +1,7 @@
 import TradeStats from "../models/tradeStats.js";
 import TradeJournal from "../models/tradeJournal.js";
 import Accounts from "../models/accounts.js";
+import { DateRangeFilter } from "../utils/general.js";
 
 /* Inserting/Updating Calculated Trade statistics in TradeStats */
 export const AddUpdateTradeStats = async (req, res, next) => {
@@ -51,15 +52,17 @@ export const AddUpdateTradeStats = async (req, res, next) => {
 
 //Dashboard Charts
 export const getTotalPnL = async (req, res) => {
-    const { UserId } = req.body;
-    const tradeStats = await TradeStats.find({ UserId: UserId, AccountId: parseInt(req.params.accountId) }).select('NetPnL -_id');
+    const FilterName = "TradeDate";
+    const Filters = DateRangeFilter(req, FilterName);
+
+    const tradeStats = await TradeStats.find(Filters).select('NetPnL -_id');
 
     if (!tradeStats) return res.status(404).send('No Data Found!');
     res.status(200).json(tradeStats);
 }
 
 export const getWeeklyPnL = async (req, res) => {
-    const { UserId } = req.body;
+    const { UserId } = req.body; //Date Range is not applied
     try {
         const dayMap = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
         const today = new Date();
@@ -132,7 +135,7 @@ export const getWeeklyPnL = async (req, res) => {
 
 export const getMonthlyPnLAndRevenue = async (req, res) => {
 
-    const { UserId } = req.body;
+    const { UserId } = req.body; //Date Range Filter is not applied
 
     try {
         const account = await Accounts.findOne({ UserId: UserId, AccountId: parseInt(req.params.accountId) }).select('InitialBalance');
@@ -211,10 +214,12 @@ export const getMonthlyPnLAndRevenue = async (req, res) => {
 }
 //
 
-//Analytics Charts
+//#region Analytics Charts
 export const getDailyPnLAndReturns = async (req, res) => {
-    const { UserId } = req.body;
-    const getStats = await TradeJournal.find({ UserId: UserId, AccountId: parseInt(req.params.accountId) }).select('JournalDate TotalNetPnL TotalRoi -_id');
+    const FilterName = "JournalDate";
+    const Filters = DateRangeFilter(req, FilterName);
+
+    const getStats = await TradeJournal.find(Filters).select('JournalDate TotalNetPnL TotalRoi -_id');
 
     if (!getStats) return res.status(404).send('No Data Found!');
     getStats.forEach(function (item) {
@@ -225,4 +230,4 @@ export const getDailyPnLAndReturns = async (req, res) => {
     });
     res.status(200).json(getStats);
 }
-//
+//#endregion

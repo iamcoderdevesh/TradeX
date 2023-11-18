@@ -5,6 +5,7 @@ import { CalculateTradeStats } from '../utils/calculate.js';
 import TradeStats from '../models/tradeStats.js';
 import TradeJournal from '../models/tradeJournal.js';
 import Transaction from '../models/transaction.js';
+import { DateRangeFilter } from '../utils/general.js';
 
 /* Inserting/Updating TradeDetails */
 export const AddUpdateTrade = async (req, res, next) => {
@@ -112,8 +113,11 @@ export const getTradeData = async (req, res) => {
     }
     else {
         try {
+            let FilterName = "EntryDate";
+            const tradeFilter = DateRangeFilter(req, FilterName);
+
             const getTrade = await TradeDetails.aggregate([
-                { $match: { UserId: req.body.UserId, AccountId: parseInt(req.params.accountId) } },
+                { $match: tradeFilter },
                 {
                     $lookup: {
                         from: "TradeAddDetails",

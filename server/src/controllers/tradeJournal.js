@@ -1,6 +1,6 @@
 import TradeJournal from "../models/tradeJournal.js";
 import { CalculateHandleJournal } from "../utils/calculate.js";
-import { excludeFields } from "../utils/general.js";
+import { DateRangeFilter, excludeFields } from "../utils/general.js";
 
 /* Inserting Data in TradeJournal */
 export const AddTradeJournal = async (req, res) => {
@@ -15,9 +15,12 @@ export const AddTradeJournal = async (req, res) => {
     }
 };
 
-/* Getting all Trade Data */
+/* Getting the Daily Journal*/
 export const getJournalData = async (req, res) => {
-    const JounralTrade = await TradeJournal.find({ UserId: req.body.UserId, AccountId: req.params.accountId })
+    let FilterName = "JournalDate";
+    const tradeFilter = DateRangeFilter(req, FilterName);
+
+    const JounralTrade = await TradeJournal.find(tradeFilter)
         .select(excludeFields());
     res.status(200).json(JounralTrade);
 }
