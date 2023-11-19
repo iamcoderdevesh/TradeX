@@ -1,7 +1,7 @@
 import express from "express";
 import { body } from 'express-validator';
 import { verifyToken } from "../middleware/authorise.js";
-import { CreateUpdateAccount, DeleteAccount } from "../controllers/account.js";
+import { CreateUpdateAccount, DeleteAccount, SwitchAccount } from "../controllers/account.js";
 
 //Validation
 const accountValidations = [
@@ -11,13 +11,15 @@ const accountValidations = [
     body('InitialBalance', 'Enter a valid initial balance').isNumeric().isLength({ min: 1, max: 9 }),
     body('Currency', 'Please select currency').isLength({ min: 2 })
 ];
-//
 
 /* Routes */
 const router = express.Router();
 
 /*Create/Update Account */
 router.post("/api/accounts/createUpdateAccount", accountValidations, verifyToken, CreateUpdateAccount);
+
+/*Create/Update Account */
+router.get("/api/accounts/:accountId/switchAccount", verifyToken, SwitchAccount);
 
 /* Delete Account */
 router.delete("/api/accounts/deleteAccount", verifyToken, DeleteAccount);

@@ -50,7 +50,7 @@ export const AddUpdateTradeStats = async (req, res, next) => {
     }
 };
 
-//Dashboard Charts
+//#region Dashboard Charts
 export const getTotalPnL = async (req, res) => {
     const FilterName = "TradeDate";
     const Filters = DateRangeFilter(req, FilterName);
@@ -212,7 +212,7 @@ export const getMonthlyPnLAndRevenue = async (req, res) => {
         res.status(500).json({ error: err.message });
     }
 }
-//
+//#endregion
 
 //#region Analytics Charts
 export const getDailyPnLAndReturns = async (req, res) => {

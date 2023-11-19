@@ -346,7 +346,7 @@ export const CalculateStatistics = async (req, res) => {
 
             //#region Calculating Trade Hold Time
             const tradeHoldTime = await TradeDetails.aggregate([
-                { $match: tradeStatsFilter },
+                { $match: DateRangeFilter(req, "EntryDate") },
                 {
                     $lookup: {
                         from: "TradeStats",
@@ -431,11 +431,11 @@ export const CalculateStatistics = async (req, res) => {
             const _totalRevenue = _tradeCount === 0 ? 0 : parseFloat(TotalBalance).toFixed(2);
             const _totalPnl = _tradeCount === 0 ? 0 : parseInt((TotalBalance - InitialBalance));
             const _Winrate = _tradeCount === 0 ? 0 : parseFloat((_totalWins / _tradeCount) * 100).toFixed(2);
-            const _roi = parseFloat((TotalBalance - InitialBalance) / InitialBalance * 100).toFixed(2);
+            const _roi = _tradeCount === 0 ? 0 : parseFloat((TotalBalance - InitialBalance) / InitialBalance * 100).toFixed(2);
 
-            const _totalRR = Math.abs(((_totalProfit / InitialBalance) * 100) / ((_totalLoss / InitialBalance) * 100)).toFixed(2);
+            const _totalRR = (_totalProfit !== 0 && _totalLoss !== 0) ? Math.abs(((_totalProfit / InitialBalance) * 100) / ((_totalLoss / InitialBalance) * 100)).toFixed(2) : 0;
             const _grossPnl = (_totalPnl + _totalFees).toFixed(2);
-            const _profitFactor = Math.abs((_totalProfit / _totalLoss)).toFixed(2);
+            const _profitFactor = (_totalProfit !== 0 && _totalLoss !== 0) ? Math.abs((_totalProfit / _totalLoss)).toFixed(2) : 0;
 
             const responseData = {
                 totalRevenue: _totalRevenue,
