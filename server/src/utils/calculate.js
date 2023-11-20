@@ -130,6 +130,7 @@ export const CalculateHandleJournal = async (TradeId, UserId, AccountId, current
                     GrossRevenue: _grossRevenue,
                     TotalRevenue: _totalRevenue,
                     TotalRoi: _netRoi,
+                    $push: { TradeIds: TradeId },
                     UpdatedBy: UserId
                 }
             );
@@ -159,12 +160,11 @@ export const CalculateHandleJournal = async (TradeId, UserId, AccountId, current
             GrossRevenue: _grossRevenue,
             TotalRevenue: _totalRevenue,
             TotalRoi: _netRoi,
-            TradeId,
             AccountId,
             UserId,
             CreatedBy: UserId
         });
-
+        newJournal.TradeIds.push(TradeId);
         await newJournal.save();
     }
 

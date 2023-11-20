@@ -113,8 +113,12 @@ export const getTradeData = async (req, res) => {
     }
     else {
         try {
+            const { TradeId } = req.body;
+
             let FilterName = "EntryDate";
             const tradeFilter = DateRangeFilter(req, FilterName);
+
+            if (TradeId) tradeFilter.TradeId = { $in: TradeId };
 
             const getTrade = await TradeDetails.aggregate([
                 { $match: tradeFilter },
@@ -165,12 +169,20 @@ export const getTradeData = async (req, res) => {
                     }
                 }
             ]);
-            res.status(200).json(getTrade);
+
+            if (TradeId) {
+                return getTrade;
+            }
+            else {
+                res.status(200).json(getTrade);
+            }
         } catch (err) {
             res.status(500).json({ error: err.message });
         }
     }
 };
+
+
 
 /* Dashboard Fetch Recent Trade */
 export const GetRecentTrade = async (req, res) => {

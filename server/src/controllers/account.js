@@ -58,6 +58,26 @@ export const CreateUpdateAccount = async (req, res) => {
     }
 };
 
+/* Get Account Details */
+export const GetAccountDetails = async (req, res) => {
+    try {
+        const { UserId } = req.body;
+
+        //Checking the records exists or not
+        const account = await AccountDetails.find({ UserId });
+
+        if (account) {
+            res.status(201).send(account);
+        }
+        else {
+            return res.status(404).send(`Account Doesn't Exists`);
+        }
+
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+};
+
 /* Switch Account */
 export const SwitchAccount = async (req, res) => {
     try {

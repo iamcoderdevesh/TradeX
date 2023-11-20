@@ -1,7 +1,7 @@
 import express from "express";
 import { body } from 'express-validator';
 import { verifyToken } from "../middleware/authorise.js";
-import { CreateUpdateAccount, DeleteAccount, SwitchAccount } from "../controllers/account.js";
+import { CreateUpdateAccount, DeleteAccount, GetAccountDetails, SwitchAccount } from "../controllers/account.js";
 
 //Validation
 const accountValidations = [
@@ -18,8 +18,11 @@ const router = express.Router();
 /*Create/Update Account */
 router.post("/api/accounts/createUpdateAccount", accountValidations, verifyToken, CreateUpdateAccount);
 
-/*Create/Update Account */
+/*Switch Account */
 router.get("/api/accounts/:accountId/switchAccount", verifyToken, SwitchAccount);
+
+/*Get Account Details */
+router.get("/api/accounts/getAccountDetails", verifyToken, GetAccountDetails);
 
 /* Delete Account */
 router.delete("/api/accounts/deleteAccount", verifyToken, DeleteAccount);

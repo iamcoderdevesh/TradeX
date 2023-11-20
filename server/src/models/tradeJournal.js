@@ -8,7 +8,7 @@ const TradeJournalSechma = new mongoose.Schema(
             unique: true,
         },
         JournalDate: {
-            type: Date, 
+            type: Date,
             required: true,
         },
         TotalNetPnL: {
@@ -59,11 +59,9 @@ const TradeJournalSechma = new mongoose.Schema(
             type: Number,
             required: true,
         },
-        TradeId: {
-            type: Number,
-            required: true,
-            unique: true,
-            ref: "TradeDetails",
+        TradeIds: {
+            type: Array,
+            default: [],
         },
         AccountId: {
             type: Number,
@@ -71,7 +69,7 @@ const TradeJournalSechma = new mongoose.Schema(
             ref: "Accounts",
         },
         UserId: {
-            type: Number, 
+            type: Number,
             required: true,
             ref: "UserInfo",
         },
