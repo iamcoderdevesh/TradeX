@@ -1,19 +1,5 @@
 import mongoose from "mongoose";
 
-const TransactionSchema = new mongoose.Schema({
-    TransactionId: {
-        type: Number,
-        unique: true,
-    },
-    TransName: String,
-    TransAmount: Number,
-    Currency: String,
-    TransDate: {
-        type: Date,
-        default: Date.now,
-    },
-});
-
 const AccountSchema = new mongoose.Schema(
     {
         AccountId: {
@@ -44,10 +30,6 @@ const AccountSchema = new mongoose.Schema(
         TotalBalance: {
             type: Number,
             required: true,
-        },
-        Transaction: {
-            type: [TransactionSchema],
-            default: [],
         },
         UserId: {
             type: Number,

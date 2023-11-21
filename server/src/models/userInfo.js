@@ -9,14 +9,11 @@ const UserInfoSchema = new mongoose.Schema(
         UserName: {
             type: String,
             required: true,
-            min: 2,
-            max: 50,
             unique: true,
         },
         Email: {
             type: String,
             required: true,
-            max: 250,
             unique: true,
         },
         Password: {

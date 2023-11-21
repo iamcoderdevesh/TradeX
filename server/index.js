@@ -7,6 +7,7 @@ import tagRoutes from "./src/routes/tag.js";
 import tradeRoutes from "./src/routes/trade.js";
 import dotenv from "dotenv";
 import helmet from "helmet";
+import { ErrorHandler } from "./src/middleware/catchError.js";
 
 // #region CONFIGURATIONS
 dotenv.config();
@@ -16,7 +17,6 @@ app.use(express.json());
 app.use(helmet());
 app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
 app.use(cors());
-
 app.get('/', (req, res) => {
   res.send('Hello World!');
 })
@@ -30,6 +30,10 @@ app.use("/", tradeRoutes);
 
 //#region MONGOOSE SETUP
 mongoose.connect(process.env.MONGO_URL).then(() => {
-    app.listen(PORT, () => console.log(`Server Port: ${PORT}`));
-  }).catch((error) => console.log(`${error} did not connect`));
+  app.listen(PORT, () => console.log(`Server Port: ${PORT}`));
+}).catch((error) => console.log(`${error} did not connect`));
+//#endregion
+
+//#region Error Handling
+app.use(ErrorHandler);
 //#endregion

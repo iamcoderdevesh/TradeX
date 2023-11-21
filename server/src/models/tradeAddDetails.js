@@ -9,19 +9,19 @@ const TradeAddDetailSechma = new mongoose.Schema(
         },
         EntryReason: {
             type: String, 
-            required: true,
+            default: null,
         },
         ExitReason: {
             type: String,
-            required: true,
+            default: null,
         },
         Emotions: {
             type: String,
-            required: true,
+            default: null,
         },
         MarketCondition: {
             type: String,
-            required: true,
+            default: null,
         },
         Screenshots: {
             type: Buffer,
@@ -29,7 +29,7 @@ const TradeAddDetailSechma = new mongoose.Schema(
         },
         TradeAddInfo: {
             type: String,
-            required: true,
+            default: null,
         },
         TradeId: {
             type: Number,

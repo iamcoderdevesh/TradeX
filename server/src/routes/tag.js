@@ -1,22 +1,16 @@
 import express from "express";
 import { verifyToken } from "../middleware/authorise.js";
 import { CreateUpdateTag, DeleteTag } from "../controllers/tag.js";
-import { body } from 'express-validator';
+import { HandleAsyncError } from "../middleware/catchError.js";
+import { tagValidations } from "../middleware/validator.js";
 
-// Validation
-const validations = [
-    body('TagName', 'Enter a valid tag name').isLength({ min: 1 }),
-    body('TagType', 'Select a valid tag type').isLength({ min: 3 })
-];
-//
-
-/* Routes */
+/* Router setup */
 const router = express.Router();
 
 /* Create Tag */
-router.post("/api/tags/createUpdateTag", validations, verifyToken, CreateUpdateTag);
+router.post("/api/tags/createUpdateTag", tagValidations, verifyToken, HandleAsyncError(CreateUpdateTag));
 
 /* Delete Tag */
-router.delete("/api/tags/deleteTag", verifyToken, DeleteTag);
+router.delete("/api/tags/deleteTag", verifyToken, HandleAsyncError(DeleteTag));
 
 export default router;
