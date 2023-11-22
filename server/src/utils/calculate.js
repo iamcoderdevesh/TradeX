@@ -39,9 +39,9 @@ export const CalculateHandleJournal = async (TradeId, UserId, AccountId, current
     const account = await Accounts.findOne({ AccountId });
     const _capital = account.InitialBalance;
     const _totalCapital = account.TotalBalance;
-
+    
     // Initialize variables
-    let _totalNetPnL = netPnL, _totalTrades = 1, _totalWins = tradeStatus === 'WIN' ? 1 : 0, _totalLoss = tradeStatus === 'LOSS' ? 1 : 0, _Winrate = 0, _totalFees = totalFees, _totalGrossPnL = grossPnL, _totalRR = riskReward, _netRevenue = netPnL, _grossRevenue = (totalFees + _netRevenue + _capital), _totalRevenue = _netRevenue + _totalCapital, _netRoi = parseFloat((netPnL / _capital * 100).toFixed(2));
+    let _totalNetPnL = netPnL, _totalTrades = 1, _tradeStatus = tradeStatus === 'WIN' ? 'PROFIT' : 'LOSS', _totalWins = tradeStatus === 'WIN' ? 1 : 0, _totalLoss = tradeStatus === 'LOSS' ? 1 : 0, _Winrate = 0, _totalFees = totalFees, _totalGrossPnL = grossPnL, _totalRR = riskReward, _netRevenue = netPnL, _grossRevenue = (totalFees + _netRevenue + _capital), _totalRevenue = _netRevenue + _totalCapital, _netRoi = parseFloat((netPnL / _capital * 100).toFixed(2));
 
     // Define date range for today's trades
     let end = new Date(todaysDate);
@@ -113,6 +113,7 @@ export const CalculateHandleJournal = async (TradeId, UserId, AccountId, current
             _grossRevenue = (_totalGrossPnL + _capital);
             _netRoi = ((_totalNetPnL / _capital) * 100).toFixed(2);
             _totalRevenue = _totalCapital + netPnL;
+            _tradeStatus = _totalNetPnL > 0 ? 'PROFIT' : _totalNetPnL === 0 ? 'BREAKEVEN' : 'LOSS'; 
 
             // Update today's journal entry
             await TradeJournal.updateOne(
@@ -120,6 +121,7 @@ export const CalculateHandleJournal = async (TradeId, UserId, AccountId, current
                 {
                     TotalNetPnL: _totalNetPnL,
                     TotalTrades: _totalTrades,
+                    TradeStatus: _tradeStatus,
                     TotalWins: _totalWins,
                     TotalLoss: _totalLoss,
                     Winrate: _Winrate,
@@ -134,7 +136,6 @@ export const CalculateHandleJournal = async (TradeId, UserId, AccountId, current
                     UpdatedBy: UserId
                 }
             );
-
         }
     }
     //Creating a new entry. Insert a new journal entry for today
@@ -150,6 +151,7 @@ export const CalculateHandleJournal = async (TradeId, UserId, AccountId, current
             JournalDate: end,
             TotalNetPnL: _totalNetPnL,
             TotalTrades: _totalTrades,
+            TradeStatus: _tradeStatus,
             TotalWins: _totalWins,
             TotalLoss: _totalLoss,
             Winrate: _Winrate,
@@ -167,9 +169,6 @@ export const CalculateHandleJournal = async (TradeId, UserId, AccountId, current
         newJournal.TradeIds.push(TradeId);
         await newJournal.save();
     }
-
-    //Insert Profit/LOSS in Transaction Collection 
-    const _tradeStatus = tradeStatus === 'WIN' ? 'PROFIT' : 'LOSS'
 
     // Find the last Id from Collection. If record does'nt exist, start with 1, otherwise increment the last Id
     let lastId = await Transaction.findOne().sort('-TransactionId');
@@ -394,8 +393,8 @@ export const CalculateStatistics = async (req, res) => {
         }
         //#endregion
 
+        //#region Extract the fields from the result
         if (result.length > 0 && getDays.length > 0 && getConsecutive.length > 0) {
-            // Extract the fields from the result
             const { totalProfit, totalLoss, averagePnl, maxProfit, maxLoss, totalFees, avgProfit, avgLoss, countWin, countLoss } = result[0];
 
             const { totalWinDays, totalLossDays, netDailyPnl } = getDays[0];
@@ -426,6 +425,7 @@ export const CalculateStatistics = async (req, res) => {
             _minProfit = minProfit;
             _minLoss = minLoss;
         }
+        //#endregion
 
         const _totalRevenue = _tradeCount === 0 ? 0 : parseFloat(TotalBalance).toFixed(2);
         const _totalPnl = _tradeCount === 0 ? 0 : parseInt((TotalBalance - InitialBalance));

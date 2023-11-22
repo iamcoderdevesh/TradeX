@@ -38,5 +38,14 @@ export const GetJournalDetails = async (req, res) => {
         return res.status(404).send(`No Data Found`);
     }
 
-}
+};
 
+export const GetJournalForCalendar = async (req, res) => {
+
+    req.body.fromDate = undefined;
+    let FilterName = "JournalDate";
+    const tradeFilter = DateRangeFilter(req, FilterName);
+    const JournalTrade = await TradeJournal.find(tradeFilter).select('-_id JournalDate TradeStatus TotalNetPnL');
+
+    res.status(200).json(JournalTrade);
+};

@@ -19,6 +19,10 @@ const TradeJournalSechma = new mongoose.Schema(
             type: Number,
             required: true,
         },
+        TradeStatus: {
+            type: String,
+            required: true,
+        },
         TotalWins: {
             type: Number,
             required: true,
