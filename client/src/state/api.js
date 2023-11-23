@@ -6,8 +6,7 @@ const apiSlice = createApi({
     reducerPath: "api",
     baseQuery: baseQuery,
     endpoints: builder => ({}),
-    tagTypes: ["User", "Auth", "Accounts", "Tags", "Trades"],
-    keepUnusedDataFor: 5
+    tagTypes: ["User", "Auth", "Accounts", "Tags", "Trades"]
 });
 
 export default apiSlice

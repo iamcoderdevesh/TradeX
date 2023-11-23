@@ -5,11 +5,12 @@ import Logo from 'assets/logo';
 import Checkbox from 'components/common/checkbox/index';
 import InputField from 'components/common/inputs/InputField';
 import { useSignUpMutation } from "state/auth/authApi.js";
+import { ToastContainer, Toast } from 'components/common/alerts'
 
 const Signup = () => {
 
-    const [formData, setFormData] = useState({ Username: "", Email: "", Password: "", confirm_password: "" });
-    const [signUp, { isLoading }] = useSignUpMutation();
+    const [formData, setFormData] = useState({ UserName: "", Email: "", Password: "", confirm_password: "" });
+    const [signUp, { isLoading, isError, isSuccess }] = useSignUpMutation();
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -17,20 +18,25 @@ const Signup = () => {
     };
 
     const handleSubmit = async () => {
+        delete formData.confirm_password;
+
         try {
-            await signUp({
-                Email: formData.Email,
-                Username: formData.Username,
-                Password: formData.Password,
-            }).unwrap();
-            console.log("success");
+            await signUp(formData).unwrap();
+            Toast.success("Register Successfully!!!");
         } catch (error) {
-            console.log(error);
+            if (error.data && error.data.errors) {
+                error.data.errors.forEach((err, index) => {
+                    setTimeout(() => {
+                        Toast.error(err.msg);
+                      }, (index + 1) * 2000);
+                })
+            }
         }
     }
 
     return (
         <div>
+            <ToastContainer />
             <section className="bg-gray-50 dark:bg-primary-dark">
                 <div className="min-h-screen flex flex-col items-center lg:justify-center px-6 py-8 mx-auto md:h-[45rem] lg:py-0">
                     <Logo margin={"mb-4"} height={"sm:h-10 sm:w-10"} />
@@ -41,7 +47,7 @@ const Signup = () => {
                             </h1>
                             <form className="space-y-4 md:space-y-6" onClick={(e) => e.preventDefault()}>
                                 <div>
-                                    <InputField label={"Username"} placeholder={"Neil Sims"} id={"username"} type={"text"} htmlName={"Username"} handleChange={handleChange} />
+                                    <InputField label={"Username"} placeholder={"Neil Sims"} id={"username"} type={"text"} htmlName={"UserName"} handleChange={handleChange} />
                                 </div>
                                 <div>
                                     <InputField label={"Your email"} placeholder={"name@company.com"} id={"email"} type={"email"} htmlName={"Email"} handleChange={handleChange} />
