@@ -6,9 +6,9 @@ import { useSelector } from 'react-redux';
 
 const Layout = () => {
 
-    const activeMenu = useSelector((state) => state.activeSidebar);
-    const showPopup = useSelector((state) => state.showPopup);
-    const filterPopup = useSelector((state) => state.filterPopup);
+    const activeMenu = useSelector((state) => state.global.activeSidebar);
+    const showPopup = useSelector((state) => state.global.showPopup);
+    const filterPopup = useSelector((state) => state.global.filterPopup);
 
     return (
         <>

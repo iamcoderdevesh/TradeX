@@ -78,7 +78,7 @@ const ColumnChart = () => {
     ];
 
     const [options, setOptions] = useState(columnChartOptions);
-    const currentMode = useSelector((state) => state.mode);
+    const currentMode = useSelector((state) => state.global.mode);
 
     useEffect(() => {
         setOptions((prevState) => ({

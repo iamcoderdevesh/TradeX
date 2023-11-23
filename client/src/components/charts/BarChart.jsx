@@ -49,7 +49,7 @@ const BarChart = () => {
     ]);
 
     const [options, setOptions] = useState(barChartOptions);
-    const currentMode = useSelector((state) => state.mode);
+    const currentMode = useSelector((state) => state.global.mode);
     
     useEffect(() => {
         setOptions((prevState) => ({

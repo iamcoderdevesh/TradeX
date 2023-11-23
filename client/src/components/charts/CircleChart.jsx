@@ -57,7 +57,7 @@ const CircleChart = () => {
 
     const [series] = useState([76]);
     const [options, setOptions] = useState(CircleChartOptions);
-    const currentMode = useSelector((state) => state.mode);
+    const currentMode = useSelector((state) => state.global.mode);
 
     useEffect(() => {
         setOptions((prevState) => ({

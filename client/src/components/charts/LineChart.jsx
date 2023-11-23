@@ -31,7 +31,7 @@ const LineChart = (props) => {
   const { data } = props;
   const [options, setOptions] = useState(areaChartOptions);
   const [series, setSeries] = useState([data]);
-  const currentMode = useSelector((state) => state.mode);
+  const currentMode = useSelector((state) => state.global.mode);
 
   useEffect(() => {
       setOptions((prevState) => ({

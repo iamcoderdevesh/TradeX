@@ -14,7 +14,7 @@ import { setMode, setActiveSidebar, setFilterPopup } from 'state';
 const Navbar = () => {
 
     //Theme Config
-    const currentMode = useSelector((state) => state.mode);
+    const currentMode = useSelector((state) => state.global.mode);
     const dispatch = useDispatch();
 
     const setTheme = () => {
@@ -30,12 +30,12 @@ const Navbar = () => {
     };
     //------------------------------------------------------------------------
 
-    const activeMenu = useSelector((state) => state.activeSidebar);
+    const activeMenu = useSelector((state) => state.global.activeSidebar);
     
     // Check if the current location is active
     const location = useLocation();
 
-    const filterPopup = useSelector((state) => state.filterPopup);
+    const filterPopup = useSelector((state) => state.global.filterPopup);
     const [showProfile, setShowProfile] = useState(false);
 
     const capitalizeWords = (str) => {

@@ -62,7 +62,7 @@ const Sidebar = () => {
         return location.pathname.includes(routeName)
     };
 
-    const activeMenu = useSelector((state) => state.activeSidebar);
+    const activeMenu = useSelector((state) => state.global.activeSidebar);
     const dispatch = useDispatch();
 
     return (

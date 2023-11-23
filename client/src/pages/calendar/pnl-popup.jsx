@@ -14,7 +14,7 @@ import { TradeColumns } from 'components/common/table/columns';
 
 const PnlPopup = () => {
 
-    const showPopup = useSelector((state) => state.showPopup);
+    const showPopup = useSelector((state) => state.global.showPopup);
     const dispatch = useDispatch();
 
     const [status, setStatus] = useState(false);
