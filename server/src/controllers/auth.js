@@ -45,9 +45,13 @@ export const register = async (req, res) => {
         });
 
         await newUser.save();
-        await UserDetail.save();
+        const userDetails = await UserDetail.save();
 
-        res.status(201).json({ success: "Register Successfully!!!" });
+        res.status(201).json({
+            success: true,
+            email: userDetails.Email,
+            message: "Register Successfully!!!"
+        });
     }
 };
 
@@ -58,15 +62,19 @@ export const login = async (req, res) => {
         return res.status(400).json({ errors: errors.array() });
     }
     else {
-        const { UserName, Password } = req.body;
-        const user = await UserInfo.findOne({ UserName: UserName });
-        if (!user) return res.status(400).json({ msg: "Username does not exist." });
+        const { Email, Password } = req.body;
+        const user = await UserInfo.findOne({ Email });
+        if (!user) return res.status(400).json({ message: "Email does not exist." });
 
         const isMatch = await bcrypt.compare(Password, user.Password);
-        if (!isMatch) return res.status(400).json({ msg: "Invalid credentials." });
+        if (!isMatch) return res.status(400).json({ message: "Incorrect Password." });
 
         const token = jwt.sign({ id: user.UserId }, process.env.JWT_SECRET);
-        res.status(200).json({ token });
+        res.status(200).json({ 
+            success: true, 
+            token,
+            message: "Login Successfully!!!"
+        });
     }
 };
 
@@ -103,10 +111,10 @@ export const DeleteAll = async (req, res) => {
 
     //Checking the records exists or not
     const user = await UserInfo.findOne({ UserId: UserId });
-    if (!user) return res.status(400).json({ msg: "User doesn't exist." });
+    if (!user) return res.status(400).json({ message: "User doesn't exist." });
 
     const isMatch = await bcrypt.compare(Password, user.Password);
-    if (!isMatch) return res.status(400).json({ msg: "Incorrect Password!!!" });
+    if (!isMatch) return res.status(400).json({ message: "Incorrect Password!!!" });
 
     const deleteUser = await UserInfo.findOneAndDelete({ UserId });
     const deleteUserDet = await UserDetails.findOneAndDelete({ UserId });

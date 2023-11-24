@@ -14,6 +14,6 @@ export const HandleAsyncError = (passedFunction) => (req, res, next) => {
   // Promise.resolve(fn(req, res, next))
   //   .catch(err => {
   //     // log the error
-  //     res.status(500).send({ msg: 'Internal Server Error' }); 
+  //     res.status(500).send({ message: 'Internal Server Error' }); 
   //   });//Uncomment For Deployment
 };  

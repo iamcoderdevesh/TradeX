@@ -1,36 +1,42 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { Button } from 'components/common/buttons';
 import Logo from 'assets/logo';
-import Checkbox from 'components/common/checkbox/index';
+import Checkbox from 'components/common/checkbox';
 import InputField from 'components/common/inputs/InputField';
 import { useSignUpMutation } from "state/auth/authApi.js";
 import { ToastContainer, Toast } from 'components/common/alerts'
 
 const Signup = () => {
 
+    const navigate = useNavigate();
     const [formData, setFormData] = useState({ UserName: "", Email: "", Password: "", confirm_password: "" });
-    const [signUp, { isLoading, isError, isSuccess }] = useSignUpMutation();
+    const [signUp, { isLoading, isSuccess, data }] = useSignUpMutation();
 
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData((prevFormData) => ({ ...prevFormData, [name]: value }));
     };
 
-    const handleSubmit = async () => {
+    useEffect(() => {
+        if (isSuccess) {
+            Toast.success(data.message);
+            setTimeout(() => {
+                navigate('/auth/login');
+            }, 3000);
+        }
+    }, [isSuccess, data]);
+
+
+    const handleSubmit = async (e) => {
+
+        e.preventDefault();
         delete formData.confirm_password;
 
         try {
             await signUp(formData).unwrap();
-            Toast.success("Register Successfully!!!");
         } catch (error) {
-            if (error.data && error.data.errors) {
-                error.data.errors.forEach((err, index) => {
-                    setTimeout(() => {
-                        Toast.error(err.msg);
-                      }, (index + 1) * 2000);
-                })
-            }
+            return;
         }
     }
 
@@ -45,18 +51,18 @@ const Signup = () => {
                             <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
                                 Create and account
                             </h1>
-                            <form className="space-y-4 md:space-y-6" onClick={(e) => e.preventDefault()}>
+                            <form className="space-y-4 md:space-y-6" onSubmit={handleSubmit}>
                                 <div>
-                                    <InputField label={"Username"} placeholder={"Neil Sims"} id={"username"} type={"text"} htmlName={"UserName"} handleChange={handleChange} />
+                                    <InputField label={"Username"} placeholder={"Neil Sims"} id={"username"} type={"text"} htmlName={"UserName"} require={true} handleChange={handleChange} />
                                 </div>
                                 <div>
-                                    <InputField label={"Your email"} placeholder={"name@company.com"} id={"email"} type={"email"} htmlName={"Email"} handleChange={handleChange} />
+                                    <InputField label={"Your email"} placeholder={"name@company.com"} id={"email"} type={"email"} htmlName={"Email"} require={true} handleChange={handleChange} />
                                 </div>
                                 <div>
-                                    <InputField label={"Password"} placeholder={"••••••••"} id={"password"} type={"password"} htmlName={"Password"} handleChange={handleChange} />
+                                    <InputField label={"Password"} placeholder={"••••••••"} id={"password"} type={"password"} htmlName={"Password"} require={true} handleChange={handleChange} />
                                 </div>
                                 <div>
-                                    <InputField label={"Confirm Password"} placeholder={"••••••••"} id={"confirm_password"} type={"password"} htmlName={"confirm_password"} handleChange={handleChange} />
+                                    <InputField label={"Confirm Password"} placeholder={"••••••••"} id={"confirm_password"} type={"password"} htmlName={"confirm_password"} require={true} handleChange={handleChange} />
                                 </div>
                                 <div className="flex items-start">
                                     <div className="flex items-center h-5">
@@ -68,7 +74,7 @@ const Signup = () => {
                                         </label>
                                     </div>
                                 </div>
-                                <Button type="submit" id="create-account" onClick={handleSubmit}>Create an account</Button>
+                                <Button type="submit" id="create-account" disabled={isLoading}>Create an account</Button>
                                 <p className="text-sm font-light text-gray-500 dark:text-gray-400">Already have an account?{" "}
                                     <Link
                                         to={"/auth/login"}>
