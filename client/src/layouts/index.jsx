@@ -3,6 +3,7 @@ import Navbar from 'layouts/MainLayout/Navbar';
 import Sidebar from 'layouts/MainLayout/Sidebar';
 import { Outlet } from "react-router-dom";
 import { useSelector } from 'react-redux';
+import { ToastContainer } from 'components/common/alerts';
 
 const Layout = () => {
 
@@ -12,6 +13,7 @@ const Layout = () => {
 
     return (
         <>
+            <ToastContainer />
             <Navbar />
             <Sidebar />
             <div className={`min-h-screen p-2 bg-gray-50 dark:bg-primary-dark ${activeMenu && 'md:ml-64'} md:p-4`}>

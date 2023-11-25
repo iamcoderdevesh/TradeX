@@ -4,8 +4,8 @@ import { Button } from 'components/common/buttons';
 import Logo from 'assets/logo';
 import Checkbox from 'components/common/checkbox';
 import InputField from 'components/common/inputs/InputField';
-import { useSignUpMutation } from "state/auth/authApi.js";
-import { ToastContainer, Toast } from 'components/common/alerts'
+import { useSignUpMutation } from "state/api/auth/authApi.js";
+import { ToastContainer, Toast } from 'components/common/alerts';
 
 const Signup = () => {
 
@@ -29,14 +29,16 @@ const Signup = () => {
 
 
     const handleSubmit = async (e) => {
-
         e.preventDefault();
-        delete formData.confirm_password;
-
-        try {
-            await signUp(formData).unwrap();
-        } catch (error) {
-            return;
+        const { Password, confirm_password } = formData;
+        if (Password.localeCompare(confirm_password) === (-1 || 1)) Toast.info(`Confirm Password doesn't match`)
+        else {
+            delete formData.confirm_password;
+            try {
+                await signUp(formData).unwrap();
+            } catch (error) {
+                return;
+            }
         }
     }
 

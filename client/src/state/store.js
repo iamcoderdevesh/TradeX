@@ -1,24 +1,20 @@
 import { configureStore, combineReducers, isRejectedWithValue } from '@reduxjs/toolkit';
-import globalReducer from "state/index.js";
-import api from "state/api.js";
-import authSliceReducer from './auth/authSlice';
+import globalSliceReducer from "state/index.js";
+import api from "state/api";
+import authSliceReducer from './api/auth/authSlice';
 import { Toast } from 'components/common/alerts';
 
 const rootReducer = combineReducers({
     [api.reducerPath]: api.reducer,
-    global: globalReducer,
+    global: globalSliceReducer,
     auth: authSliceReducer
 });
 
-const errorsMiddleware = (api) => (next) => (action) => {
+const errorsMiddleware = (dispatch) => (next) => (action) => {
     if (isRejectedWithValue(action)) {
         const { payload } = action;
-        if (payload.data != null) {
-            const { code, message } = payload.data;
-            Toast.error(message);
-        } else {
-            Toast.error('Internal Server Error');
-        }
+        payload.data != null ? Toast.error(payload.data.message) 
+        : Toast.error('Oops looks like Something went wrong Internal Server Error!!!');
     }
 
     return next(action);

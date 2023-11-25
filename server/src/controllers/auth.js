@@ -39,7 +39,7 @@ export const register = async (req, res) => {
         const UserDetail = new UserDetails({
             UserDetId,
             UserId,
-            FullName: UserName,
+            FirstName: UserName,
             Email,
             CreatedBy,
         });
@@ -47,9 +47,12 @@ export const register = async (req, res) => {
         await newUser.save();
         const userDetails = await UserDetail.save();
 
+
         res.status(201).json({
             success: true,
-            email: userDetails.Email,
+            userInfo: {
+                Email: userDetails.Email
+            },
             message: "Register Successfully!!!"
         });
     }
@@ -70,10 +73,15 @@ export const login = async (req, res) => {
         if (!isMatch) return res.status(400).json({ message: "Incorrect Password." });
 
         const token = jwt.sign({ id: user.UserId }, process.env.JWT_SECRET);
-        res.status(200).json({ 
-            success: true, 
+
+        res.status(200).json({
+            success: true,
+            message: "Login Successfully!!!",
             token,
-            message: "Login Successfully!!!"
+            userInfo: {
+                FirstName: user.UserName,
+                Email: user.Email
+            }
         });
     }
 };
@@ -85,11 +93,11 @@ export const UpdateProfile = async (req, res) => {
         return res.status(400).json({ errors: errors.array() });
     }
     else {
-        const { UserId, UserDetId, FullName, Email, Phone, BirthDate } = req.body;
+        const { UserId, FirstName, LastName, Email, Phone, BirthDate } = req.body;
 
         const userDetails = await UserDetails.findOneAndUpdate(
-            { UserId, UserDetId },
-            { FullName, Email, PhoneNo: Phone, BirthDate, UpdatedBy: UserId },
+            { UserId },
+            { FirstName, LastName, PhoneNo: Phone, BirthDate, UpdatedBy: UserId },
             { new: true }
         );
 
@@ -99,8 +107,19 @@ export const UpdateProfile = async (req, res) => {
         );
 
         if (userDetails) {
-            const { FullName, Email, PhoneNo, BirthDate } = userDetails;
-            res.status(200).json({ FullName, Email, PhoneNo, BirthDate });
+            const { FirstName, LastName, Email, PhoneNo, BirthDate } = userDetails;
+
+            res.status(200).json({
+                success: true,
+                message: "Profile Upadated Successfully!!!",
+                userInfo: {
+                    FirstName,
+                    LastName,
+                    Email,
+                    Phone: PhoneNo,
+                    BirthDate
+                }
+            });
         }
     }
 }

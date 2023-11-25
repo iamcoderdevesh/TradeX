@@ -18,4 +18,4 @@ const apiSlice = createApi({
     tagTypes: ["User", "Auth", "Accounts", "Tags", "Trades"]
 });
 
-export default apiSlice
+export default apiSlice;

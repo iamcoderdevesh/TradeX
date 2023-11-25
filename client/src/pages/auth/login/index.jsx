@@ -5,13 +5,13 @@ import InputField from 'components/common/inputs/InputField';
 import Checkbox from 'components/common/checkbox';
 import { Button } from 'components/common/buttons';
 import { useSelector } from 'react-redux';
-import { useLoginMutation } from "state/auth/authApi.js";
+import { useLoginMutation } from "state/api/auth/authApi.js";
 import { ToastContainer, Toast } from 'components/common/alerts';
 
 const Login = () => {
 
   const navigate = useNavigate();
-  const registeredMail = useSelector((state) => state.auth.registeredEmail);
+  const registeredMail = useSelector((state) => state.auth.userInfo.Email);
   const [formData, setFormData] = useState({
     Email: registeredMail || '',
     Password: ''
@@ -36,7 +36,6 @@ const Login = () => {
 
     e.preventDefault();
     registeredMail && setFormData({ Email: registeredMail, Password: formData.Password });
-    console.log(formData);
     try {
       await login(formData).unwrap();
     } catch (error) {

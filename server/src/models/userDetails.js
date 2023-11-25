@@ -13,9 +13,15 @@ const UserDetailSechma = new mongoose.Schema(
             required: true,
             unique: true,
         },
-        FullName: {
+        FirstName: {
             type: String,
             required: true,
+            min: 5,
+            max: 250,
+        },
+        LastName: {
+            type: String,
+            default: null,
             min: 5,
             max: 250,
         },

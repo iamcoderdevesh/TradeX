@@ -13,7 +13,7 @@ import { setMode, setActiveSidebar, setFilterPopup } from 'state';
 
 const Navbar = () => {
 
-    //Theme Config
+    //#region Theme Config
     const currentMode = useSelector((state) => state.global.mode);
     const dispatch = useDispatch();
 
@@ -28,7 +28,7 @@ const Navbar = () => {
         dispatch(setMode(mode));
         sessionStorage.setItem("themeMode", mode);
     };
-    //------------------------------------------------------------------------
+    //#endregion
 
     const activeMenu = useSelector((state) => state.global.activeSidebar);
     
@@ -46,6 +46,9 @@ const Navbar = () => {
         str = str.replace(/-/i, " ");
         return str.toLowerCase().split(' ').map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' ');
     };
+
+    const userInfo = useSelector((state) => state.auth.userInfo, []);
+    const { Username, Email } = userInfo || {};
 
     return (
         <>
@@ -100,13 +103,13 @@ const Navbar = () => {
                                             <img className="w-8 h-8 rounded-full" src="https://www.w3schools.com/howto/img_avatar.png" alt="user photo" />
                                         </button>
                                     </div>
-                                    <div className={`${!showProfile && 'hidden'} fixed top-0 right-0 z-50 mt-14 text-base list-none bg-white divide-y divide-gray-100 rounded shadow dark:bg-gray-700 dark:divide-gray-600`}>
+                                    <div className={`${!showProfile && 'hidden'} w-52 fixed top-0 right-0 z-50 mt-14 text-base list-none bg-white divide-y divide-gray-100 rounded shadow dark:bg-gray-700 dark:divide-gray-600`}>
                                         <div className="px-4 py-3" role="none">
                                             <p className="text-sm text-gray-900 dark:text-white" role="none">
-                                                Neil Sims
+                                                {Username}
                                             </p>
                                             <p className="text-sm font-medium text-gray-900 truncate dark:text-gray-300" role="none">
-                                                neil.sims@flowbite.com
+                                                {Email}
                                             </p>
                                         </div>
                                         <ul className="py-1" role="none">
