@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { AiOutlineMenuFold, AiOutlineMenuUnfold } from "react-icons/ai";
 import { BsSunFill, BsFillMoonFill } from "react-icons/bs";
 import { FaFilter } from "react-icons/fa";
-
 import { Link, useLocation } from 'react-router-dom';
 import routes from "routes/routes";
 import Dropdown from 'components/common/dropdown';
@@ -10,6 +9,7 @@ import DateRange from 'components/common/calendar';
 import ModalPopup from 'components/common/popup';
 import { useDispatch, useSelector } from 'react-redux';
 import { setMode, setActiveSidebar, setFilterPopup } from 'state';
+import { useGetUserQuery } from 'state/api/auth/authApi';
 
 const Navbar = () => {
 
@@ -31,7 +31,7 @@ const Navbar = () => {
     //#endregion
 
     const activeMenu = useSelector((state) => state.global.activeSidebar);
-    
+
     // Check if the current location is active
     const location = useLocation();
 
@@ -48,7 +48,12 @@ const Navbar = () => {
     };
 
     const userInfo = useSelector((state) => state.auth.userInfo, []);
-    const { Username, Email } = userInfo || {};
+    const { FirstName, Email } = userInfo || {};
+
+    //To Get the UserDetails by default and when page refresh...
+    const { isLoading } = useGetUserQuery(
+        { refetchOnMountOrArgChange: true }
+    );
 
     return (
         <>
@@ -106,7 +111,7 @@ const Navbar = () => {
                                     <div className={`${!showProfile && 'hidden'} w-52 fixed top-0 right-0 z-50 mt-14 text-base list-none bg-white divide-y divide-gray-100 rounded shadow dark:bg-gray-700 dark:divide-gray-600`}>
                                         <div className="px-4 py-3" role="none">
                                             <p className="text-sm text-gray-900 dark:text-white" role="none">
-                                                {Username}
+                                                {FirstName}
                                             </p>
                                             <p className="text-sm font-medium text-gray-900 truncate dark:text-gray-300" role="none">
                                                 {Email}

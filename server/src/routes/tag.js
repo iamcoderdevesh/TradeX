@@ -6,11 +6,12 @@ import { tagValidations } from "../middleware/validator.js";
 
 /* Router setup */
 const router = express.Router();
+router.use(verifyToken);
 
 /* Create Tag */
-router.post("/api/tags/createUpdateTag", tagValidations, verifyToken, HandleAsyncError(CreateUpdateTag));
+router.post("/api/tags/createUpdateTag", tagValidations, HandleAsyncError(CreateUpdateTag));
 
 /* Delete Tag */
-router.delete("/api/tags/deleteTag", verifyToken, HandleAsyncError(DeleteTag));
+router.delete("/api/tags/deleteTag", HandleAsyncError(DeleteTag));
 
 export default router;

@@ -4,6 +4,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { validationResult } from 'express-validator';
 import { DeleteAccount } from "./account.js";
+import { createTokenOptions } from "../utils/cookies.js";
 
 /* REGISTER USER */
 export const register = async (req, res) => {
@@ -39,6 +40,7 @@ export const register = async (req, res) => {
         const UserDetail = new UserDetails({
             UserDetId,
             UserId,
+            UserName,
             FirstName: UserName,
             Email,
             CreatedBy,
@@ -74,6 +76,8 @@ export const login = async (req, res) => {
 
         const token = jwt.sign({ id: user.UserId }, process.env.JWT_SECRET);
 
+        res.cookie('jwt', token, { ...createTokenOptions(), maxAge: 24 * 60 * 60 * 1000 });
+
         res.status(200).json({
             success: true,
             message: "Login Successfully!!!",
@@ -84,6 +88,18 @@ export const login = async (req, res) => {
             }
         });
     }
+};
+
+/* Fetch User */
+export const GetUserDetails = async (req, res) => {
+
+    const { UserId } = req.body;
+
+    const userDetails = await UserDetails.findOne({ UserId: UserId }).select('-_id FirstName LastName Email PhoneNo BirthDate');
+    res.status(201).json({
+        success: true,
+        userInfo: userDetails
+    });
 };
 
 /* Update Profile */

@@ -6,17 +6,18 @@ import { accountValidations } from "../middleware/validator.js";
 
 /* Routes */
 const router = express.Router();
+router.use(verifyToken);
 
 /*Create/Update Account */
-router.post("/api/accounts/createUpdateAccount", accountValidations, verifyToken, HandleAsyncError(CreateUpdateAccount));
+router.post("/api/accounts/createUpdateAccount", accountValidations, HandleAsyncError(CreateUpdateAccount));
 
 /*Switch Account */
-router.get("/api/accounts/:accountId/switchAccount", verifyToken, HandleAsyncError(SwitchAccount));
+router.get("/api/accounts/:accountId/switchAccount", HandleAsyncError(SwitchAccount));
 
 /*Get Account Details */
-router.get("/api/accounts/getAccountDetails", verifyToken, HandleAsyncError(GetAccountDetails));
+router.get("/api/accounts/getAccountDetails", HandleAsyncError(GetAccountDetails));
 
 /* Delete Account */
-router.delete("/api/accounts/deleteAccount", verifyToken, HandleAsyncError(DeleteAccount));
+router.delete("/api/accounts/deleteAccount", HandleAsyncError(DeleteAccount));
 
 export default router;

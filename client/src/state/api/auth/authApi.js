@@ -1,5 +1,5 @@
 import apiSlice from "state/api";
-import { addUserInfo, userLoggedIn } from "./authSlice";
+import { addUserInfo, setUserAuthenticated, userLoggedIn } from "./authSlice";
 
 const authApiSlice = apiSlice.injectEndpoints({
   endpoints: builder => ({
@@ -30,6 +30,7 @@ const authApiSlice = apiSlice.injectEndpoints({
           if (result.data.success) {
             dispatch(userLoggedIn({ accessToken: result.data.token }));
             dispatch(addUserInfo(result.data.userInfo));
+            dispatch(setUserAuthenticated(true));
           }
         } catch (err) {
           return;
@@ -51,8 +52,19 @@ const authApiSlice = apiSlice.injectEndpoints({
         }
       },
     }),
+    getUser: builder.query({
+      query: () => `api/auth/getUserDetails`,
+      async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+        try {
+          const result = await queryFulfilled;
+          result.data.success && dispatch(addUserInfo(result.data.userInfo));
+        } catch (err) {
+            return;
+        }
+      }
+    }),
   }),
   overrideExisting: true
 });
 
-export const { useSignUpMutation, useLoginMutation, useUpdateProfileMutation } = authApiSlice;
+export const { useSignUpMutation, useLoginMutation, useUpdateProfileMutation, useGetUserQuery } = authApiSlice;

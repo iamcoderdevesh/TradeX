@@ -10,7 +10,7 @@ import { formatDate } from 'components/utils';
 const General = () => {
 
   const userInfo = useSelector((state) => state.auth.userInfo, []);
-  const { FirstName, LastName, Email, Phone, BirthDate } = userInfo || {};
+  const { FirstName, LastName, Email, PhoneNo:Phone, BirthDate } = userInfo || {};
 
   const [formData, setFormData] = useState({
     FirstName: FirstName || "",

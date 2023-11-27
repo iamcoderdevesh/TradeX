@@ -11,7 +11,7 @@ import { ToastContainer, Toast } from 'components/common/alerts';
 const Login = () => {
 
   const navigate = useNavigate();
-  const registeredMail = useSelector((state) => state.auth.userInfo.Email);
+  const registeredMail = useSelector((state) => state.auth.userInfo?.Email);
   const [formData, setFormData] = useState({
     Email: registeredMail || '',
     Password: ''
@@ -33,7 +33,6 @@ const Login = () => {
   }, [isSuccess, data]);
 
   const handleSubmit = async (e) => {
-
     e.preventDefault();
     registeredMail && setFormData({ Email: registeredMail, Password: formData.Password });
     try {

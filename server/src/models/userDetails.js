@@ -13,6 +13,11 @@ const UserDetailSechma = new mongoose.Schema(
             required: true,
             unique: true,
         },
+        UserName: {
+            type: String,
+            required: true,
+            unique: true,
+        },
         FirstName: {
             type: String,
             required: true,

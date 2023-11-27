@@ -10,40 +10,41 @@ import { importValidations, tradeValidations } from "../middleware/validator.js"
 
 /* Routes */
 const router = express.Router();
+router.use(verifyToken);
 
 //#region Insert/Update Trade
-router.post("/api/trade/importTrade", importValidations, verifyToken, HandleAsyncError(ImportTrades));
-router.post("/api/trade/addUpdateTrade", tradeValidations, verifyToken, AddUpdateTrade, AddUpdateTradeStats, HandleAsyncError(AddTradeJournal));
+router.post("/api/trade/importTrade", importValidations, HandleAsyncError(ImportTrades));
+router.post("/api/trade/addUpdateTrade", tradeValidations, AddUpdateTrade, AddUpdateTradeStats, HandleAsyncError(AddTradeJournal));
 //#endregion
 
 //#region Fetch Data
 //Fetch Trade Data
-router.get("/api/trade/:accountId/getTrade", verifyToken, HandleAsyncError(getTradeData));
-router.get("/api/trade/:accountId/getJounral", verifyToken, HandleAsyncError(GetJournalDetails));
-router.get("/api/trade/:accountId/getRecentTrades", verifyToken, HandleAsyncError(GetRecentTrade));
+router.get("/api/trade/:accountId/getTrade", HandleAsyncError(getTradeData));
+router.get("/api/trade/:accountId/getJounral", HandleAsyncError(GetJournalDetails));
+router.get("/api/trade/:accountId/getRecentTrades", HandleAsyncError(GetRecentTrade));
 
 //Fetch Trade Statistics
-router.get("/api/trade/:accountId/getStats", verifyToken, HandleAsyncError(CalculateStatistics));
+router.get("/api/trade/:accountId/getStats", HandleAsyncError(CalculateStatistics));
 
 //Fetch PnL Calendar
-router.get("/api/trade/:accountId/getJournalForCalendar", verifyToken, HandleAsyncError(GetJournalForCalendar));
+router.get("/api/trade/:accountId/getJournalForCalendar", HandleAsyncError(GetJournalForCalendar));
 
 //Fetch Dashboard Chart Data (TotalNetPnL)
-router.get("/api/trade/:accountId/getTotalPnlStats", verifyToken, HandleAsyncError(getTotalPnL));
+router.get("/api/trade/:accountId/getTotalPnlStats", HandleAsyncError(getTotalPnL));
 
 //Fetch Dashboard Chart Data (Weekly PnL)
-router.get("/api/trade/:accountId/getWeeklyStats", verifyToken, HandleAsyncError(getWeeklyPnL));
+router.get("/api/trade/:accountId/getWeeklyStats", HandleAsyncError(getWeeklyPnL));
 
 //Fetch Dashboard Chart Data (Monthly PnL & Revenue)
-router.get("/api/trade/:accountId/getMonthlyStats", verifyToken, HandleAsyncError(getMonthlyPnLAndRevenue));
+router.get("/api/trade/:accountId/getMonthlyStats", HandleAsyncError(getMonthlyPnLAndRevenue));
 
 //Fetch Analytics Chart Data (Daily PnL)
-router.get("/api/trade/:accountId/getDailyStats", verifyToken, HandleAsyncError(getDailyPnLAndReturns));
+router.get("/api/trade/:accountId/getDailyStats", HandleAsyncError(getDailyPnLAndReturns));
 //#endregion
 
 //#region Delete Trade
-router.delete("/api/trade/deleteTrade", verifyToken, HandleAsyncError(DeleteTrades));
-router.delete("/api/trade/deleteImport", verifyToken, HandleAsyncError(DeleteTradeImport));
+router.delete("/api/trade/deleteTrade", HandleAsyncError(DeleteTrades));
+router.delete("/api/trade/deleteImport", HandleAsyncError(DeleteTradeImport));
 //#endregion
 
 export default router;
