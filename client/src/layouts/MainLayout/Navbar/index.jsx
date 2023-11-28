@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { AiOutlineMenuFold, AiOutlineMenuUnfold } from "react-icons/ai";
-import { BsSunFill, BsFillMoonFill } from "react-icons/bs";
 import { FaFilter } from "react-icons/fa";
 import { Link, useLocation } from 'react-router-dom';
 import routes from "routes/routes";
@@ -8,52 +7,39 @@ import Dropdown from 'components/common/dropdown';
 import DateRange from 'components/common/calendar';
 import ModalPopup from 'components/common/popup';
 import { useDispatch, useSelector } from 'react-redux';
-import { setMode, setActiveSidebar, setFilterPopup } from 'state';
-import { useGetUserQuery } from 'state/api/auth/authApi';
+import { setActiveSidebar, setFilterPopup } from 'state';
+import { useRefreshQuery } from 'state/api/user/userApi';
+import { capitalizeWords } from 'components/utils';
+import { useNavigate } from 'react-router-dom';
+import { Toast } from 'components/common/alerts';
+import { useLazyLogoutQuery } from 'state/api/auth/authApi';
+import ThemeButton from 'state/theme/index';
 
 const Navbar = () => {
 
-    //#region Theme Config
-    const currentMode = useSelector((state) => state.global.mode);
-    const dispatch = useDispatch();
-
-    const setTheme = () => {
-        currentMode === "light" ? setAppTheme("dark") : setAppTheme("light");
-    };
-
-    const setAppTheme = (mode) => {
-        const root = window.document.documentElement;
-        root.classList.remove(mode === "light" ? "dark" : "light");
-        root.classList.add(mode);
-        dispatch(setMode(mode));
-        sessionStorage.setItem("themeMode", mode);
-    };
-    //#endregion
-
     const activeMenu = useSelector((state) => state.global.activeSidebar);
-
-    // Check if the current location is active
+    const filterPopup = useSelector((state) => state.global.filterPopup);
+    const dispatch = useDispatch();
     const location = useLocation();
 
-    const filterPopup = useSelector((state) => state.global.filterPopup);
     const [showProfile, setShowProfile] = useState(false);
-
-    const capitalizeWords = (str) => {
-        if (str.includes("settings")) {
-            str = str.replace(str, "settings");
-        }
-        str = str.replace(/\//i, "");
-        str = str.replace(/-/i, " ");
-        return str.toLowerCase().split(' ').map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' ');
-    };
-
     const userInfo = useSelector((state) => state.auth.userInfo, []);
     const { FirstName, Email } = userInfo || {};
 
-    //To Get the UserDetails by default and when page refresh...
-    const { isLoading } = useGetUserQuery(
-        { refetchOnMountOrArgChange: true }
-    );
+    const { isLoading: isLoadingRefresh } = useRefreshQuery({
+        refetchOnMountOrArgChange: true,
+    });
+
+    //#region Handle Logging out the user
+    const navigate = useNavigate();
+    const [trigger] = useLazyLogoutQuery();
+    const handleLogout = () => {
+        trigger();
+        setShowProfile(!showProfile);
+        Toast.success("Logout Successfully!!!");
+        navigate('/auth/login');
+    }
+    //#endregion
 
     return (
         <>
@@ -90,14 +76,7 @@ const Navbar = () => {
                                 </div>
                             </div>
                             <div>
-                                <button id="theme-toggle" type="button" className="text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white focus:outline-none rounded-lg text-sm p-2.5"
-                                    onClick={setTheme}>
-                                    {currentMode === 'dark' ? (
-                                        <BsSunFill className="w-5 h-5" id="theme-toggle-light-icon" />
-                                    ) : (
-                                        <BsFillMoonFill className="w-4 h-4" id="theme-toggle-dark-icon" />
-                                    )}
-                                </button>
+                                <ThemeButton />
                             </div>
                             <div className="flex items-center">
                                 <div className="flex items-center ml-3">
@@ -128,11 +107,9 @@ const Navbar = () => {
                                                 </li>
                                             )}
                                             <li>
-                                                <Link
-                                                    to={"/auth/login"}
-                                                    onClick={() => setShowProfile(!showProfile)}>
+                                                <div onClick={handleLogout()}>
                                                     <span className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-200 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white" role="menuitem">Sign out</span>
-                                                </Link>
+                                                </div>
                                             </li>
                                         </ul>
                                     </div>

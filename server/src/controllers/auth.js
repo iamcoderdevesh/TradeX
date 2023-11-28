@@ -1,10 +1,9 @@
 import UserInfo from "../models/userInfo.js";
 import UserDetails from "../models/userDetails.js";
 import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
 import { validationResult } from 'express-validator';
-import { DeleteAccount } from "./account.js";
 import { createTokenOptions } from "../utils/cookies.js";
+import generateTokens from "../utils/token.js";
 
 /* REGISTER USER */
 export const register = async (req, res) => {
@@ -74,14 +73,14 @@ export const login = async (req, res) => {
         const isMatch = await bcrypt.compare(Password, user.Password);
         if (!isMatch) return res.status(400).json({ message: "Incorrect Password." });
 
-        const token = jwt.sign({ id: user.UserId }, process.env.JWT_SECRET);
+        const { authToken, refreshToken } = await generateTokens(user);
 
-        res.cookie('jwt', token, { ...createTokenOptions(), maxAge: 24 * 60 * 60 * 1000 });
+        res.cookie('token', authToken, { ...createTokenOptions(), maxAge: 24 * 60 * 60 * 1000 });
 
         res.status(200).json({
             success: true,
             message: "Login Successfully!!!",
-            token,
+            token: refreshToken,
             userInfo: {
                 FirstName: user.UserName,
                 Email: user.Email
@@ -90,73 +89,13 @@ export const login = async (req, res) => {
     }
 };
 
-/* Fetch User */
-export const GetUserDetails = async (req, res) => {
-
-    const { UserId } = req.body;
-
-    const userDetails = await UserDetails.findOne({ UserId: UserId }).select('-_id FirstName LastName Email PhoneNo BirthDate');
-    res.status(201).json({
+/* LOGGING OUT */
+export const handleLogout = async (req, res) => {
+    const cookies = req.cookies;
+    if (!cookies?.token) return res.sendStatus(204); //No content
+    res.clearCookie('token', createTokenOptions());
+    res.status(200).json({
         success: true,
-        userInfo: userDetails
+        message: "Logout Successfully!!!",
     });
-};
-
-/* Update Profile */
-export const UpdateProfile = async (req, res) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() });
-    }
-    else {
-        const { UserId, FirstName, LastName, Email, Phone, BirthDate } = req.body;
-
-        const userDetails = await UserDetails.findOneAndUpdate(
-            { UserId },
-            { FirstName, LastName, PhoneNo: Phone, BirthDate, UpdatedBy: UserId },
-            { new: true }
-        );
-
-        await UserInfo.findOneAndUpdate(
-            { UserId: UserId },
-            { Email: Email },
-        );
-
-        if (userDetails) {
-            const { FirstName, LastName, Email, PhoneNo, BirthDate } = userDetails;
-
-            res.status(200).json({
-                success: true,
-                message: "Profile Upadated Successfully!!!",
-                userInfo: {
-                    FirstName,
-                    LastName,
-                    Email,
-                    Phone: PhoneNo,
-                    BirthDate
-                }
-            });
-        }
-    }
-}
-
-/* Delete Everthing */
-export const DeleteAll = async (req, res) => {
-    const { UserId, Password } = req.body;
-
-    //Checking the records exists or not
-    const user = await UserInfo.findOne({ UserId: UserId });
-    if (!user) return res.status(400).json({ message: "User doesn't exist." });
-
-    const isMatch = await bcrypt.compare(Password, user.Password);
-    if (!isMatch) return res.status(400).json({ message: "Incorrect Password!!!" });
-
-    const deleteUser = await UserInfo.findOneAndDelete({ UserId });
-    const deleteUserDet = await UserDetails.findOneAndDelete({ UserId });
-
-    if (deleteUser && deleteUserDet) {
-        req.body.isVerified = true;
-        await DeleteAccount(req, res);
-    }
-    res.status(400).json({ errors: "Unable to delete account" });
 }

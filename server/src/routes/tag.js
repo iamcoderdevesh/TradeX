@@ -9,9 +9,9 @@ const router = express.Router();
 router.use(verifyToken);
 
 /* Create Tag */
-router.post("/api/tags/createUpdateTag", tagValidations, HandleAsyncError(CreateUpdateTag));
+router.post("/tags/createUpdateTag", tagValidations, HandleAsyncError(CreateUpdateTag));
 
 /* Delete Tag */
-router.delete("/api/tags/deleteTag", HandleAsyncError(DeleteTag));
+router.delete("/tags/deleteTag", HandleAsyncError(DeleteTag));
 
 export default router;

@@ -3,7 +3,7 @@ import TabPanel from '../'
 import { SubmitButton, DeleteButton } from 'components/common/buttons';
 import InputField from 'components/common/inputs/InputField';
 import { useSelector } from 'react-redux';
-import { useUpdateProfileMutation } from 'state/api/auth/authApi';
+import { useUpdateProfileMutation } from 'state/api/user/userApi';
 import { Toast } from 'components/common/alerts';
 import { formatDate } from 'components/utils';
 

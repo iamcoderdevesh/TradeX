@@ -1,11 +1,11 @@
 import apiSlice from "state/api";
-import { addUserInfo, setUserAuthenticated, userLoggedIn } from "./authSlice";
+import { addUserInfo, setUserAuthenticated, setToken } from "./authSlice";
 
 const authApiSlice = apiSlice.injectEndpoints({
   endpoints: builder => ({
     signUp: builder.mutation({
       query: data => ({
-        url: "api/auth/register",
+        url: "auth/register",
         method: "POST",
         body: { ...data }
       }),
@@ -20,7 +20,7 @@ const authApiSlice = apiSlice.injectEndpoints({
     }),
     login: builder.mutation({
       query: (data) => ({
-        url: '/api/auth/login',
+        url: 'auth/login',
         method: 'POST',
         body: { ...data }
       }),
@@ -28,7 +28,7 @@ const authApiSlice = apiSlice.injectEndpoints({
         try {
           const result = await queryFulfilled;
           if (result.data.success) {
-            dispatch(userLoggedIn({ accessToken: result.data.token }));
+            dispatch(setToken({ accessToken: result.data.token }));
             dispatch(addUserInfo(result.data.userInfo));
             dispatch(setUserAuthenticated(true));
           }
@@ -37,34 +37,24 @@ const authApiSlice = apiSlice.injectEndpoints({
         }
       },
     }),
-    updateProfile: builder.mutation({
-      query: data => ({
-        url: "api/auth/updateProfile",
-        method: "POST",
-        body: { ...data }
+    logout: builder.query({
+      query: () => ({
+        url: 'auth/logout',
+        credentials: 'include',
       }),
-      async onQueryStarted(args, { queryFulfilled, dispatch }) {
+      async onQueryStarted(args, { dispatch, queryFulfilled }) {
         try {
           const result = await queryFulfilled;
-          result.data.success && dispatch(addUserInfo(result.data.userInfo));
-        } catch (err) {
-          return;
-        }
-      },
-    }),
-    getUser: builder.query({
-      query: () => `api/auth/getUserDetails`,
-      async onQueryStarted(arg, { dispatch, queryFulfilled }) {
-        try {
-          const result = await queryFulfilled;
-          result.data.success && dispatch(addUserInfo(result.data.userInfo));
-        } catch (err) {
+          if (result.data.success) {
+            dispatch(setUserAuthenticated(false));
+          }
+        } catch(error) {
             return;
         }
-      }
+      },
     }),
   }),
   overrideExisting: true
 });
 
-export const { useSignUpMutation, useLoginMutation, useUpdateProfileMutation, useGetUserQuery } = authApiSlice;
+export const { useSignUpMutation, useLoginMutation, useLazyLogoutQuery } = authApiSlice;

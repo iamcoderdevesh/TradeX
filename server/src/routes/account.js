@@ -9,15 +9,15 @@ const router = express.Router();
 router.use(verifyToken);
 
 /*Create/Update Account */
-router.post("/api/accounts/createUpdateAccount", accountValidations, HandleAsyncError(CreateUpdateAccount));
+router.post("/accounts/createUpdateAccount", accountValidations, HandleAsyncError(CreateUpdateAccount));
 
 /*Switch Account */
-router.get("/api/accounts/:accountId/switchAccount", HandleAsyncError(SwitchAccount));
+router.get("/accounts/:accountId/switchAccount", HandleAsyncError(SwitchAccount));
 
 /*Get Account Details */
-router.get("/api/accounts/getAccountDetails", HandleAsyncError(GetAccountDetails));
+router.get("/accounts/getAccountDetails", HandleAsyncError(GetAccountDetails));
 
 /* Delete Account */
-router.delete("/api/accounts/deleteAccount", HandleAsyncError(DeleteAccount));
+router.delete("/accounts/deleteAccount", HandleAsyncError(DeleteAccount));
 
 export default router;

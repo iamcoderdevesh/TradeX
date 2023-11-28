@@ -15,3 +15,12 @@ export const formatDate = (date) => {
 
     return [year, month, day].join('-');
 }
+
+export const capitalizeWords = (str) => {
+    if (str.includes("settings")) {
+        str = str.replace(str, "settings");
+    }
+    str = str.replace(/\//i, "");
+    str = str.replace(/-/i, " ");
+    return str.toLowerCase().split(' ').map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' ');
+};

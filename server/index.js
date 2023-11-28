@@ -3,6 +3,8 @@ import mongoose from "mongoose";
 import cors from "cors";
 import authRoutes from "./src/routes/auth.js";
 import accountRoutes from "./src/routes/account.js";
+import userRoutes from "./src/routes/user.js";
+import refreshRoutes from "./src/routes/refresh.js";
 import tagRoutes from "./src/routes/tag.js";
 import tradeRoutes from "./src/routes/trade.js";
 import dotenv from "dotenv";
@@ -13,7 +15,7 @@ import credentials from "./src/config/corsCredentials.js";
 import cookieParser from "cookie-parser";
 import bodyParser from "body-parser";
 
-// #region CONFIGURATIONS
+//#region CONFIGURATIONS
 dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 6000;
@@ -31,11 +33,14 @@ app.get('/', (req, res) => {
 })
 //#endregion
 
-/* Routes */
-app.use("/", authRoutes);
-app.use("/", accountRoutes);
-app.use("/", tagRoutes);
-app.use("/", tradeRoutes);
+//#region App Routes
+app.use("/api", authRoutes);
+app.use("/api", refreshRoutes);
+app.use("/api", userRoutes);
+app.use("/api", accountRoutes);
+app.use("/api", tagRoutes);
+app.use("/api", tradeRoutes);
+//#endregion
 
 //#region MONGOOSE SETUP
 mongoose.connect(process.env.MONGO_URL).then(() => {

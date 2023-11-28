@@ -1,5 +1,5 @@
 const createTokenOptions = () => {
-    return { httpOnly: true, secure: false, sameSite: "none" }
+    return { httpOnly: true, secure: true, sameSite: "none" }
 }
 
 export { createTokenOptions }
