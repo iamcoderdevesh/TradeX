@@ -10,10 +10,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setActiveSidebar, setFilterPopup } from 'state';
 import { useRefreshQuery } from 'state/api/user/userApi';
 import { capitalizeWords } from 'components/utils';
-import { useNavigate } from 'react-router-dom';
-import { Toast } from 'components/common/alerts';
-import { useLazyLogoutQuery } from 'state/api/auth/authApi';
 import ThemeButton from 'state/theme/index';
+import LogoutButton from 'components/common/buttons/logoutButton';
 
 const Navbar = () => {
 
@@ -29,17 +27,6 @@ const Navbar = () => {
     const { isLoading: isLoadingRefresh } = useRefreshQuery({
         refetchOnMountOrArgChange: true,
     });
-
-    //#region Handle Logging out the user
-    const navigate = useNavigate();
-    const [trigger] = useLazyLogoutQuery();
-    const handleLogout = () => {
-        trigger();
-        setShowProfile(!showProfile);
-        Toast.success("Logout Successfully!!!");
-        navigate('/auth/login');
-    }
-    //#endregion
 
     return (
         <>
@@ -107,9 +94,7 @@ const Navbar = () => {
                                                 </li>
                                             )}
                                             <li>
-                                                <div onClick={handleLogout()}>
-                                                    <span className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-200 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white" role="menuitem">Sign out</span>
-                                                </div>
+                                                <LogoutButton />
                                             </li>
                                         </ul>
                                     </div>

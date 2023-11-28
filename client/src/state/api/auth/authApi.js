@@ -37,7 +37,7 @@ const authApiSlice = apiSlice.injectEndpoints({
         }
       },
     }),
-    logout: builder.query({
+    logout: builder.mutation({
       query: () => ({
         url: 'auth/logout',
         credentials: 'include',
@@ -57,4 +57,4 @@ const authApiSlice = apiSlice.injectEndpoints({
   overrideExisting: true
 });
 
-export const { useSignUpMutation, useLoginMutation, useLazyLogoutQuery } = authApiSlice;
+export const { useSignUpMutation, useLoginMutation, useLogoutMutation } = authApiSlice;
