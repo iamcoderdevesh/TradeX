@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect } from 'react';
+import { useFormik } from "formik";
 import TabPanel from '../'
 import { SubmitButton, DeleteButton } from 'components/common/buttons';
 import InputField from 'components/common/inputs/InputField';
@@ -10,21 +11,22 @@ import { formatDate } from 'components/utils';
 const General = () => {
 
   const userInfo = useSelector((state) => state.auth.userInfo, []);
-  const { FirstName, LastName, Email, PhoneNo:Phone, BirthDate } = userInfo || {};
+  const { FirstName, LastName, Email, PhoneNo: Phone, BirthDate } = userInfo || {};
 
-  const [formData, setFormData] = useState({
-    FirstName: FirstName || "",
-    LastName: LastName || "",
-    Email: Email || "",
-    Phone: Phone || "",
-    BirthDate: BirthDate || ""
+  const { values, isValid, dirty, handleChange, handleSubmit, handleBlur } = useFormik({
+    initialValues: {
+      FirstName: FirstName,
+      LastName: LastName,
+      Email: Email,
+      Phone: Phone,
+      BirthDate: BirthDate
+    },
+    onSubmit: values => {
+      submitForm(values);
+    },
   });
-  const [updateProfile, { isLoading, isSuccess, data }] = useUpdateProfileMutation();
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prevFormData) => ({ ...prevFormData, [name]: value }));
-  };
+  const [updateProfile, { isLoading, isSuccess, data }] = useUpdateProfileMutation();
 
   useEffect(() => {
     if (isSuccess) {
@@ -33,8 +35,7 @@ const General = () => {
   }, [isSuccess, data]);
 
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const submitForm = async (formData) => {
     try {
       await updateProfile(formData).unwrap();
     } catch (error) {
@@ -52,25 +53,25 @@ const General = () => {
             <form onSubmit={handleSubmit}>
               <div className="grid gap-4 sm:grid-cols-2 sm:gap-6">
                 <div className="w-full">
-                  <InputField label={"First Name"} id={"firstName"} type={"text"} htmlName={"FirstName"} value={FirstName} handleChange={handleChange} />
+                  <InputField label={"First Name"} id={"firstName"} type={"text"} htmlName={"FirstName"} value={values.FirstName} handleChange={handleChange} onBlur={handleBlur} />
                 </div>
                 <div className="w-full">
-                  <InputField label={"Last Name"} id={"lastName"} type={"text"} htmlName={"LastName"} value={LastName} handleChange={handleChange} />
+                  <InputField label={"Last Name"} id={"lastName"} type={"text"} htmlName={"LastName"} value={values.LastName} handleChange={handleChange} onBlur={handleBlur} />
                 </div>
                 <div className="sm:col-span-2">
-                  <InputField label={"Email"} id={"email"} type={"email"} htmlName={"Email"} value={Email} handleChange={handleChange} />
+                  <InputField label={"Email"} id={"email"} type={"email"} htmlName={"Email"} value={values.Email} handleChange={handleChange} onBlur={handleBlur} />
                 </div>
                 <div className="w-full">
-                  <InputField label={"Phone"} id={"phone"} type={"phone"} htmlName={"Phone"} value={Phone} handleChange={handleChange} />
+                  <InputField label={"Phone"} id={"phone"} type={"phone"} htmlName={"Phone"} value={values.Phone} handleChange={handleChange} onBlur={handleBlur} />
                 </div>
                 <div className="w-full">
-                  <InputField label={"Birthday"} id={"birthday"} type={"date"} htmlName={"BirthDate"} value={formatDate(BirthDate)} handleChange={handleChange} />
+                  <InputField label={"Birthday"} id={"birthday"} type={"date"} htmlName={"BirthDate"} value={formatDate(values.BirthDate)} handleChange={handleChange} onBlur={handleBlur} />
                 </div>
                 <div className="sm:col-span-2">
-                  <InputField label={"Your avatar"} placeholder={"Choose a file"} id={"ProfileImg"} type={"file"} htmlName={"profileImg"} />
+                  <InputField label={"Your avatar"} placeholder={"Choose a file"} id={"ProfileImg"} type={"file"} htmlName={"profileImg"}/>
                 </div>
                 <div className="flex flex-row items-center mt-5">
-                  <SubmitButton type="submit" id="profileBtn">Submit</SubmitButton>
+                  <SubmitButton type="submit" id="profileBtn" disabled={!(dirty && isValid) || isLoading}>Submit</SubmitButton>
                 </div>
               </div>
             </form>

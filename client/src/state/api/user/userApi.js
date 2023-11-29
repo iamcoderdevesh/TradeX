@@ -1,7 +1,7 @@
 import apiSlice from "state/api";
 import { addUserInfo, setUserAuthenticated, setToken } from "../auth/authSlice";
 
-const authApiSlice = apiSlice.injectEndpoints({
+const userApiSlice = apiSlice.injectEndpoints({
     endpoints: builder => ({
         getUser: builder.query({
             query: () => `auth/getUserDetails`,
@@ -28,7 +28,7 @@ const authApiSlice = apiSlice.injectEndpoints({
                         dispatch(setUserAuthenticated(true));
 
                         //To Get the UserDetails when page refresh...
-                        dispatch(authApiSlice.endpoints.getUser.initiate());
+                        dispatch(userApiSlice.endpoints.getUser.initiate());
                     }
                 } catch (err) {
                     return;
@@ -54,4 +54,4 @@ const authApiSlice = apiSlice.injectEndpoints({
     overrideExisting: true
 });
 
-export const { useGetUserQuery, useRefreshQuery, useUpdateProfileMutation } = authApiSlice;
+export const { useGetUserQuery, useRefreshQuery, useUpdateProfileMutation } = userApiSlice;

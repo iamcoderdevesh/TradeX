@@ -9,13 +9,13 @@ const generateTokens = async (UserInfo) => {
     const refreshToken = jwt.sign(
       payload,
       process.env.REFRESH_TOKEN,
-      { expiresIn: "7d" }
+      { expiresIn: "1h" }
     );
 
     const authToken = jwt.sign(
       payload,
       process.env.JWT_SECRET,
-      { expiresIn: "10m" }
+      { expiresIn: "7d" }
     );
 
     const userToken = await UserToken.deleteOne({ UserId });
