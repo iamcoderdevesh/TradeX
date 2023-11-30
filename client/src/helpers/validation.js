@@ -20,4 +20,19 @@ const SignInSchema = Yup.object().shape({
     .min(8, "too short - should be 8 chars minimum")
 });
 
-export { SignUpSchema, SignInSchema };
+const AccountSchema = Yup.object().shape({
+  AccountName: Yup.string().required("Account Name is required"),
+  Market: Yup.string().required("Select Market"),
+  Broker: Yup.string().required("Select Broker"),
+  InitialBalance: Yup.number().positive().integer().required("Initial Balance is required"),
+  Currency: Yup.string().required("Select Currency")
+});
+
+const TagSchema = Yup.object().shape({
+  TagName: Yup.string().required("Tag Name is required"),
+  TagType: Yup.string().required("Select Tag Type"),
+  TagDesc: Yup.string().required("Tag Description is required")
+});
+
+
+export { SignUpSchema, SignInSchema, AccountSchema, TagSchema };

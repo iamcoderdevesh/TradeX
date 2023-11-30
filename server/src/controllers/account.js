@@ -25,8 +25,10 @@ export const CreateUpdateAccount = async (req, res) => {
             );
 
             if (updateAccount) {
-                const { AccountId, AccountName, Market, Broker, InitialBalance, Currency } = updateAccount;
-                res.status(200).json({ AccountId, AccountName, Market, Broker, InitialBalance, Currency });
+                res.status(201).json({
+                    success: true,
+                    message: "Account Created Successfully!!!"
+                });
             }
         }
         //Else Create a new Account
@@ -48,7 +50,10 @@ export const CreateUpdateAccount = async (req, res) => {
             });
 
             await newAccount.save();
-            res.status(201).send("Account Created Successfully!!!");
+            res.status(201).json({
+                success: true,
+                message: "Account Created Successfully!!!"
+            });
         }
     }
 };
@@ -58,10 +63,13 @@ export const GetAccountDetails = async (req, res) => {
     const { UserId } = req.body;
 
     //Checking the records exists or not
-    const account = await AccountDetails.find({ UserId });
-
+    const account = await AccountDetails.find({ UserId }).select('-_id AccountId AccountName Broker InitialBalance Currency');
+    
     if (account) {
-        res.status(201).send(account);
+        res.status(200).json({
+            success: true,
+            account
+        });
     }
     else {
         return res.status(404).send(`Account Doesn't Exists`);

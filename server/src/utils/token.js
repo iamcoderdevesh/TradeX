@@ -18,7 +18,7 @@ const generateTokens = async (UserInfo) => {
       { expiresIn: "7d" }
     );
 
-    const userToken = await UserToken.deleteOne({ UserId });
+    await UserToken.deleteOne({ UserId });
 
     const newToken = new UserToken({
       UserId,

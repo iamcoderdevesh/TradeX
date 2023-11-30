@@ -42,8 +42,29 @@ export const CreateUpdateTag = async (req, res) => {
             });
 
             await newTag.save();
-            res.status(201).send("Tag Created Successfully!!!");
+            res.status(201).json({
+                success: true,
+                message: "Tag Created Successfully!!!"
+            });
         }
+    }
+};
+
+/* Get Account Details */
+export const GetTagDetails = async (req, res) => {
+    const { UserId } = req.body;
+
+    //Checking the records exists or not
+    const tag = await Tags.find({ UserId }).select('-_id TagId TagName TagType TagDesc');
+    
+    if (tag) {
+        res.status(200).json({
+            success: true,
+            tag
+        });
+    }
+    else {
+        return res.status(404).send(`Tag Doesn't Exists`);
     }
 };
 

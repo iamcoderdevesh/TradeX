@@ -1,16 +1,19 @@
 import React, { useState } from 'react'
 import TabPanel from '../'
 import { IoClose } from "react-icons/io5";
-import { SubmitButton, DeleteButton, ResetButton, IconButton } from 'components/common/buttons';
-import InputField from 'components/common/inputs/InputField';
-import Dropdown from 'components/common/dropdown';
+import { SubmitButton } from 'components/common/buttons';
 import { DefaultTable } from 'components/common/table';
 import { TagsColumns } from 'components/common/table/columns';
+import TagForm from './forms/tagFrom';
+import { useGetAllTagsQuery } from 'state/api/tags/tagApi';
 
 const Tags = () => {
 
   const [showAddTags, setShowAddTags] = useState(false);
-  const data = [];
+  const { data, isLoading } = useGetAllTagsQuery({
+    refetchOnMountOrArgChange: true,
+  });
+  console.log(data);
 
   return (
     <div>
@@ -29,7 +32,7 @@ const Tags = () => {
                   <SubmitButton id="add-account" onClick={() => setShowAddTags(!showAddTags)}>+ ADD TAGS</SubmitButton>
                 </div>
                 <div className="sm:col-span-2 relative overflow-x-auto shadow-md sm:rounded-lg">
-                  <DefaultTable data={data} columns={TagsColumns} />
+                  <DefaultTable data={data || []} columns={TagsColumns} />
                 </div>
               </div>
             }
@@ -43,31 +46,7 @@ const Tags = () => {
                     <IoClose className="w-6 h-6" />
                   </button>
                 </div>
-                <form>
-                  <div className="grid gap-4 sm:grid-cols-2 sm:gap-6">
-                    <div>
-                      <InputField label={"Tag Name"} placeholder={"Ex.: Setup Created"} id={"tag-name"} type={"text"} htmlName={"tag-name"} />
-                    </div>
-                    <div>
-                      <Dropdown label={"Select Tag Type"} id={"ddTags"}
-                        children={
-                          <>
-                            <option>Select Type</option>
-                            <option>SETUP</option>
-                            <option>MISTAKE</option>
-                            <option>CUSTOM</option>
-                          </>
-                        } />
-                    </div>
-                    <div className='col-span-2'>
-                      <InputField label={"Description"} placeholder={"Add Description"} id={"tag-description"} type={"textArea"} htmlName={"tag-description"} />
-                    </div>
-                    <div className="flex flex-row items-start mt-5">
-                      <ResetButton id="reset">Reset</ResetButton>
-                      <SubmitButton id="importTrade">Submit</SubmitButton>
-                    </div>
-                  </div>
-                </form>
+                <TagForm />
               </div>
             }
           </div>

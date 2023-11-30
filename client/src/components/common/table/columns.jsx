@@ -41,7 +41,7 @@ export const RecentTradeCols = [
         header: () => <div className="capitalize">Net ROI</div>,
         cell: ({ row }) => <div className={classNames("capitalize font-medium", row.getValue("Net ROI").startsWith("-") ? "text-red" : "text-green")}>{row.getValue("Net ROI")}</div>
     },
-]
+];
 
 export const TradeColumns = [
     {
@@ -128,13 +128,13 @@ export const TradeColumns = [
         header: () => <div className="capitalize">Additional Info</div>,
         cell: ({ row }) => <div className="capitalize">{row.getValue("Additional Info")}</div>
     },
-]
+];
 
 export const AccountColumns = [
     {
-        accessorKey: "Account Name",
+        accessorKey: "AccountName",
         header: () => <span>Account Name</span>,
-        cell: ({ row }) => <div className="capitalize">{row.getValue("Account Name")}</div>
+        cell: ({ row }) => <div className="capitalize">{row.getValue("AccountName")}</div>
     },
     {
         accessorKey: "Broker",
@@ -142,34 +142,34 @@ export const AccountColumns = [
         cell: ({ row }) => <div className="capitalize">{row.getValue("Broker")}</div>
     },
     {
-        accessorKey: "Balance",
+        accessorKey: "InitialBalance",
         header: () => <span>Balance</span>,
-        cell: ({ row }) => <div className="capitalize">{row.getValue("Balance")}</div>
+        cell: ({ row }) => <div className="capitalize">{row.getValue("InitialBalance")}</div>
     },
     {
         accessorKey: "Currency",
         header: () => <span>Currency</span>,
         cell: ({ row }) => <div className="capitalize">{row.getValue("Currency")}</div>
     },
-]
+];
 
 export const TagsColumns = [
     {
-        accessorKey: "Tag Name",
+        accessorKey: "TagName",
         header: () => <span>Tag Name</span>,
-        cell: ({ row }) => <div className="capitalize">{row.getValue("Tag Name")}</div>
+        cell: ({ row }) => <div className="capitalize">{row.getValue("TagName")}</div>
     },
     {
-        accessorKey: "Type",
+        accessorKey: "TagType",
         header: () => <span>Type</span>,
-        cell: ({ row }) => <div className="capitalize">{row.getValue("Type")}</div>
+        cell: ({ row }) => <div className="capitalize">{row.getValue("TagType")}</div>
     },
     {
-        accessorKey: "Description",
+        accessorKey: "TagDesc",
         header: () => <span>Description</span>,
-        cell: ({ row }) => <div className="capitalize">{row.getValue("Description")}</div>
+        cell: ({ row }) => <div className="capitalize">{row.getValue("TagDesc")}</div>
     },
-]
+];
 
 export const ImportHistColumns = [
     {
@@ -197,4 +197,4 @@ export const ImportHistColumns = [
         header: () => <span>File</span>,
         cell: ({ row }) => <div className="capitalize">{row.getValue("File")}</div>
     },
-]
+];

@@ -1,7 +1,7 @@
 import React from 'react';
 import Logo from 'assets/logo';
 import { ToastContainer } from 'components/common/alerts';
-import LoginForm from './loginForn';
+import LoginForm from './loginForm';
 
 const Login = () => {
   return (
