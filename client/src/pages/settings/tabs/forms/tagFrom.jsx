@@ -7,12 +7,12 @@ import { SubmitButton } from 'components/common/buttons';
 import Dropdown from 'components/common/dropdown';
 import { ResetButton } from 'components/common/buttons';
 import { TagSchema } from 'helpers/validation';
-import { useCreateUpadateTagsMutation, useGetAllTagsQuery } from 'state/api/tags/tagApi';
+import { useCreateUpadateTagsMutation, useGetTagDetailsQuery } from 'state/api/tags/tagApi';
 
 const TagForm = ({ setShowTagForm }) => {
 
     const TagId = new URLSearchParams(useLocation().search).get('tagId');
-    const { data: TagInfo, isLoading: isLoadingTag } = useGetAllTagsQuery(TagId, {
+    const { data: TagInfo, isLoading: isLoadingTag } = useGetTagDetailsQuery(TagId, {
         refetchOnMountOrArgChange: true,
         skip: !TagId
     });

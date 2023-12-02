@@ -60,32 +60,18 @@ export const CreateUpdateAccount = async (req, res) => {
 
 /* Get Account Details */
 export const GetAccountDetails = async (req, res) => {
-    const { UserId, AccountId } = req.body;
+    const { UserId } = req.body;
+
+    const AccountId = parseInt(req.params.id);
     const accountFilter = { UserId };
 
     //Search Filter by AccountId Filter
-    if (AccountId) accountFilter.AccountId = AccountId;
+    if (AccountId !== 0) accountFilter.AccountId = AccountId;
 
     //Checking the records exists or not
-    const account = await AccountDetails.find(accountFilter).select('-_id AccountId AccountName Broker InitialBalance Currency');
+    let account = await AccountDetails.findOne(accountFilter).select('-_id AccountId AccountName Broker InitialBalance Currency');
 
-    if (account) {
-        res.status(200).json({
-            success: true,
-            account
-        });
-    }
-    else {
-        return res.status(404).send(`Account Doesn't Exists`);
-    }
-};
-
-/* Get Account Details */
-export const GetAccountById = async (req, res) => {
-    const { UserId } = req.body;
-    const { AccountId } = req.params;
-    //Checking the records exists or not
-    const account = await AccountDetails.findOne({ UserId, AccountId }).select('-_id AccountId AccountName Broker InitialBalance Currency');
+    if (AccountId === 0 || !account) account = await AccountDetails.find({ UserId }).select('-_id AccountId AccountName Broker InitialBalance Currency');
 
     if (account) {
         res.status(200).json({

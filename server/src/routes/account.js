@@ -1,6 +1,6 @@
 import express from "express";
 import { verifyToken } from "../middleware/authorise.js";
-import { CreateUpdateAccount, DeleteAccount, GetAccountById, GetAccountDetails, SwitchAccount } from "../controllers/account.js";
+import { CreateUpdateAccount, DeleteAccount, GetAccountDetails, SwitchAccount } from "../controllers/account.js";
 import { HandleAsyncError } from "../middleware/catchError.js";
 import { accountValidations } from "../middleware/validator.js";
 
@@ -15,10 +15,7 @@ router.post("/accounts/createUpdateAccount", accountValidations, HandleAsyncErro
 router.get("/accounts/:accountId/switchAccount", HandleAsyncError(SwitchAccount));
 
 /*Get Account Details */
-router.get("/accounts/getAccountDetails", HandleAsyncError(GetAccountDetails));
-
-/*Get Account Details */
-router.get("/accounts/getAccountById/:AccountId", HandleAsyncError(GetAccountById));
+router.get("/accounts/getAccountDetails/:id", HandleAsyncError(GetAccountDetails));
 
 /* Delete Account */
 router.delete("/accounts/deleteAccount", HandleAsyncError(DeleteAccount));

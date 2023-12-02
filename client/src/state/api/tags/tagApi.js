@@ -3,8 +3,8 @@ import apiSlice from "state/api";
 
 const tagApiSlice = apiSlice.injectEndpoints({
     endpoints: builder => ({
-        getAllTags: builder.query({
-            query: (TagId) => `tags/getTagDetails/${TagId}`,
+        getTagDetails: builder.query({
+            query: (TagId = 0) => `tags/getTagDetails/${TagId}`,
             transformResponse: (response) => response.success ? response.tag : [],
             providesTags: ["Tags"],
         }),
@@ -36,4 +36,4 @@ const tagApiSlice = apiSlice.injectEndpoints({
     overrideExisting: true
 });
 
-export const { useGetAllTagsQuery, useCreateUpadateTagsMutation, useDeleteTagMutation } = tagApiSlice;
+export const { useGetTagDetailsQuery, useCreateUpadateTagsMutation, useDeleteTagMutation } = tagApiSlice;

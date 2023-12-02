@@ -6,15 +6,13 @@ import { SubmitButton } from 'components/common/buttons';
 import { DefaultTable } from 'components/common/table';
 import { TagsColumns } from 'components/common/table/columns';
 import TagForm from './forms/tagFrom';
-import { useDeleteTagMutation, useGetAllTagsQuery } from 'state/api/tags/tagApi';
+import { useDeleteTagMutation, useGetTagDetailsQuery } from 'state/api/tags/tagApi';
 
 const Tags = () => {
 
   const navigate = useNavigate();
   const [showAddTags, setShowAddTags] = useState(false);
-  const { data, isLoading: isLoadingTag } = useGetAllTagsQuery(0, {
-    refetchOnMountOrArgChange: true,
-  });
+  const { data, isLoading: isLoadingTag } = useGetTagDetailsQuery();
 
   const [deleteTag, { isLoading }] = useDeleteTagMutation();
 

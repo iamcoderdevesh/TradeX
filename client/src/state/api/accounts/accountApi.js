@@ -3,15 +3,10 @@ import apiSlice from "state/api";
 
 const accountApiSlice = apiSlice.injectEndpoints({
     endpoints: builder => ({
-        getAllAccount: builder.query({
-            query: () => "accounts/getAccountDetails",
+        getAccountDetails: builder.query({
+            query: (id = 0) => `accounts/getAccountDetails/${id}`,
             transformResponse: (response) => response.success ? response.account : [],
             providesTags: ["Accounts"]
-        }),
-        getAccountById: builder.query({
-            query: accountId => `accounts/getAccountById/${accountId}`,
-            transformResponse: (response) => response.success ? response.account : [],
-            invalidatesTags: ["Accounts"],
         }),
         createUpadateAccount: builder.mutation({
             query: data => ({
@@ -41,4 +36,4 @@ const accountApiSlice = apiSlice.injectEndpoints({
     overrideExisting: true
 });
 
-export const { useGetAllAccountQuery, useGetAccountByIdQuery, useCreateUpadateAccountMutation, useDeleteAccountMutation } = accountApiSlice;
+export const { useGetAccountDetailsQuery, useCreateUpadateAccountMutation, useDeleteAccountMutation } = accountApiSlice;

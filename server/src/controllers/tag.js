@@ -62,8 +62,8 @@ export const GetTagDetails = async (req, res) => {
 
     //Checking the records exists or not
     let tag = await Tags.findOne(tagFilter).select('-_id TagId TagName TagType TagDesc');
-    
-    if (TagId === 0) tag = await Tags.find(tagFilter).select('-_id TagId TagName TagType TagDesc');
+
+    if (TagId === 0 || !tag) tag = await Tags.find({ UserId }).select('-_id TagId TagName TagType TagDesc');
 
     if (tag) {
         res.status(200).json({

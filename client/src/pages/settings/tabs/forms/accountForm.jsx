@@ -4,14 +4,14 @@ import InputField from 'components/common/inputs/InputField';
 import Dropdown from 'components/common/dropdown';
 import { useFormik } from "formik";
 import { Toast } from 'components/common/alerts';
-import { useCreateUpadateAccountMutation, useGetAccountByIdQuery } from 'state/api/accounts/accountApi';
+import { useCreateUpadateAccountMutation, useGetAccountDetailsQuery } from 'state/api/accounts/accountApi';
 import { AccountSchema } from 'helpers/validation';
 import { useLocation } from 'react-router-dom';
 
 const AccountForm = ({ setShowAccountPage }) => {
 
     const AccountId = new URLSearchParams(useLocation().search).get('accountId');
-    const { data: AccountInfo, isLoading: isLoadingAcc } = useGetAccountByIdQuery(AccountId, {
+    const { data: AccountInfo, isLoading: isLoadingAcc } = useGetAccountDetailsQuery(AccountId, {
         skip: !AccountId,
     });
     const { AccountName, Market, Broker, InitialBalance, Currency } = AccountInfo || [];

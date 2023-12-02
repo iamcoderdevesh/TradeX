@@ -6,16 +6,14 @@ import { SubmitButton } from 'components/common/buttons';
 import { DefaultTable } from 'components/common/table';
 import { AccountColumns } from 'components/common/table/columns';
 import AccountForm from './forms/accountForm';
-import { useDeleteAccountMutation, useGetAllAccountQuery } from 'state/api/accounts/accountApi';
+import { useDeleteAccountMutation, useGetAccountDetailsQuery } from 'state/api/accounts/accountApi';
 
 const Accounts = () => {
 
   const navigate = useNavigate();
   const [showAddAccount, setShowAddAccount] = useState(false);
 
-  const { data, isLoading: isLoadingAcc } = useGetAllAccountQuery({
-    refetchOnMountOrArgChange: true,
-  });
+  const { data, isLoading: isLoadingAcc } = useGetAccountDetailsQuery();
 
   const [deleteAccount, { isLoading }] = useDeleteAccountMutation();
 
