@@ -9,7 +9,7 @@ import ModalPopup from 'components/common/popup';
 import { useDispatch, useSelector } from 'react-redux';
 import { setActiveSidebar, setFilterPopup } from 'state';
 import { useRefreshQuery } from 'state/api/user/userApi';
-import { capitalizeWords } from 'components/utils';
+import { capitalizeWords } from 'utils';
 import ThemeButton from 'state/theme/index';
 import LogoutButton from 'components/common/buttons/logoutButton';
 

@@ -20,7 +20,7 @@ const SignupForm = () => {
         ConfirmPassword: ''
     };
 
-    const { values, errors, touched, isValid, dirty, handleChange, handleSubmit, handleBlur } = useFormik({
+    const { values, errors, touched, isSubmitting, handleChange, handleSubmit, handleBlur } = useFormik({
         initialValues: initialValues,
         validationSchema: SignUpSchema,
         onSubmit: values => {
@@ -50,16 +50,16 @@ const SignupForm = () => {
     return (
         <form className="space-y-4 md:space-y-6" onSubmit={handleSubmit}>
             <div>
-                <InputField label={"Username"} placeholder={"Neil Sims"} id={"username"} type={"text"} htmlName={"UserName"} handleChange={handleChange} value={values.UserName} onBlur={handleBlur} errorMsg={errors.UserName || touched.UserName} />
+                <InputField label={"Username"} placeholder={"Neil Sims"} id={"username"} type={"text"} htmlName={"UserName"} handleChange={handleChange} value={values.UserName} onBlur={handleBlur} errorMsg={errors.UserName && touched.UserName && errors.UserName} />
             </div>
             <div>
-                <InputField label={"Your email"} placeholder={"name@company.com"} id={"email"} type={"text"} htmlName={"Email"} value={values.Email} handleChange={handleChange} onBlur={handleBlur} errorMsg={errors.Email || touched.Email} />
+                <InputField label={"Your email"} placeholder={"name@company.com"} id={"email"} type={"text"} htmlName={"Email"} value={values.Email} handleChange={handleChange} onBlur={handleBlur} errorMsg={errors.Email && touched.Email && errors.Email} />
             </div>
             <div>
-                <InputField label={"Password"} placeholder={"••••••••"} id={"password"} type={"password"} htmlName={"Password"} value={values.Password} handleChange={handleChange} onBlur={handleBlur} errorMsg={errors.Password || touched.Password} />
+                <InputField label={"Password"} placeholder={"••••••••"} id={"password"} type={"password"} htmlName={"Password"} value={values.Password} handleChange={handleChange} onBlur={handleBlur} errorMsg={errors.Password && touched.Password && errors.Password} />
             </div>
             <div>
-                <InputField label={"Confirm Password"} placeholder={"••••••••"} id={"ConfirmPassword"} type={"password"} htmlName={"ConfirmPassword"} handleChange={handleChange} value={values.ConfirmPassword} onBlur={handleBlur} errorMsg={errors.ConfirmPassword || touched.ConfirmPassword} />
+                <InputField label={"Confirm Password"} placeholder={"••••••••"} id={"ConfirmPassword"} type={"password"} htmlName={"ConfirmPassword"} handleChange={handleChange} value={values.ConfirmPassword} onBlur={handleBlur} errorMsg={errors.ConfirmPassword && touched.ConfirmPassword && errors.ConfirmPassword} />
             </div>
             <div className="flex items-start">
                 <div className="flex items-center h-5">
@@ -71,7 +71,7 @@ const SignupForm = () => {
                     </label>
                 </div>
             </div>
-            <Button type="submit" id="create-account" disabled={!(dirty && isValid) || isLoading}>Create an account</Button>
+            <Button type="submit" id="create-account" disabled={isSubmitting}>Create an account</Button>
             <p className="text-sm font-light text-gray-500 dark:text-gray-400">Already have an account?{" "}
                 <Link
                     to={"/auth/login"}>

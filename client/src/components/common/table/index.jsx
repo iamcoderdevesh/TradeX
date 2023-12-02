@@ -23,7 +23,7 @@ export const KeyValueTable = (props) => {
 
 export const DefaultTable = (props) => {
 
-    const { columns, data, isEdit } = props;
+    const { columns, data, isEdit, handleEditClick, handleDeleteClick, Id } = props;
 
     const table = useReactTable({
         data,
@@ -50,8 +50,8 @@ export const DefaultTable = (props) => {
                                 )
                             })}
                             {
-                                isEdit && <th scope="col" className="px-6 py-3">
-                                    <span className="sr-only">Edit</span>
+                                isEdit && <th scope="col" className="capitalize px-6 py-3 text-center whitespace-nowrap">
+                                    Action
                                 </th>
                             }
                         </tr>
@@ -72,8 +72,9 @@ export const DefaultTable = (props) => {
                                 ))}
 
                                 {
-                                    isEdit && <td className="px-6 py-4 text-right">
-                                        <a href="#" className="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
+                                    isEdit && <td className="px-6 py-4 flex items-center justify-between">
+                                        <button className="font-medium text-blue-600 dark:text-blue-500 hover:underline" onClick={() => handleEditClick(row?.original?.[Id])}>Edit</button>
+                                        <button className="font-medium text-red-600 dark:text-red-500 hover:underline" onClick={() => handleDeleteClick(row?.original?.[Id])}>Delete</button>
                                     </td>
                                 }
                             </tr>

@@ -4,7 +4,7 @@ import InputField from 'components/common/inputs/InputField';
 import { useSelector } from 'react-redux';
 import { useUpdateProfileMutation } from 'state/api/user/userApi';
 import { Toast } from 'components/common/alerts';
-import { formatDate } from 'components/utils';
+import { formatDate } from 'utils';
 import { SubmitButton } from 'components/common/buttons';
 
 const ProfileForm = () => {
@@ -30,7 +30,6 @@ const ProfileForm = () => {
     useEffect(() => {
       if (isSuccess) {
         Toast.success(data.message);
-        console.log(userInfo);
       }
     }, [isSuccess, data]);
   

@@ -22,7 +22,6 @@ const TagSchema = new mongoose.Schema(
             type: Number,
             ref: "UserInfo",
             required: true,
-            unique: true,
         },
         CreatedBy: {
             type: Number,

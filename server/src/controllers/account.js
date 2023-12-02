@@ -60,11 +60,33 @@ export const CreateUpdateAccount = async (req, res) => {
 
 /* Get Account Details */
 export const GetAccountDetails = async (req, res) => {
-    const { UserId } = req.body;
+    const { UserId, AccountId } = req.body;
+    const accountFilter = { UserId };
+
+    //Search Filter by AccountId Filter
+    if (AccountId) accountFilter.AccountId = AccountId;
 
     //Checking the records exists or not
-    const account = await AccountDetails.find({ UserId }).select('-_id AccountId AccountName Broker InitialBalance Currency');
-    
+    const account = await AccountDetails.find(accountFilter).select('-_id AccountId AccountName Broker InitialBalance Currency');
+
+    if (account) {
+        res.status(200).json({
+            success: true,
+            account
+        });
+    }
+    else {
+        return res.status(404).send(`Account Doesn't Exists`);
+    }
+};
+
+/* Get Account Details */
+export const GetAccountById = async (req, res) => {
+    const { UserId } = req.body;
+    const { AccountId } = req.params;
+    //Checking the records exists or not
+    const account = await AccountDetails.findOne({ UserId, AccountId }).select('-_id AccountId AccountName Broker InitialBalance Currency');
+
     if (account) {
         res.status(200).json({
             success: true,
@@ -109,8 +131,11 @@ export const DeleteAccount = async (req, res) => {
                     await DeleteTag(req, res);
                     await DeleteTradeImport(req, res);
                 }
-                return res.status(201).send("Account Deleted Successfully!!!");
             }
+            return res.status(201).json({
+                success: true,
+                message: "Account Deleted Successfully!!!"
+            });
         }
         res.status(400).json({ errors: "Unable to delete account" });
     }

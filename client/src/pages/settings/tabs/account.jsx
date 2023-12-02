@@ -1,18 +1,38 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
+import { useNavigate, createSearchParams, } from 'react-router-dom';
 import TabPanel from '../'
 import { IoClose } from "react-icons/io5";
 import { SubmitButton } from 'components/common/buttons';
 import { DefaultTable } from 'components/common/table';
 import { AccountColumns } from 'components/common/table/columns';
 import AccountForm from './forms/accountForm';
-import { useGetAllAccountQuery } from 'state/api/accounts/accountApi';
+import { useDeleteAccountMutation, useGetAllAccountQuery } from 'state/api/accounts/accountApi';
 
 const Accounts = () => {
 
+  const navigate = useNavigate();
   const [showAddAccount, setShowAddAccount] = useState(false);
-  const { data, isLoading } = useGetAllAccountQuery({
+
+  const { data, isLoading: isLoadingAcc } = useGetAllAccountQuery({
     refetchOnMountOrArgChange: true,
   });
+
+  const [deleteAccount, { isLoading }] = useDeleteAccountMutation();
+
+  const handleDeleteClick = async (accountId) => {
+    try {
+      await deleteAccount({ AccountId: accountId }).unwrap();
+    } catch (error) {
+      return;
+    }
+  };
+
+  const useNavigateSearch = () => {
+    return (pathname, params) =>
+      navigate(`${pathname}?${createSearchParams(params)}`);
+  };
+
+  const navigateSearch = useNavigateSearch();
 
   return (
     <div>
@@ -28,10 +48,22 @@ const Accounts = () => {
                   <h2 className="mb-2 sm:mb-2 text-sm font-bold text-gray-900 dark:text-white">MANAGE ACCOUNTS</h2>
                 </div>
                 <div className="w-full flex sm:justify-end sm:items-start">
-                  <SubmitButton id="add-account" onClick={() => setShowAddAccount(!showAddAccount)}>+ ADD ACCOUNT</SubmitButton>
+                  <SubmitButton id="add-account" onClick={() => {
+                    setShowAddAccount(!showAddAccount);
+                    navigate('/settings/accounts');
+                  }}>+ ADD ACCOUNT</SubmitButton>
                 </div>
                 <div className="sm:col-span-2 relative overflow-x-auto shadow-md sm:rounded-lg">
-                  <DefaultTable data={data || []} columns={AccountColumns} />
+                  <DefaultTable
+                    data={data || []}
+                    columns={AccountColumns}
+                    isEdit={true}
+                    handleDeleteClick={handleDeleteClick}
+                    handleEditClick={(AccountId) => {
+                      setShowAddAccount(true);
+                      navigateSearch('/settings/accounts', { accountId: AccountId });
+                    }}
+                    Id={'AccountId'} />
                 </div>
               </div>
             }
@@ -45,7 +77,7 @@ const Accounts = () => {
                     <IoClose className="w-6 h-6" />
                   </button>
                 </div>
-                <AccountForm />
+                <AccountForm setShowAccountPage={setShowAddAccount} />
               </>
             }
           </div>

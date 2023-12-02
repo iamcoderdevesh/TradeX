@@ -1,5 +1,5 @@
 import React from 'react'
-import { classNames } from "components/utils";
+import { classNames } from "utils";
 
 const StatusPill = (props) => {
     const { value } = props;

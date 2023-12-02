@@ -20,7 +20,7 @@ const LoginForm = () => {
         Password: '',
     };
 
-    const { values, errors, touched, isValid, dirty, handleChange, handleSubmit, handleBlur } = useFormik({
+    const { values, errors, touched, isSubmitting, handleChange, handleSubmit, handleBlur } = useFormik({
         initialValues: initialValues,
         validationSchema: SignInSchema,
         onSubmit: values => {
@@ -49,10 +49,10 @@ const LoginForm = () => {
     return (
         <form className="space-y-4 md:space-y-6" onSubmit={handleSubmit}>
             <div>
-                <InputField label={"Your email"} placeholder={"name@company.com"} id={"email"} type={"text"} htmlName={"Email"} value={values.Email} handleChange={handleChange} onBlur={handleBlur} errorMsg={errors.Email || touched.Email} />
+                <InputField label={"Your email"} placeholder={"name@company.com"} id={"email"} type={"text"} htmlName={"Email"} value={values.Email} handleChange={handleChange} onBlur={handleBlur} errorMsg={errors.Email && touched.Email &&errors.Email} />
             </div>
             <div>
-                <InputField label={"Password"} placeholder={"••••••••"} id={"password"} type={"password"} htmlName={"Password"} value={values.Password} handleChange={handleChange} onBlur={handleBlur} errorMsg={errors.Password || touched.Password} />
+                <InputField label={"Password"} placeholder={"••••••••"} id={"password"} type={"password"} htmlName={"Password"} value={values.Password} handleChange={handleChange} onBlur={handleBlur} errorMsg={errors.Password && touched.Passwordn && errors.Password} />
             </div>
             <div className="flex items-center justify-between">
                 <div className="flex items-start">
@@ -65,7 +65,7 @@ const LoginForm = () => {
                 </div>
                 <a href="#" className="text-sm font-medium text-primary-100 hover:underline dark:text-brand-100">Forgot password?</a>
             </div>
-            <Button type="submit" id="sign-in" disabled={!(dirty && isValid) || isLoading}>Sign in</Button>
+            <Button type="submit" id="sign-in" disabled={isSubmitting}>Sign in</Button>
             <p className="text-sm font-light text-gray-500 dark:text-gray-400">
                 Don’t have an account yet? {" "}
                 <Link

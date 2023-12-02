@@ -1,7 +1,7 @@
 import React from 'react'
 import { NavLink, useLocation } from 'react-router-dom';
 import routes from "routes/routes";
-import { classNames } from "components/utils";
+import { classNames } from "utils";
 
 const TabPanel = () => {
 

@@ -53,10 +53,18 @@ export const CreateUpdateTag = async (req, res) => {
 /* Get Account Details */
 export const GetTagDetails = async (req, res) => {
     const { UserId } = req.body;
+    const TagId = parseInt(req.params.TagId);
+
+    const tagFilter = { UserId };
+
+    //Search Filter by TagId Filter
+    if (TagId !== 0) tagFilter.TagId = TagId;
 
     //Checking the records exists or not
-    const tag = await Tags.find({ UserId }).select('-_id TagId TagName TagType TagDesc');
+    let tag = await Tags.findOne(tagFilter).select('-_id TagId TagName TagType TagDesc');
     
+    if (TagId === 0) tag = await Tags.find(tagFilter).select('-_id TagId TagName TagType TagDesc');
+
     if (tag) {
         res.status(200).json({
             success: true,
@@ -86,7 +94,10 @@ export const DeleteTag = async (req, res) => {
             if (!TagId) {
                 return true;
             }
-            res.status(201).send("Tags Deleted Successfully!!!");
+            return res.status(201).json({
+                success: true,
+                message: "Tags Deleted Successfully!!!"
+            });
         }
         return false;
     }

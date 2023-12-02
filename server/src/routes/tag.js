@@ -12,7 +12,7 @@ router.use(verifyToken);
 router.post("/tags/createUpdateTag", tagValidations, HandleAsyncError(CreateUpdateTag));
 
 /* Get All Tag */
-router.get("/tags/getTagDetails", HandleAsyncError(GetTagDetails));
+router.get("/tags/getTagDetails/:TagId", HandleAsyncError(GetTagDetails));
 
 /* Delete Tag */
 router.delete("/tags/deleteTag", HandleAsyncError(DeleteTag));

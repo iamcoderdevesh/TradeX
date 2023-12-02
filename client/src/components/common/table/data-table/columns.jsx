@@ -1,4 +1,4 @@
-import { classNames } from "components/utils";
+import { classNames } from "utils";
 
 import { RiArrowUpDownLine } from 'react-icons/ri';
 import { FaArrowUp, FaArrowDown } from 'react-icons/fa6';

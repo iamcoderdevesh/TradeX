@@ -1,19 +1,37 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
+import { useNavigate, createSearchParams, } from 'react-router-dom';
 import TabPanel from '../'
 import { IoClose } from "react-icons/io5";
 import { SubmitButton } from 'components/common/buttons';
 import { DefaultTable } from 'components/common/table';
 import { TagsColumns } from 'components/common/table/columns';
 import TagForm from './forms/tagFrom';
-import { useGetAllTagsQuery } from 'state/api/tags/tagApi';
+import { useDeleteTagMutation, useGetAllTagsQuery } from 'state/api/tags/tagApi';
 
 const Tags = () => {
 
+  const navigate = useNavigate();
   const [showAddTags, setShowAddTags] = useState(false);
-  const { data, isLoading } = useGetAllTagsQuery({
+  const { data, isLoading: isLoadingTag } = useGetAllTagsQuery(0, {
     refetchOnMountOrArgChange: true,
   });
-  console.log(data);
+
+  const [deleteTag, { isLoading }] = useDeleteTagMutation();
+
+  const handleDeleteClick = async (TagId) => {
+    try {
+      await deleteTag({ TagId }).unwrap();
+    } catch (error) {
+      return;
+    }
+  };
+
+  const useNavigateSearch = () => {
+    return (pathname, params) =>
+      navigate(`${pathname}?${createSearchParams(params)}`);
+  };
+
+  const navigateSearch = useNavigateSearch();
 
   return (
     <div>
@@ -29,10 +47,22 @@ const Tags = () => {
                   <h2 className="mb-2 sm:mb-2 text-sm font-bold text-gray-900 dark:text-white">MANAGE TAGS</h2>
                 </div>
                 <div className="w-full flex sm:justify-end sm:items-start">
-                  <SubmitButton id="add-account" onClick={() => setShowAddTags(!showAddTags)}>+ ADD TAGS</SubmitButton>
+                  <SubmitButton id="add-account" onClick={() => {
+                    setShowAddTags(!showAddTags)
+                    navigate('/settings/tags-mmanagements');
+                  }}>+ ADD TAGS</SubmitButton>
                 </div>
                 <div className="sm:col-span-2 relative overflow-x-auto shadow-md sm:rounded-lg">
-                  <DefaultTable data={data || []} columns={TagsColumns} />
+                  <DefaultTable
+                    data={data || []}
+                    columns={TagsColumns}
+                    isEdit={true}
+                    handleDeleteClick={handleDeleteClick}
+                    handleEditClick={(TagId) => {
+                      setShowAddTags(true);
+                      navigateSearch('/settings/tags-mmanagements', { tagId: TagId });
+                    }}
+                    Id={'TagId'} />
                 </div>
               </div>
             }
@@ -46,7 +76,7 @@ const Tags = () => {
                     <IoClose className="w-6 h-6" />
                   </button>
                 </div>
-                <TagForm />
+                <TagForm setShowTagForm={setShowAddTags} />
               </div>
             }
           </div>

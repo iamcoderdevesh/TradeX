@@ -1,4 +1,4 @@
-import { classNames } from "components/utils";
+import { classNames } from "utils";
 import StatusPill from "components/common/statusPill";
 
 export const RecentTradeCols = [
