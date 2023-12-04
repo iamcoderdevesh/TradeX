@@ -8,7 +8,10 @@ export const AddTradeJournal = async (req, res) => {
     const { TradeId, AccountId, UserId, Stats, EntryDate, TradeState } = req.body;
 
     await CalculateHandleJournal(TradeId, UserId, AccountId, Stats, EntryDate);
-    res.status(201).send("Trade " + TradeState + " Successfully!!!");
+    return res.status(201).json({
+        success: true,
+        message: "Trade " + TradeState + " Successfully!!!"
+    });
 };
 
 export const GetJournalDetails = async (req, res) => {

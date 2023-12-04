@@ -2,12 +2,14 @@ import { configureStore, combineReducers, isRejectedWithValue } from '@reduxjs/t
 import globalSliceReducer from "state/index.js";
 import api from "state/api";
 import authSliceReducer from './api/auth/authSlice';
+import accountSliceReducer from './api/accounts/accountSlice';
 import { Toast } from 'components/common/alerts';
 
 const rootReducer = combineReducers({
     [api.reducerPath]: api.reducer,
     global: globalSliceReducer,
-    auth: authSliceReducer
+    auth: authSliceReducer,
+    account: accountSliceReducer
 });
 
 const errorsMiddleware = (dispatch) => (next) => (action) => {

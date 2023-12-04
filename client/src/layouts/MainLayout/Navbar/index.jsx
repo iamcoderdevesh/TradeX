@@ -10,8 +10,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setActiveSidebar, setFilterPopup } from 'state';
 import { useRefreshQuery } from 'state/api/user/userApi';
 import { capitalizeWords } from 'utils';
-import ThemeButton from 'state/theme/index';
+import ThemeButton from 'state/theme';
 import LogoutButton from 'components/common/buttons/logoutButton';
+import { FilterAccountDropdown } from 'components/common/dropdown/accountDropdown';
 
 const Navbar = () => {
 
@@ -54,12 +55,7 @@ const Navbar = () => {
                                     <DateRange range={true} />
                                 </div>
                                 <div className='w-48 mx-4'>
-                                    <Dropdown id={"ddBroker"} label={''}
-                                        children={
-                                            <>
-                                                <option>Default</option>
-                                            </>
-                                        } />
+                                    <FilterAccountDropdown label={''} />
                                 </div>
                             </div>
                             <div>
@@ -118,13 +114,7 @@ const Navbar = () => {
                                 <DateRange range={false} />
                             </div>
                             <div className='my-2'>
-                                <label htmlFor="date-range" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Select Account</label>
-                                <Dropdown id={"ddBroker"} label={''}
-                                    children={
-                                        <>
-                                            <option>Default</option>
-                                        </>
-                                    } />
+                                <FilterAccountDropdown label={'Select Account'} />
                             </div>
                         </div>
                     } />

@@ -92,14 +92,6 @@ export const Inputs = {
     //Form Dropdowns
     FormDropdown: [
         {
-            id: "Portfolio",
-            label: "Portfolio",
-            children: [
-                "Select Portfolio",
-                "Default Portfolio",
-            ],
-        },
-        {
             id: "Market",
             label: "Market",
             children: [
@@ -134,18 +126,16 @@ export const Inputs = {
             id: "Status",
             label: "Status",
             children: [
-                "Select Status",
+                "Closed",
                 "Open",
-                "Close",
             ],
         },
         {
             id: "Action",
             label: "Action",
             children: [
-                "Select Action",
                 "Buy",
-                "Close",
+                "Sell",
             ],
         },
     ],

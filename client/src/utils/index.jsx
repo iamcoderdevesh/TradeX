@@ -2,7 +2,7 @@ export function classNames(...classes) {
     return classes.filter(Boolean).join(" ");
 }
 
-export const formatDate = (date) => {
+export const formatDate = (date, type) => {
     var d = new Date(date),
         month = '' + (d.getMonth() + 1),
         day = '' + d.getDate(),
@@ -13,7 +13,8 @@ export const formatDate = (date) => {
     if (day.length < 2)
         day = '0' + day;
 
-    return [year, month, day].join('-');
+    if(type === 'dd/mm/yyyy') return [day, month, year].join('/')
+    else return [year, month, day].join('-');
 }
 
 export const capitalizeWords = (str) => {

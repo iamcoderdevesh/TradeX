@@ -1,22 +1,48 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BiChevronDown, BiChevronUp } from "react-icons/bi";
 import InputField from 'components/common/inputs/InputField';
 import Dropdown from 'components/common/dropdown';
 import { SubmitButton, ResetButton } from 'components/common/buttons';
 import { Inputs } from "./variables/FormVariables";
+import { TradeSchema } from 'helpers/validation';
+import { useFormik } from "formik";
+import { AccountDropdown } from 'components/common/dropdown/accountDropdown';
+import { useAddUpadateTradeMutation } from 'state/api/trade/tradeApi';
+import { Toast } from 'components/common/alerts/index';
 
 const AddTrade = () => {
-    const [formData, setFormData] = useState({ Symbol: "", EntryDate: "", ExitDate: "" });
     const [showAdd, setShowAdd] = useState(false);
+    const { Account, Market, Broker, Setup, Status, Action, Symbol, EntryDate, ExitDate, EntryPrice, ExitPrice, StopLoss, Quantity, EntryReason, ExitReason, Emotions, MarketConditions, AdditionalInformation } = [];
 
-    const handleChange = (event) => {
-        const { name, value } = event.target;
-        setFormData((prevFormData) => ({ ...prevFormData, [name]: value }));
-    };
+    const { values, errors, touched, isSubmitting, handleChange, handleSubmit, handleBlur, setValues } = useFormik({
+        initialValues: {
+            Account, Market, Broker, Setup, Status: 'Closed', Action: 'Buy', Symbol, EntryDate, ExitDate, EntryPrice, ExitPrice, StopLoss, Quantity, EntryReason, ExitReason, Emotions, MarketConditions, AdditionalInformation
+        },
+        validationSchema: TradeSchema,
+        onSubmit: values => {
+            submitForm(values);
+        },
+    });
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-    };
+    const [addUpdateTrade, { isLoading, isSuccess, data }] = useAddUpadateTradeMutation();
+
+    useEffect(() => {
+        if (isSuccess) {
+            Toast.success(data?.message);
+        }
+    }, [isSuccess, data]);
+
+
+    const submitForm = async (formData) => {
+        try {
+            // if (id) formData.TradeId = id;
+            formData.AccountId = parseInt(formData.Account);
+            delete formData.Account;
+            await addUpdateTrade(formData).unwrap();
+        } catch (error) {
+            return;
+        }
+    }
 
     return (
         <div className="flex justify-center items-center">
@@ -26,10 +52,13 @@ const AddTrade = () => {
                         <h2 className="pb-4 mb-4 sm:mb-5 text-xl border-b font-bold text-gray-900 dark:text-white dark:border-gray-600">Trade Details</h2>
                         <form onSubmit={handleSubmit}>
                             <div className="grid gap-4 sm:grid-cols-2 sm:gap-6">
+                                <div>
+                                    <AccountDropdown label={'Account'} htmlName={"Account"} errorMsg={errors.Account && touched.Account && errors.Account} onChange={handleChange} onBlur={handleBlur} value={values.Account} />
+                                </div>
                                 {/* Below Code is displaying mutiple form elements using javascript object */}
                                 {Inputs.FormDropdown.map((items) => (
                                     <div key={items.id}>
-                                        <Dropdown label={items.label} id={items.id}
+                                        <Dropdown label={items.label} id={items.id} htmlName={items.id} errorMsg={errors[items.id] && touched[items.id] && errors[items.id]} onChange={handleChange} onBlur={handleBlur} value={values[items.id]}
                                             children={
                                                 items.children.map((child) => (
                                                     <option key={child}>{child}</option>
@@ -39,7 +68,7 @@ const AddTrade = () => {
                                 ))}
                                 {Inputs.FormInputs.map((items) => (
                                     <div key={items.id} className={items.divClass}>
-                                        <InputField label={items.label} divClass={items.divClass} placeholder={items.placeholder} id={items.id} type={items.type} htmlName={items.id} handleChange={handleChange} />
+                                        <InputField label={items.label} divClass={items.divClass} placeholder={items.placeholder} id={items.id} type={items.type} htmlName={items.id} errorMsg={errors[items.id] && touched[items.id] && errors[items.id]} handleChange={handleChange} onBlur={handleBlur} value={values[items.id]} />
                                     </div>
                                 ))}
                                 {
@@ -53,7 +82,7 @@ const AddTrade = () => {
                                     items.id === "null" ?
                                         Inputs.FormAddDropdown.map((dropdown) => (
                                             <div key={dropdown.id}>
-                                                <Dropdown label={dropdown.label} id={dropdown.id}
+                                                <Dropdown label={dropdown.label} id={dropdown.id} htmlName={items.id} errorMsg={errors[items.id] && touched[items.id] && errors[items.id]} onChange={handleChange} onBlur={handleBlur} value={values[items.id]}
                                                     children={
                                                         dropdown.children.map((child) => (
                                                             <option key={child}>{child}</option>
@@ -62,13 +91,13 @@ const AddTrade = () => {
                                             </div>
                                         )) :
                                         <div key={items.id} className={items.divClass}>
-                                            <InputField label={items.label} divClass={items.divClass} placeholder={items.placeholder} id={items.id} type={items.type} htmlName={items.id} handleChange={handleChange} />
+                                            <InputField label={items.label} divClass={items.divClass} placeholder={items.placeholder} id={items.id} type={items.type} htmlName={items.id} errorMsg={errors[items.id] && touched[items.id] && errors[items.id]} handleChange={handleChange} onBlur={handleBlur} value={values[items.id]} />
                                         </div>
                                 ))}
                             </div>
 
                             <div className="flex flex-row items-center justify-center my-4 sm:my-8">
-                                <button onClick={() => setShowAdd(!showAdd)} className="flex flex-col items-center justify-center">
+                                <button type='button' onClick={() => setShowAdd(!showAdd)} className="flex flex-col items-center justify-center">
                                     {showAdd && <BiChevronUp className="dark:text-white cursor-pointer" />}
                                     <h3 className="text-base dark:text-white cursor-pointer">{showAdd ? "Less" : "More"}</h3>
                                     {!showAdd && <BiChevronDown className="dark:text-white cursor-pointer" />}
@@ -77,7 +106,7 @@ const AddTrade = () => {
 
                             <div className="flex flex-row items-center">
                                 <ResetButton type="reset" id="reset" className="inline-flex items-center px-5 py-2.5 mr-4 text-xs sm:text-sm font-medium text-center text-white bg-gray-500 rounded-lg hover:bg-gray-600">Reset</ResetButton>
-                                <SubmitButton type="submit" id="importTrade">Submit</SubmitButton>
+                                <SubmitButton type="submit" id="importTrade" disabled={isSubmitting}>Submit</SubmitButton>
                             </div>
                         </form>
                     </div>

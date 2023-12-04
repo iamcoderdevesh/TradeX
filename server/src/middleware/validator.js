@@ -49,11 +49,10 @@ export const tagValidations = [
 
 //#region Trade Validation
 export const tradeValidations = [
-    body('TradeName', 'Enter a valid trade name').isLength({ min: 3 }),
     body('Market', 'Please select market type').isLength({ min: 2 }),
     body('Broker', 'Please select broker').isLength({ min: 2 }),
     body('Setup', 'Please select setup').isLength({ min: 2 }),
-    body('TradeStatus', 'Please select trade status').isLength({ min: 2 }),
+    body('Status', 'Please select trade status').isLength({ min: 2 }),
     body('Action', 'Please select broker').isLength({ min: 2 }),
     body('Symbol', 'Enter a valid symbol name').isLength({ min: 2 }),
     body('EntryDate', 'Please select valid entry date').isISO8601(),
@@ -63,7 +62,6 @@ export const tradeValidations = [
     body('StopLoss', 'Enter a valid stop loss').isNumeric().isLength({ min: 1, max: 9 }),
     body('Quantity', 'Enter a valid quantity').isNumeric().isLength({ min: 1, max: 9 }),
     body('AccountId', 'Account not found').isLength({ min: 1 }),
-    body('isAdd', 'Error! Something went wrong').isLength({ min: 2 })
 ];
 
 export const importValidations = [

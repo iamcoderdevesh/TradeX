@@ -14,59 +14,67 @@ export const AddUpdateTrade = async (req, res, next) => {
         return res.status(400).json({ errors: errors.array() });
     }
     else {
-        const { TradeName, Market, Broker, Setup, TradeStatus, Action, Symbol, EntryDate, ExitDate, EntryPrice, ExitPrice, StopLoss, Quantity, isAdd, UserId, AccountId, TradeId = 0 } = req.body;
-        const Fees = 50.00;
+        try {
+            const { Market, Broker, Setup, Status: TradeStatus, Action, Symbol, EntryDate, ExitDate,
+                EntryPrice, ExitPrice, StopLoss, Quantity, EntryReason, ExitReason,
+                Emotions, MarketConditions, AdditionalInformation, UserId, AccountId, TradeId = 0 } = req.body;
+            const Fees = 50.00;
 
-        //Checking the records exists or not
-        const tradeDetails = await TradeDetails.findOne({ UserId, AccountId, TradeId });
+            //Checking the records exists or not
+            const tradeDetails = await TradeDetails.findOne({ UserId, AccountId, TradeId });
+            const TradeName = Symbol + " " + Action;
 
-        //If record exists Update Trade
-        if (tradeDetails) {
-            const updateTrade = await TradeDetails.findOneAndUpdate(
-                { UserId, AccountId, TradeId },
-                { TradeName, Market, Broker, Setup, TradeStatus, Action, Symbol, EntryDate, ExitDate, EntryPrice, ExitPrice, StopLoss, Quantity, AccountId, UpdatedBy: UserId },
-                { new: true }
-            );
+            //If record exists Update Trade
+            if (tradeDetails) {
+                const updateTrade = await TradeDetails.findOneAndUpdate(
+                    { UserId, AccountId, TradeId },
+                    { TradeName, Market, Broker, Setup, TradeStatus, Action, Symbol, EntryDate, ExitDate, EntryPrice, ExitPrice, StopLoss, Quantity, AccountId, UpdatedBy: UserId },
+                    { new: true }
+                );
 
-            if (!updateTrade) {
-                res.status(400).json({ error: "Oops Something Went! Unable to Update Trade" });
+                if (!updateTrade) {
+                    res.status(400).json({ error: "Oops Something Went! Unable to Update Trade" });
+                }
+                else {
+                    req.body.TradeState = "Updated";
+                }
+            }
+            //Else Insert New Trade
+            else {
+                // Find the last Id from Collection. If record does'nt exist, start with 1, otherwise increment the last Id
+                let lastId = await TradeDetails.findOne().sort('-TradeId');
+                const TradeId = lastId ? lastId.TradeId + 1 : 1;
+
+                const newTrade = new TradeDetails({ TradeId, TradeName, Market, Broker, Setup, TradeStatus, Action, Symbol, EntryDate, ExitDate, EntryPrice, ExitPrice, StopLoss, Quantity, AccountId, UserId, CreatedBy: UserId });
+
+                const trade = await newTrade.save();
+                if (!trade) {
+                    res.status(400).json({ error: "Oops Something Went! Unable to Insert Trade" });
+                }
+                else {
+                    req.body.TradeId = trade.TradeId;
+                    req.body.TradeState = "Added";
+                }
+            }
+
+            //If any field had the value then insert data in TradeAddDetails
+            if (EntryReason || ExitReason || Emotions || MarketConditions || AdditionalInformation) {
+                if (!AddUpdateTradeAddDetails(req)) {
+                    res.status(400).json({ error: "Oops Something Went Wrong! Unable to Update Trade" });
+                }
+            }
+
+            //Calculate Stats only if tradeStatus is Closed
+            if (TradeStatus === "Closed") {
+                req.body.Stats = await CalculateTradeStats(Action, EntryPrice, ExitPrice, StopLoss, Quantity, Fees, AccountId);
+                next();
             }
             else {
-                req.body.TradeState = "Updated";
+                res.status(201).send("Trade " + req.body.TradeState + " Successfully!!!");
             }
         }
-        //Else Insert New Trade
-        else {
-            // Find the last Id from Collection. If record does'nt exist, start with 1, otherwise increment the last Id
-            let lastId = await TradeDetails.findOne().sort('-TradeId');
-            const TradeId = lastId ? lastId.TradeId + 1 : 1;
-
-            const newTrade = new TradeDetails({ TradeId, TradeName, Market, Broker, Setup, TradeStatus, Action, Symbol, EntryDate, ExitDate, EntryPrice, ExitPrice, StopLoss, Quantity, AccountId, UserId, CreatedBy: UserId });
-
-            const trade = await newTrade.save();
-            if (!trade) {
-                res.status(400).json({ error: "Oops Something Went! Unable to Insert Trade" });
-            }
-            else {
-                req.body.TradeId = trade.TradeId;
-                req.body.TradeState = "Added";
-            }
-        }
-
-        //If isAdd Boolean is true then insert data in TradeAddDetails
-        if (isAdd) {
-            if (!AddUpdateTradeAddDetails(req)) {
-                res.status(400).json({ error: "Oops Something Went! Unable to Update Trade" });
-            }
-        }
-
-        //Calculate Stats only if tradeStatus is Closed
-        if (TradeStatus === "Closed") {
-            req.body.Stats = await CalculateTradeStats(Action, EntryPrice, ExitPrice, StopLoss, Quantity, Fees, AccountId);
-            next();
-        }
-        else {
-            res.status(201).send("Trade " + req.body.TradeState + " Successfully!!!");
+        catch (err) {
+            return;
         }
     }
 };
@@ -129,34 +137,29 @@ export const getTradeData = async (req, res) => {
                 as: "TradeStats"
             },
         },
+        { $unwind: { path: "$TradeAddDetails", preserveNullAndEmptyArrays: true } },
+        { $unwind: { path: "$TradeStats", preserveNullAndEmptyArrays: true } },
         {
             $project: {
                 "_id": 0,
-                "AccountId": 0,
-                "UserId": 0,
-                "CreatedBy": 0,
-                "UpdatedBy": 0,
-                "createdAt": 0,
-                "updatedAt": 0,
-                "__v": 0,
-                "TradeAddDetails._id": 0,
-                "TradeAddDetails.TradeId": 0,
-                "TradeAddDetails.AccountId": 0,
-                "TradeAddDetails.UserId": 0,
-                "TradeAddDetails.CreatedBy": 0,
-                "TradeAddDetails.UpdatedBy": 0,
-                "TradeAddDetails.createdAt": 0,
-                "TradeAddDetails.updatedAt": 0,
-                "TradeAddDetails.__v": 0,
-                "TradeStats._id": 0,
-                "TradeStats.TradeId": 0,
-                "TradeStats.AccountId": 0,
-                "TradeStats.UserId": 0,
-                "TradeStats.CreatedBy": 0,
-                "TradeStats.UpdatedBy": 0,
-                "TradeStats.createdAt": 0,
-                "TradeStats.updatedAt": 0,
-                "TradeStats.__v": 0,
+                "TradeId": 1,
+                "Symbol": 1,
+                "EntryDate": 1,
+                "ExitDate": 1,
+                "Action": 1,
+                "EntryPrice": 1,
+                "ExitPrice": 1,
+                "StopLoss": 1,
+                "Quantity": 1,
+                "Setup": 1,
+                "EntryReason": "$TradeAddDetails.EntryReason",
+                "ExitReason": "$TradeAddDetails.ExitReason",
+                "MarketCondition": "$TradeAddDetails.MarketCondition",
+                "Emotions": "$TradeAddDetails.Emotions",
+                "AdditionalInfo": "$TradeAddDetails.TradeAddInfo",
+                "TradeStatus": "$TradeStats.TradeStatus",
+                "NetPnL": "$TradeStats.NetPnL",
+                "NetRoi": "$TradeStats.NetRoi",
             }
         }
     ]);
@@ -166,7 +169,10 @@ export const getTradeData = async (req, res) => {
         return getTrade;
     }
     else {
-        res.status(200).json(getTrade);
+        return res.status(201).json({
+            success: true,
+            tradeDetails: getTrade
+        });
     }
 };
 

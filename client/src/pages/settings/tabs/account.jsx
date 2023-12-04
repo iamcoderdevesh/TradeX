@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, createSearchParams, } from 'react-router-dom';
 import TabPanel from '../'
 import { IoClose } from "react-icons/io5";
@@ -7,13 +7,23 @@ import { DefaultTable } from 'components/common/table';
 import { AccountColumns } from 'components/common/table/columns';
 import AccountForm from './forms/accountForm';
 import { useDeleteAccountMutation, useGetAccountDetailsQuery } from 'state/api/accounts/accountApi';
+import { useDispatch } from 'react-redux';
+import { addAccountInfo } from 'state/api/accounts/accountSlice';
 
 const Accounts = () => {
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [showAddAccount, setShowAddAccount] = useState(false);
 
   const { data, isLoading: isLoadingAcc } = useGetAccountDetailsQuery();
+
+  useEffect(() => {
+    if (data) {
+      console.log('Data', data);
+      dispatch(addAccountInfo(data));
+    }
+  }, [isLoadingAcc, data]);
 
   const [deleteAccount, { isLoading }] = useDeleteAccountMutation();
 

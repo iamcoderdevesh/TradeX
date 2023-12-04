@@ -83,7 +83,10 @@ const AccountForm = ({ setShowAccountPage }) => {
                         children={
                             <>
                                 <option>Select Broker</option>
-                                <option>Binance</option>
+                                <option>ZERODHA</option>
+                                <option>ANGLE ONE</option>
+                                <option>UPSTOX</option>
+                                <option>DHAN</option>
                             </>
                         } />
                 </div>

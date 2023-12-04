@@ -34,5 +34,19 @@ const TagSchema = Yup.object().shape({
   TagDesc: Yup.string().required("Tag Description is required")
 });
 
+const TradeSchema = Yup.object().shape({
+  Account: Yup.string().required("Select Account"),
+  Market: Yup.string().required("Select Market"),
+  Broker: Yup.string().required("Select Broker"),
+  Setup: Yup.string().required("Select Setup"),
+  Symbol: Yup.string().required("Symbol is required"),
+  EntryDate: Yup.date().required("Entry Date is required"),
+  ExitDate: Yup.date().required("Exit Date is required").min(Yup.ref('EntryDate')),
+  EntryPrice: Yup.number().positive().integer().required("Entry Price is required"),
+  ExitPrice: Yup.number().positive().integer().required("Initial Balance is required"),
+  StopLoss: Yup.number().positive().integer().required("Stop Loss is required"),
+  Quantity: Yup.number().positive().integer().required("Quantity is required")
+});
 
-export { SignUpSchema, SignInSchema, AccountSchema, TagSchema };
+
+export { SignUpSchema, SignInSchema, AccountSchema, TagSchema, TradeSchema };

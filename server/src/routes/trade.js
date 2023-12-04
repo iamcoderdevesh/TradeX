@@ -19,7 +19,7 @@ router.post("/trade/addUpdateTrade", tradeValidations, AddUpdateTrade, AddUpdate
 
 //#region Fetch Data
 //Fetch Trade Data
-router.get("/trade/:accountId/getTrade", HandleAsyncError(getTradeData));
+router.get("/trade/:accountId/getTradeDetails", HandleAsyncError(getTradeData));
 router.get("/trade/:accountId/getJounral", HandleAsyncError(GetJournalDetails));
 router.get("/trade/:accountId/getRecentTrades", HandleAsyncError(GetRecentTrade));
 

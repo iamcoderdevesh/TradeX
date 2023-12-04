@@ -50,23 +50,23 @@ export const TradeColumns = [
         cell: ({ row }) => <div className="capitalize">{row.getValue("Symbol")}</div>
     },
     {
-        accessorKey: "Status",
+        accessorKey: "TradeStatus",
         header: () => <div className="capitalize">Status</div>,
         cell: ({ row }) => (
             <div className="capitalize">
-                <StatusPill value={row.getValue("Status")} />
+                <StatusPill value={row.getValue("TradeStatus")} />
             </div>
         )
     },
     {
-        accessorKey: "Open Date",
+        accessorKey: "EntryDate",
         header: () => <div className="capitalize">Open Date</div>,
-        cell: ({ row }) => <div className="capitalize">{row.getValue("Open Date")}</div>
+        cell: ({ row }) => <div className="capitalize">{row.getValue("EntryDate")}</div>
     },
     {
-        accessorKey: "Close Date",
+        accessorKey: "ExitDate",
         header: () => <div className="capitalize">Close Date</div>,
-        cell: ({ row }) => <div className="capitalize">{row.getValue("Close Date")}</div>
+        cell: ({ row }) => <div className="capitalize">{row.getValue("ExitDate")}</div>
     },
     {
         accessorKey: "Action",
@@ -74,29 +74,29 @@ export const TradeColumns = [
         cell: ({ row }) => <div className="capitalize">{row.getValue("Action")}</div>
     },
     {
-        accessorKey: "Net PnL",
-        header: () => <div className="capitalize">Net PnL</div>,
-        cell: ({ row }) => <div className={classNames("capitalize font-medium", row.getValue("Net PnL").startsWith("-") ? "text-red" : "text-green")}>{row.getValue("Net PnL")}</div>
+        accessorKey: "NetPnL",
+        header: () => <div className="capitalize">Net P&L</div>,
+        cell: ({ row }) => <div className={classNames("capitalize font-medium", row.getValue("Net PnL").startsWith("-") ? "text-red" : "text-green")}>{row.getValue("NetPnL")}</div>
     },
     {
-        accessorKey: "Net ROI",
+        accessorKey: "NetRoi",
         header: () => <div className="capitalize">Net ROI</div>,
-        cell: ({ row }) => <div className={classNames("capitalize font-medium", row.getValue("Net ROI").startsWith("-") ? "text-red" : "text-green")}>{row.getValue("Net ROI")}</div>
+        cell: ({ row }) => <div className={classNames("capitalize font-medium", row.getValue("Net ROI").startsWith("-") ? "text-red" : "text-green")}>{row.getValue("NetRoi")}</div>
     },
     {
-        accessorKey: "Entry Price",
+        accessorKey: "EntryPrice",
         header: () => <div className="capitalize">Entry Price</div>,
-        cell: ({ row }) => <div className="capitalize">{row.getValue("Entry Price")}</div>
+        cell: ({ row }) => <div className="capitalize">{row.getValue("EntryPrice")}</div>
     },
     {
-        accessorKey: "Exit Price",
+        accessorKey: "ExitPrice",
         header: () => <div className="capitalize">Exit Price</div>,
-        cell: ({ row }) => <div className="capitalize">{row.getValue("Exit Price")}</div>
+        cell: ({ row }) => <div className="capitalize">{row.getValue("ExitPrice")}</div>
     },
     {
-        accessorKey: "Stop Loss",
+        accessorKey: "StopLoss",
         header: () => <div className="capitalize">Stop Loss</div>,
-        cell: ({ row }) => <div className="capitalize">{row.getValue("Stop Loss")}</div>
+        cell: ({ row }) => <div className="capitalize">{row.getValue("StopLoss")}</div>
     },
     {
         accessorKey: "Quantity",
@@ -109,14 +109,14 @@ export const TradeColumns = [
         cell: ({ row }) => <div className="capitalize">{row.getValue("Setup")}</div>
     },
     {
-        accessorKey: "Entry Reason",
+        accessorKey: "EntryReason",
         header: () => <div className="capitalize">Entry Reason</div>,
-        cell: ({ row }) => <div className="capitalize">{row.getValue("Entry Reason")}</div>
+        cell: ({ row }) => <div className="capitalize">{row.getValue("EntryReason")}</div>
     },
     {
-        accessorKey: "Exit Reason",
+        accessorKey: "ExitReason",
         header: () => <div className="capitalize">Exit Reason</div>,
-        cell: ({ row }) => <div className="capitalize">{row.getValue("Exit Reason")}</div>
+        cell: ({ row }) => <div className="capitalize">{row.getValue("ExitReason")}</div>
     },
     {
         accessorKey: "Emotions",
@@ -124,9 +124,14 @@ export const TradeColumns = [
         cell: ({ row }) => <div className="capitalize">{row.getValue("Emotions")}</div>
     },
     {
-        accessorKey: "Additional Info",
+        accessorKey: "MarketCondition",
+        header: () => <div className="capitalize">Market Condition</div>,
+        cell: ({ row }) => <div className="capitalize">{row.getValue("MarketCondition")}</div>
+    },
+    {
+        accessorKey: "AdditionalInfo",
         header: () => <div className="capitalize">Additional Info</div>,
-        cell: ({ row }) => <div className="capitalize">{row.getValue("Additional Info")}</div>
+        cell: ({ row }) => <div className="capitalize">{row.getValue("AdditionalInfo")}</div>
     },
 ];
 

@@ -27,7 +27,7 @@ export const CreateUpdateAccount = async (req, res) => {
             if (updateAccount) {
                 res.status(201).json({
                     success: true,
-                    message: "Account Created Successfully!!!"
+                    message: "Account Updated Successfully!!!"
                 });
             }
         }
@@ -62,11 +62,11 @@ export const CreateUpdateAccount = async (req, res) => {
 export const GetAccountDetails = async (req, res) => {
     const { UserId } = req.body;
 
-    const AccountId = parseInt(req.params.id);
+    const AccountId = req.params.id && parseInt(req.params.id);
     const accountFilter = { UserId };
 
     //Search Filter by AccountId Filter
-    if (AccountId !== 0) accountFilter.AccountId = AccountId;
+    if (AccountId && AccountId !== 0) accountFilter.AccountId = AccountId;
 
     //Checking the records exists or not
     let account = await AccountDetails.findOne(accountFilter).select('-_id AccountId AccountName Broker InitialBalance Currency');
@@ -105,28 +105,20 @@ export const SwitchAccount = async (req, res) => {
 export const DeleteAccount = async (req, res) => {
 
     const { AccountId, UserId, isVerified } = req.body;
+    const accountFilter = { UserId };
 
-    //Checking the records exists or not
-    const account = await AccountDetails.findOne({ UserId, AccountId });
-    if (account) {
-        const deleteAccount = await AccountDetails.findOneAndDelete({ UserId, AccountId });
-        if (deleteAccount) {
-            if (await DeleteTrades(req, res)) {
-                //If isVerified is true that means user is verified and can delete everthing
-                if (isVerified) {
-                    await DeleteTag(req, res);
-                    await DeleteTradeImport(req, res);
-                }
-            }
-            return res.status(201).json({
-                success: true,
-                message: "Account Deleted Successfully!!!"
-            });
-        }
-        res.status(400).json({ errors: "Unable to delete account" });
+    //If isVerified is true that means user is verified and can delete everthing
+    if (isVerified) {
+        await DeleteTag(req, res);
+        await DeleteTradeImport(req, res);
     }
+    
+    if (AccountId) accountFilter.AccountId = AccountId;
+    await AccountDetails.deleteMany(accountFilter);
+    await DeleteTrades(req, res);
+    return res.status(201).json({
+        success: true,
+        message: "Account Deleted Successfully!!!"
+    });
 
-    else {
-        res.status(400).json({ errors: "Account Doesn't Exists" });
-    }
 };

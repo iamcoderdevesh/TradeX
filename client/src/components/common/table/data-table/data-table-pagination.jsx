@@ -10,7 +10,7 @@ export function DataTablePagination({ table }) {
                 onChange={(e) => {
                     table.setPageSize(Number(e.target.value));
                 }}
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block p-1.5 pr-7 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block mt-3 p-1.5 pr-8 pl-3 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
                 {[5, 10, 20, 30, 50].map((pageSize) => (
                     <option key={pageSize} value={pageSize}>
                         Show {pageSize}
