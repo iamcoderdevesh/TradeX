@@ -20,7 +20,6 @@ const Accounts = () => {
 
   useEffect(() => {
     if (data) {
-      console.log('Data', data);
       dispatch(addAccountInfo(data));
     }
   }, [isLoadingAcc, data]);

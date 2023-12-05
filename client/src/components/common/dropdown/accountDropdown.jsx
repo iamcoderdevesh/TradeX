@@ -34,9 +34,9 @@ const FilterAccountDropdown = (props) => {
 
     const handleChange = (e) => {
         const selectedAccount = AccountInfo.find(account => account.AccountId === parseInt(e.target.value));
-        dispatch(setSelectedAccount(e.target.value));
         if (selectedAccount) {
             const CurrencySymbol = selectedAccount?.Currency?.toString()?.charAt(0);
+            dispatch(setSelectedAccount(selectedAccount));
             dispatch(setSelectedCurrencySymbol(CurrencySymbol));
         }
     }

@@ -11,7 +11,7 @@ export const KeyValueTable = (props) => {
                 <tbody>
                     {data.map((item, index) => (
                         <tr key={index} className={`border-b dark:border-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 ${index % 2 === 0 ? "bg-gray-100 dark:bg-primary-dark" : "bg-white dark:bg-main-dark"}`}>
-                            <td className="px-2 py-1 break-words">{item.key}</td>
+                            <td className="px-2 py-1 break-words capitalize">{item.key}</td>
                             <td className="px-2 py-1 break-words">{item.value}</td>
                         </tr>
                     ))}

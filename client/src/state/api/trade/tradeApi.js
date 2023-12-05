@@ -8,6 +8,11 @@ const tradeApiSlice = apiSlice.injectEndpoints({
             transformResponse: (response) => response.success ? response.tradeDetails : [],
             providesTags: ["Trade"]
         }),
+        getStatistics: builder.query({
+            query: (id = 0) => `trade/${id}/getStats`,
+            transformResponse: (response) => response.success ? response.stats : [],
+            providesTags: ["Trade"]
+        }),
         addUpadateTrade: builder.mutation({
             query: data => ({
                 url: "trade/addUpdateTrade",
@@ -36,4 +41,4 @@ const tradeApiSlice = apiSlice.injectEndpoints({
     overrideExisting: true
 });
 
-export const { useGetTradeDetailsQuery, useAddUpadateTradeMutation } = tradeApiSlice;
+export const { useGetTradeDetailsQuery, useGetStatisticsQuery, useAddUpadateTradeMutation  } = tradeApiSlice;

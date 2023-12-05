@@ -22,7 +22,6 @@ const userApiSlice = apiSlice.injectEndpoints({
             async onQueryStarted(arg, { dispatch, queryFulfilled }) {
                 try {
                     const result = await queryFulfilled;
-                    console.log("success");
                     if (result.data.success) {
                         dispatch(setToken({ accessToken: result.data.token }));
                         dispatch(setUserAuthenticated(true));

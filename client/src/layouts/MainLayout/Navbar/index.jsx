@@ -3,7 +3,6 @@ import { AiOutlineMenuFold, AiOutlineMenuUnfold } from "react-icons/ai";
 import { FaFilter } from "react-icons/fa";
 import { Link, useLocation } from 'react-router-dom';
 import routes from "routes/routes";
-import Dropdown from 'components/common/dropdown';
 import DateRange from 'components/common/calendar';
 import ModalPopup from 'components/common/popup';
 import { useDispatch, useSelector } from 'react-redux';
