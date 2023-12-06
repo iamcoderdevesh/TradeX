@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, createSearchParams, } from 'react-router-dom';
+import { useNavigate, createSearchParams } from 'react-router-dom';
 import TabPanel from '../'
 import { IoClose } from "react-icons/io5";
 import { SubmitButton } from 'components/common/buttons';
@@ -11,10 +11,16 @@ import { useDispatch } from 'react-redux';
 import { addAccountInfo } from 'state/api/accounts/accountSlice';
 
 const Accounts = () => {
-
+  
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [showAddAccount, setShowAddAccount] = useState(false);
+
+  const useNavigateSearch = () => {
+    return (pathname, params) =>
+    navigate(`${pathname}?${createSearchParams(params)}`);
+  };
+  const navigateSearch = useNavigateSearch();
 
   const { data, isLoading: isLoadingAcc } = useGetAccountDetailsQuery();
 
@@ -33,13 +39,6 @@ const Accounts = () => {
       return;
     }
   };
-
-  const useNavigateSearch = () => {
-    return (pathname, params) =>
-      navigate(`${pathname}?${createSearchParams(params)}`);
-  };
-
-  const navigateSearch = useNavigateSearch();
 
   return (
     <div>

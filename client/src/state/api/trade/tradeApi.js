@@ -9,7 +9,9 @@ const tradeApiSlice = apiSlice.injectEndpoints({
             providesTags: ["Trade"]
         }),
         getStatistics: builder.query({
-            query: (id = 0) => `trade/${id}/getStats`,
+            query: ({ id = 0, type }) => ({
+                url: `trade/${id}/getStats/${type ? type : ''}`,
+            }),
             transformResponse: (response) => response.success ? response.stats : [],
             providesTags: ["Trade"]
         }),
@@ -21,9 +23,9 @@ const tradeApiSlice = apiSlice.injectEndpoints({
             }),
             invalidatesTags: ["Trade"],
         }),
-        // deleteAccount: builder.mutation({
+        // deleteTrade: builder.mutation({
         //     query: data => ({
-        //         url: "accounts/deleteAccount",
+        //         url: "trade/deleteTrade",
         //         method: "DELETE",
         //         body: { ...data }
         //     }),
@@ -35,10 +37,10 @@ const tradeApiSlice = apiSlice.injectEndpoints({
         //             return;
         //         }
         //     },
-        //     invalidatesTags: ["Accounts"],
+        //     invalidatesTags: ["Trade"],
         // }),
     }),
     overrideExisting: true
 });
 
-export const { useGetTradeDetailsQuery, useGetStatisticsQuery, useAddUpadateTradeMutation  } = tradeApiSlice;
+export const { useGetTradeDetailsQuery, useGetStatisticsQuery, useAddUpadateTradeMutation, useDeleteTradeMutation } = tradeApiSlice;

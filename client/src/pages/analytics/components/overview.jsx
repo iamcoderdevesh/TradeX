@@ -13,7 +13,7 @@ const Overview = () => {
   };
 
   const id = useSelector((state) => state.account?.selectedAccount?.AccountId);
-  const { data, isLoading } = useGetStatisticsQuery(id, {
+  const { data, isLoading } = useGetStatisticsQuery({ id }, {
     refetchOnMountOrArgChange: true,
   });
 
@@ -43,7 +43,7 @@ const Overview = () => {
           <div className="flex justify-between my-2">
             <div className="flex flex-col">
               <p className="font-dm text-xs font-medium text-gray-400 mb-1">Net ROI</p>
-              <h4 className="text-base font-medium"><GetFomatedPnl value={totalReturns}/></h4>
+              <h4 className="text-base font-medium"><GetFomatedPnl value={totalReturns} /></h4>
             </div>
             <div className="divider border-r-2 border-gray-300"></div>
           </div>
@@ -89,7 +89,7 @@ const Overview = () => {
           <div className="flex justify-between my-2">
             <div className="flex flex-col">
               <p className="font-dm text-xs font-medium text-gray-400 mb-1">Max Loss</p>
-              <h4 className="text-base font-medium"><GetFomatedPnl value={maximumLoss}/></h4>
+              <h4 className="text-base font-medium"><GetFomatedPnl value={maximumLoss} /></h4>
             </div>
             <div className="divider border-r-2 border-gray-300"></div>
           </div>

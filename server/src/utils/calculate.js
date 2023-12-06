@@ -196,13 +196,14 @@ export const CalculateHandleJournal = async (TradeId, UserId, AccountId, current
 /* Fetching and calculating data for dashboard & analytics*/
 export const CalculateStatistics = async (req, res) => {
     const { UserId } = req.body;
-    
-    const account = await Accounts.findOne({ UserId: UserId, AccountId: req.params.accountId });
+    const { accountId, type } = req.params;
+    const account = await Accounts.findOne({ UserId: UserId, AccountId: accountId });
 
     const tradeStatsFilter = DateRangeFilter(req, "TradeDate");
     const tradeJournalFilter = DateRangeFilter(req, "JournalDate");
 
-    const { TotalBalance = 0, InitialBalance = 0} = account || [];
+    const { TotalBalance = 0, InitialBalance = 0, Currency = '' } = account || [];
+    const _currencySymbol = Currency?.toString()?.charAt(0);
 
     const _tradeCount = await TradeStats.where(tradeStatsFilter).countDocuments();
     const _totalTradeDays = await TradeJournal.where(tradeJournalFilter).countDocuments();
@@ -442,18 +443,18 @@ export const CalculateStatistics = async (req, res) => {
     //#endregion
 
     const responseData = {
-        totalPnl: _totalPnl,
-        totalRevenue: _totalRevenue,
-        totalReturns: _roi,
-        winrate: _Winrate,
-        totalProfit: _totalProfit,
-        totalLoss: _totalLoss,
-        averageProfit: _avgProfit,
-        averageLoss: _avgLoss,
-        maximumProfit: _maxProfit,
-        maximumLoss: _maxLoss,
-        minimumProfit: _minProfit,
-        minimumLoss: _minLoss,
+        totalPnl: type === 'detailed' ? _currencySymbol + parseFloat(_totalPnl).toFixed(2) : _totalPnl,
+        totalRevenue: type === 'detailed' ? _currencySymbol + parseFloat(_totalRevenue).toFixed(2) : _totalRevenue,
+        totalReturns: type === 'detailed' ? _roi + '%' : _roi,
+        winrate: type === 'detailed' ? _Winrate + '%' : _Winrate,
+        totalProfit: type === 'detailed' ? _currencySymbol + parseFloat(_totalProfit).toFixed(2) : _totalProfit,
+        totalLoss: type === 'detailed' ? _currencySymbol + parseFloat(_totalLoss).toFixed(2) : _totalLoss,
+        averageProfit: type === 'detailed' ? _currencySymbol + parseFloat(_avgProfit).toFixed(2) : _avgProfit,
+        averageLoss: type === 'detailed' ? _currencySymbol + parseFloat(_avgLoss).toFixed(2) : _avgLoss,
+        maximumProfit: type === 'detailed' ? _currencySymbol + parseFloat(_maxProfit).toFixed(2) : _maxProfit,
+        maximumLoss: type === 'detailed' ? _currencySymbol + parseFloat(_maxLoss).toFixed(2) : _maxLoss,
+        minimumProfit: type === 'detailed' ? _currencySymbol + parseFloat(_minProfit).toFixed(2) : _minProfit,
+        minimumLoss: type === 'detailed' ? _currencySymbol + parseFloat(_minLoss).toFixed(2) : _minLoss,
         totalTrades: _tradeCount,
         numberOfWinningTrades: _totalWins,
         numberOfLosingTrades: _totalLosses,
@@ -462,20 +463,20 @@ export const CalculateStatistics = async (req, res) => {
         numberOfBreakevenTrade: 0, //TODO :- To be calculated
         maxConsecutiveWins: _convWins,
         maxConsecutiveLosses: _convLoss,
-        totalCommissionsFees: _totalFees,
-        grossPnl: _grossPnl,
+        totalCommissionsFees: type === 'detailed' ? _currencySymbol + parseFloat(_totalFees).toFixed(2) : _totalFees,
+        grossPnl: type === 'detailed' ? _currencySymbol + parseFloat(_grossPnl).toFixed(2) : _grossPnl,
         timeAllTrades: _averageHoldTime,
         timeWinTrades: _averageWinHoldTime,
         timeLossTrades: _averageLossHoldTime,
-        averageTradePnl: _averagePnl,
-        profitFactor: _profitFactor,
+        averageTradePnl: type === 'detailed' ? _currencySymbol + parseFloat(_averagePnl).toFixed(2) : _averagePnl,
+        profitFactor: type === 'detailed' ? parseFloat(_profitFactor).toFixed(2) : _profitFactor,
         openedTrades: _tradeOpenedCount,
         totalTradingDays: _totalTradeDays,
         totalWinningDays: _winDays,
         totalLosingDays: _lossDays,
         totalBreakevenDays: _breakevenDays, //TODO :- To be calculated
-        netDailyPnl: _netDailyPnl,
-        totalRR: _totalRR,
+        netDailyPnl: type === 'detailed' ? _currencySymbol + parseFloat(_netDailyPnl).toFixed(2) : _netDailyPnl,
+        totalRR: type === 'detailed' ? parseFloat(_totalRR).toFixed(2) : _totalRR,
     };
 
     res.status(201).json({

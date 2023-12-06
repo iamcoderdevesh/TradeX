@@ -14,16 +14,18 @@ const AccountForm = ({ setShowAccountPage }) => {
     const { data: AccountInfo, isLoading: isLoadingAcc } = useGetAccountDetailsQuery(AccountId, {
         skip: !AccountId,
     });
-    const { AccountName, Market, Broker, InitialBalance, Currency } = AccountInfo || [];
+    const initialValues = AccountInfo
+        ? { ...AccountInfo }
+        : {
+            AccountName: '',
+            Market: '',
+            Broker: '',
+            InitialBalance: '',
+            Currency: ''
+        };
 
     const { values, errors, touched, isSubmitting, handleChange, handleSubmit, handleBlur, setValues } = useFormik({
-        initialValues: {
-            AccountName: AccountName,
-            Market: Market,
-            Broker: Broker,
-            InitialBalance: InitialBalance,
-            Currency: Currency
-        },
+        initialValues,
         validationSchema: AccountSchema,
         onSubmit: values => {
             submitForm(values);
@@ -40,13 +42,7 @@ const AccountForm = ({ setShowAccountPage }) => {
 
         //Dynamically Setting the Values of form for Edit Operation of account.
         if (AccountInfo) {
-            setValues({
-                AccountName: AccountInfo.AccountName || '',
-                Market: AccountInfo.Market || '',
-                Broker: AccountInfo.Broker || '',
-                InitialBalance: AccountInfo.InitialBalance || '',
-                Currency: AccountInfo.Currency || ''
-            });
+            setValues(initialValues);
         }
     }, [isSuccess, data, AccountInfo, isLoadingAcc, setValues]);
 

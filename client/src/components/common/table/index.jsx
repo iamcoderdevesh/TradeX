@@ -1,5 +1,6 @@
 import React from "react";
 import { flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table";
+import { MdDeleteOutline, MdEdit } from "react-icons/md";
 
 export const KeyValueTable = (props) => {
 
@@ -49,11 +50,7 @@ export const DefaultTable = (props) => {
                                     </th>
                                 )
                             })}
-                            {
-                                isEdit && <th scope="col" className="capitalize px-6 py-3 text-center whitespace-nowrap">
-                                    Action
-                                </th>
-                            }
+                            {isEdit && <th scope="col" className="capitalize px-6 py-3 text-center whitespace-nowrap"></th>}
                         </tr>
                     ))}
                 </thead>
@@ -72,9 +69,9 @@ export const DefaultTable = (props) => {
                                 ))}
 
                                 {
-                                    isEdit && <td className="px-6 py-4 flex items-center justify-between">
-                                        <button className="font-medium text-blue-600 dark:text-blue-500 hover:underline" onClick={() => handleEditClick(row?.original?.[Id])}>Edit</button>
-                                        <button className="font-medium text-red-600 dark:text-red-500 hover:underline" onClick={() => handleDeleteClick(row?.original?.[Id])}>Delete</button>
+                                    isEdit && <td className="py-4 w-16 flex items-center justify-between">
+                                        <button className="font-medium text-gray-900 dark:text-white hover:underline" onClick={() => handleEditClick(row?.original?.[Id])}><MdEdit className="w-5 h-5" /></button>
+                                        <button className="font-medium text-red-600 dark:text-red-500 hover:underline" onClick={() => handleDeleteClick(row?.original?.[Id])}><MdDeleteOutline className="w-5 h-5" /></button>
                                     </td>
                                 }
                             </tr>

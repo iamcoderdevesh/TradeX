@@ -6,7 +6,11 @@ import { useSelector } from 'react-redux';
 const DetailedStats = () => {
 
   const id = useSelector((state) => state.account?.selectedAccount?.AccountId);
-  const { data, isLoading } = useGetStatisticsQuery(id, {
+  const type = 'detailed';
+  const { data, isLoading } = useGetStatisticsQuery({
+    id,
+    type: "detailed"
+  }, {
     refetchOnMountOrArgChange: true,
   });
 

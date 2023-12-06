@@ -10,7 +10,7 @@ import { useGetStatisticsQuery } from 'state/api/trade/tradeApi';
 const Statistics = () => {
 
   const id = useSelector((state) => state.account?.selectedAccount?.AccountId, []);
-  const { data, isLoading } = useGetStatisticsQuery(id, {
+  const { data, isLoading } = useGetStatisticsQuery({ id }, {
     refetchOnMountOrArgChange: true,
   });
 
@@ -46,7 +46,7 @@ const Statistics = () => {
         <div className="ml-4 flex h-[90px] w-auto flex-row items-center">
           <div className="h-50 ml-3 flex w-auto flex-col justify-center">
             <p className="font-dm text-xs font-medium text-gray-400 mb-1">Winrate</p>
-            <h4 className="text-xl font-medium dark:text-white">{data?.winrate}</h4>
+            <h4 className="text-xl font-medium dark:text-white">{data?.winrate || 0}%</h4>
           </div>
         </div>
         <div className="flex item-center rounded-full p-3 mr-3 dark:bg-navy-700">
@@ -59,7 +59,7 @@ const Statistics = () => {
         <div className="ml-4 flex h-[90px] w-auto flex-row items-center">
           <div className="h-50 ml-3 flex w-auto flex-col justify-center">
             <p className="font-dm text-xs font-medium text-gray-400 mb-1">Total Trades</p>
-            <h4 className="text-xl font-medium dark:text-white">{data?.totalTrades}</h4>
+            <h4 className="text-xl font-medium dark:text-white">{data?.totalTrades || 0}</h4>
           </div>
         </div>
         <div className="flex item-center rounded-full p-3 mr-3 dark:bg-navy-700">

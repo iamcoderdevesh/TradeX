@@ -3,8 +3,9 @@ import { useSelector } from 'react-redux';
 import { AiFillCaretUp } from "react-icons/ai";
 
 export const GetFomatedCurrency = (props) => {
-    const currency = useSelector((state) => state.account.selectedCurrency, []);
-    const amount = currency + parseFloat(props?.value).toFixed(2);
+    const { value = 0 } = props;
+    const currency = useSelector((state) => state.account.selectedCurrency, []) || '';
+    const amount = currency + parseFloat(value).toFixed(2);
 
     return (
         <>

@@ -25,6 +25,8 @@ router.get("/trade/:accountId/getRecentTrades", HandleAsyncError(GetRecentTrade)
 
 //Fetch Trade Statistics
 router.get("/trade/:accountId/getStats", HandleAsyncError(CalculateStatistics));
+//For Detailed stats with currency and float values
+router.get("/trade/:accountId/getStats/:type", HandleAsyncError(CalculateStatistics));
 
 //Fetch PnL Calendar
 router.get("/trade/:accountId/getJournalForCalendar", HandleAsyncError(GetJournalForCalendar));
