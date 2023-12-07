@@ -52,7 +52,7 @@ export const tradeValidations = [
     body('Market', 'Please select market type').isLength({ min: 2 }),
     body('Broker', 'Please select broker').isLength({ min: 2 }),
     body('Setup', 'Please select setup').isLength({ min: 2 }),
-    body('Status', 'Please select trade status').isLength({ min: 2 }),
+    body('TradeStatus', 'Please select trade status').isLength({ min: 2 }),
     body('Action', 'Please select broker').isLength({ min: 2 }),
     body('Symbol', 'Enter a valid symbol name').isLength({ min: 2 }),
     body('EntryDate', 'Please select valid entry date').isISO8601(),

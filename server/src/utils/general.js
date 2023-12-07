@@ -4,7 +4,9 @@ export const excludeFields = () => {
 
 export const DateRangeFilter = (req, FieldName) => {
     const { accountId } = req.params;
-    const { UserId, fromDate, toDate } = req.body;
+    const { UserId } = req.body;
+    const { fromDate, toDate } = req.query;
+    
     const Filter = { UserId, AccountId: parseInt(accountId) };
 
     if (fromDate) {

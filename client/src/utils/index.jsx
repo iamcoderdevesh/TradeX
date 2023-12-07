@@ -3,7 +3,7 @@ export function classNames(...classes) {
 }
 
 export const formatDate = (date, type) => {
-    var d = new Date(date),
+    let d = new Date(date),
         month = '' + (d.getMonth() + 1),
         day = '' + d.getDate(),
         year = d.getFullYear();
@@ -13,7 +13,10 @@ export const formatDate = (date, type) => {
     if (day.length < 2)
         day = '0' + day;
 
-    if(type === 'dd/mm/yyyy') return [day, month, year].join('/')
+    d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
+
+    if (type === 'dd/mm/yyyy') return [day, month, year].join('/');
+    else if (type === 'date-time') return d.toISOString().slice(0, 16);
     else return [year, month, day].join('-');
 }
 

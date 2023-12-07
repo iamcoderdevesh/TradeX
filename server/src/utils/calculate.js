@@ -1,7 +1,6 @@
 import Accounts from "../models/accounts.js";
 import TradeStats from "../models/tradeStats.js";
 import TradeJournal from "../models/tradeJournal.js";
-import Transaction from "../models/transaction.js";
 import TradeDetails from "../models/tradeDetails.js";
 import { DateRangeFilter } from "./general.js";
 
@@ -31,14 +30,14 @@ export const CalculateTradeStats = async (Action, EntryPrice, ExitPrice, StopLos
     };
 }
 
-export const CalculateHandleJournal = async (TradeId, UserId, AccountId, currentStats, todaysDate) => {
+export const CalculateHandleJournal = async (TradeId, UserId, AccountId, currentStats, todaysDate, isUpdate, prevNetPnl) => {
 
     const { tradeStatus, netPnL, grossPnL, riskReward, totalFees } = currentStats;
 
     // Fetch account details
     const account = await Accounts.findOne({ AccountId });
     const _capital = account.InitialBalance;
-    const _totalCapital = account.TotalBalance;
+    const _totalCapital = account.TotalBalance + (isUpdate ? prevNetPnl || 0 : 0);
 
     // Initialize variables
     let _totalNetPnL = netPnL, _totalTrades = 1, _tradeStatus = tradeStatus === 'WIN' ? 'PROFIT' : 'LOSS', _totalWins = tradeStatus === 'WIN' ? 1 : 0, _totalLoss = tradeStatus === 'LOSS' ? 1 : 0, _Winrate = 0, _totalFees = totalFees, _totalGrossPnL = grossPnL, _totalRR = riskReward, _netRevenue = netPnL, _grossRevenue = (totalFees + _netRevenue + _capital), _totalRevenue = _netRevenue + _totalCapital, _netRoi = parseFloat((netPnL / _capital * 100).toFixed(2));
@@ -119,21 +118,23 @@ export const CalculateHandleJournal = async (TradeId, UserId, AccountId, current
             await TradeJournal.updateOne(
                 { JournalDate: { $gte: start, $lt: end } },
                 {
-                    TotalNetPnL: _totalNetPnL,
-                    TotalTrades: _totalTrades,
-                    TradeStatus: _tradeStatus,
-                    TotalWins: _totalWins,
-                    TotalLoss: _totalLoss,
-                    Winrate: _Winrate,
-                    TotalFees: _totalFees,
-                    TotalGrossPnL: _totalGrossPnL,
-                    TotalRR: (_totalRR).toFixed(2),
-                    NetRevenue: _netRevenue,
-                    GrossRevenue: _grossRevenue,
-                    TotalRevenue: _totalRevenue,
-                    TotalRoi: _netRoi,
-                    $push: { TradeIds: TradeId },
-                    UpdatedBy: UserId
+                    $set: {
+                        TotalNetPnL: _totalNetPnL,
+                        TotalTrades: _totalTrades,
+                        TradeStatus: _tradeStatus,
+                        TotalWins: _totalWins,
+                        TotalLoss: _totalLoss,
+                        Winrate: _Winrate,
+                        TotalFees: _totalFees,
+                        TotalGrossPnL: _totalGrossPnL,
+                        TotalRR: (_totalRR).toFixed(2),
+                        NetRevenue: _netRevenue,
+                        GrossRevenue: _grossRevenue,
+                        TotalRevenue: _totalRevenue,
+                        TotalRoi: _netRoi,
+                        UpdatedBy: UserId
+                    },
+                    ...(!isUpdate && { $push: { TradeIds: TradeId } })
                 }
             );
         }
@@ -169,20 +170,6 @@ export const CalculateHandleJournal = async (TradeId, UserId, AccountId, current
         newJournal.TradeIds.push(TradeId);
         await newJournal.save();
     }
-
-    // Find the last Id from Collection. If record does'nt exist, start with 1, otherwise increment the last Id
-    let lastId = await Transaction.findOne().sort('-TransactionId');
-    const TransactionId = lastId ? lastId.TransactionId + 1 : 1;
-
-    const newTransaction = new Transaction({
-        TransactionId: TransactionId,
-        TransName: _tradeStatus,
-        TransAmount: netPnL,
-        AccountId,
-        UserId,
-        CreatedBy: UserId
-    });
-    await newTransaction.save();
 
     // Update the Account's Collection
     await Accounts.updateOne(

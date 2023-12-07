@@ -2,10 +2,11 @@ import { flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel
 import React, { useState } from "react";
 import { DataTablePagination } from "./data-table-pagination";
 import { TradeColumns } from "./columns";
+import { MdDeleteOutline, MdEdit } from "react-icons/md";
 
 const DataTable = (props) => {
 
-    const { data, pagination } = props;
+    const { data, pagination, isEdit, handleEditClick, handleDeleteClick, Id } = props;
     const columns = TradeColumns;
 
     const [sorting, setSorting] = useState([]);
@@ -48,6 +49,7 @@ const DataTable = (props) => {
                                         </th>
                                     )
                                 })}
+                                {isEdit && <th scope="col" className="capitalize px-6 py-3 text-center whitespace-nowrap"></th>}
                             </tr>
                         ))}
                     </thead>
@@ -64,6 +66,13 @@ const DataTable = (props) => {
                                             {flexRender(cell.column.columnDef.cell, cell.getContext())}
                                         </td>
                                     ))}
+
+                                    {isEdit &&
+                                        <td className="py-4 px-4 w-24 flex items-center justify-between whitespace-nowrap">
+                                            <button className="font-medium text-gray-900 dark:text-white hover:underline" onClick={() => handleEditClick(row?.original?.[Id])}><MdEdit className="w-5 h-5" /></button>
+                                            <button className="font-medium text-red-600 dark:text-red-500 hover:underline" onClick={() => handleDeleteClick(row?.original?.[Id])}><MdDeleteOutline className="w-5 h-5" /></button>
+                                        </td>
+                                    }
                                 </tr>
                             ))
                         ) : (

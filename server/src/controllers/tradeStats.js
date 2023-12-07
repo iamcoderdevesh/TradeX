@@ -18,6 +18,7 @@ export const AddUpdateTradeStats = async (req, res, next) => {
 
     //If record exists Update TradeStats
     if (tradeStats) {
+        req.body.prevNetPnl = tradeStats?.NetPnL && (parseInt(tradeStats?.NetPnL * -1)); //Required for Updating Trade (Journal Calulation)
         const updateTrade = await TradeStats.findOneAndUpdate(
             { UserId, AccountId, TradeId },
             { TradeStatus: tradeStatus, NetProfit: netProfit, NetLoss: netLoss, NetPnL: netPnL, NetRoi: netRoi, TotalFees: totalFees, GrossPnL: grossPnL, TradeRisk: tradeRisk, RiskReward: riskReward, TradeDate: _tradeDate, AccountId, CreatedBy: UserId },

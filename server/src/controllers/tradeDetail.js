@@ -4,7 +4,6 @@ import TradeAddDetails from '../models/tradeAddDetails.js';
 import { CalculateTradeStats } from '../utils/calculate.js';
 import TradeStats from '../models/tradeStats.js';
 import TradeJournal from '../models/tradeJournal.js';
-import Transaction from '../models/transaction.js';
 import { DateRangeFilter } from '../utils/general.js';
 
 /* Inserting/Updating TradeDetails */
@@ -15,7 +14,7 @@ export const AddUpdateTrade = async (req, res, next) => {
     }
     else {
         try {
-            const { Market, Broker, Setup, Status: TradeStatus, Action, Symbol, EntryDate, ExitDate,
+            const { Market, Broker, Setup, TradeStatus, Action, Symbol, EntryDate, ExitDate,
                 EntryPrice, ExitPrice, StopLoss, Quantity, EntryReason, ExitReason,
                 Emotions, MarketConditions, AdditionalInformation, UserId, AccountId, TradeId = 0 } = req.body;
             const Fees = 50.00;
@@ -36,7 +35,7 @@ export const AddUpdateTrade = async (req, res, next) => {
                     res.status(400).json({ error: "Oops Something Went! Unable to Update Trade" });
                 }
                 else {
-                    req.body.TradeState = "Updated";
+                    req.body.TradeState = true; //If true means updated
                 }
             }
             //Else Insert New Trade
@@ -53,7 +52,7 @@ export const AddUpdateTrade = async (req, res, next) => {
                 }
                 else {
                     req.body.TradeId = trade.TradeId;
-                    req.body.TradeState = "Added";
+                    req.body.TradeState = false; //If false means new trade added
                 }
             }
 
@@ -70,7 +69,7 @@ export const AddUpdateTrade = async (req, res, next) => {
                 next();
             }
             else {
-                res.status(201).send("Trade " + req.body.TradeState + " Successfully!!!");
+                res.status(201).send("Trade " + (req.body?.TradeState ? "Updated" : "Added") + " Successfully!!!");
             }
         }
         catch (err) {
@@ -111,13 +110,13 @@ const AddUpdateTradeAddDetails = async (req) => {
 
 /* Getting all Trade Data */
 export const getTradeData = async (req, res) => {
-    const { TradeId } = req.body;
 
     let FilterName = "EntryDate";
     const tradeFilter = DateRangeFilter(req, FilterName);
 
     //Filter for fetching TradeDetails to show in Daily Trade Journal.
-    if (TradeId) tradeFilter.TradeId = { $in: TradeId };
+    const { TradeId: tradeId } = req.body;
+    if (tradeId) tradeFilter.TradeId = { $in: tradeId };
 
     const getTrade = await TradeDetails.aggregate([
         { $match: tradeFilter },
@@ -165,7 +164,7 @@ export const getTradeData = async (req, res) => {
     ]);
 
     //Return All Trades to GetTradeJournal function.
-    if (TradeId) {
+    if (tradeId) {
         return getTrade;
     }
     else {
@@ -174,6 +173,54 @@ export const getTradeData = async (req, res) => {
             tradeDetails: getTrade
         });
     }
+};
+
+/* Getting all Trade Data for Update Operation */
+export const getTradeDetails = async (req, res) => {
+
+    //For update operation filter by TradeId
+    const { UserId } = req.body;
+    const TradeId = parseInt(req.params?.id || 0);
+
+    const getTrade = await TradeDetails.aggregate([
+        { $match: { UserId, TradeId } },
+        {
+            $lookup: {
+                from: "TradeAddDetails",
+                localField: "TradeId",
+                foreignField: "TradeId",
+                as: "TradeAddDetails",
+            },
+        },
+        { $unwind: { path: "$TradeAddDetails", preserveNullAndEmptyArrays: true } },
+        {
+            $project: {
+                "_id": 0,
+                "Market": 1,
+                "Broker": 1,
+                "Setup": 1,
+                "TradeStatus": 1,
+                "Action": 1,
+                "Symbol": 1,
+                "EntryDate": 1,
+                "ExitDate": 1,
+                "EntryPrice": 1,
+                "ExitPrice": 1,
+                "StopLoss": 1,
+                "Quantity": 1,
+                "EntryReason": "$TradeAddDetails.EntryReason",
+                "ExitReason": "$TradeAddDetails.ExitReason",
+                "Emotions": "$TradeAddDetails.Emotions",
+                "MarketCondition": "$TradeAddDetails.MarketCondition",
+                "AdditionalInfo": "$TradeAddDetails.TradeAddInfo",
+            }
+        }
+    ]);
+
+    return res.status(201).json({
+        success: true,
+        tradeDetails: { ...getTrade[0] }
+    });
 };
 
 /* For Dashboard Fetch Recent Trade */
@@ -225,9 +272,8 @@ export const DeleteTrades = async (req, res) => {
         const deleteTradeAdd = await TradeAddDetails.deleteMany(tradeFilter);
         const deleteTradeStat = await TradeStats.deleteMany(tradeFilter);
         const deleteTradeJournal = await TradeJournal.deleteMany(tradeFilter);
-        const deleteTransaction = await Transaction.deleteMany({ UserId, AccountId });
 
-        if (deleteTrade.deletedCount > 0 && deleteTradeAdd.deletedCount > 0 && deleteTradeStat.deletedCount > 0 && deleteTradeJournal.deletedCount > 0 && deleteTransaction.deletedCount > 0) {
+        if (deleteTrade.deletedCount > 0 && deleteTradeAdd.deletedCount > 0 && deleteTradeStat.deletedCount > 0 && deleteTradeJournal.deletedCount > 0) {
             if (TradeId) return res.status(201).send("Trade Deleted Successfully");
             return true;
         }

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import { BiChevronDown, BiChevronUp } from "react-icons/bi";
 import InputField from 'components/common/inputs/InputField';
 import Dropdown from 'components/common/dropdown';
@@ -7,17 +8,24 @@ import { Inputs } from "./variables/FormVariables";
 import { TradeSchema } from 'helpers/validation';
 import { useFormik } from "formik";
 import { AccountDropdown } from 'components/common/dropdown/accountDropdown';
-import { useAddUpadateTradeMutation } from 'state/api/trade/tradeApi';
-import { Toast } from 'components/common/alerts/index';
+import { useAddUpadateTradeMutation, useGetTradeDetailsQuery } from 'state/api/trade/tradeApi';
+import { Toast } from 'components/common/alerts';
+import { formatDate } from 'utils/index';
 
 const AddTrade = () => {
-    const [showAdd, setShowAdd] = useState(false);
-    const { Account, Market, Broker, Setup, Status, Action, Symbol, EntryDate, ExitDate, EntryPrice, ExitPrice, StopLoss, Quantity, EntryReason, ExitReason, Emotions, MarketConditions, AdditionalInformation } = [];
+
+    const tradeId = new URLSearchParams(useLocation().search).get('id');
+
+    const { data: TradeInfo, isLoading: isLoadingTrade } = useGetTradeDetailsQuery(tradeId, {
+        skip: !tradeId,
+    });
+
+    const initialValues = TradeInfo
+        ? { ...TradeInfo }
+        : { Account: '', Market: '', Broker: '', Setup: '', TradeStatus: 'Closed', Action: 'Buy', Symbol: '', EntryDate: '', ExitDate: '', EntryPrice: '', ExitPrice: '', StopLoss: '', Quantity: '', EntryReason: '', ExitReason: '', Emotions: '', MarketConditions: '', AdditionalInformation: '' };
 
     const { values, errors, touched, isSubmitting, handleChange, handleSubmit, handleBlur, setValues } = useFormik({
-        initialValues: {
-            Account, Market, Broker, Setup, Status: 'Closed', Action: 'Buy', Symbol, EntryDate, ExitDate, EntryPrice, ExitPrice, StopLoss, Quantity, EntryReason, ExitReason, Emotions, MarketConditions, AdditionalInformation
-        },
+        initialValues,
         validationSchema: TradeSchema,
         onSubmit: values => {
             submitForm(values);
@@ -30,12 +38,17 @@ const AddTrade = () => {
         if (isSuccess) {
             Toast.success(data?.message);
         }
-    }, [isSuccess, data]);
+
+        //Dynamically Setting the Values of form for Update Operation of Trade.
+        if (TradeInfo) {
+            setValues(initialValues);
+        }
+    }, [isSuccess, data, TradeInfo, isLoadingTrade, setValues]);
 
 
     const submitForm = async (formData) => {
         try {
-            // if (id) formData.TradeId = id;
+            if (tradeId) formData.TradeId = parseInt(tradeId);
             formData.AccountId = parseInt(formData.Account);
             delete formData.Account;
             await addUpdateTrade(formData).unwrap();
@@ -43,6 +56,7 @@ const AddTrade = () => {
             return;
         }
     }
+    const [showAdd, setShowAdd] = useState(false);
 
     return (
         <div className="flex justify-center items-center">
@@ -68,7 +82,7 @@ const AddTrade = () => {
                                 ))}
                                 {Inputs.FormInputs.map((items) => (
                                     <div key={items.id} className={items.divClass}>
-                                        <InputField label={items.label} divClass={items.divClass} placeholder={items.placeholder} id={items.id} type={items.type} htmlName={items.id} errorMsg={errors[items.id] && touched[items.id] && errors[items.id]} handleChange={handleChange} onBlur={handleBlur} value={values[items.id]} />
+                                        <InputField label={items.label} divClass={items.divClass} placeholder={items.placeholder} id={items.id} type={items.type} htmlName={items.id} errorMsg={errors[items.id] && touched[items.id] && errors[items.id]} handleChange={handleChange} onBlur={handleBlur} value={items.id.includes("Date") && values[items.id] ? formatDate(values[items.id], "date-time") : values[items.id]} />
                                     </div>
                                 ))}
                                 {

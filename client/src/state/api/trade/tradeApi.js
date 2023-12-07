@@ -3,14 +3,18 @@ import apiSlice from "state/api";
 
 const tradeApiSlice = apiSlice.injectEndpoints({
     endpoints: builder => ({
-        getTradeDetails: builder.query({
-            query: (id = 0) => `trade/${id}/getTradeDetails`,
+        getTradeStatistics: builder.query({
+            query: (accountId = 0) => `trade/${accountId}/getTradeStatistics`,
             transformResponse: (response) => response.success ? response.tradeDetails : [],
             providesTags: ["Trade"]
         }),
+        getTradeDetails: builder.query({
+            query: (tradeId = 0) => `trade/${tradeId}/getTradeDetails`,
+            transformResponse: (response) => response.success ? response.tradeDetails : [],
+        }),
         getStatistics: builder.query({
             query: ({ id = 0, type }) => ({
-                url: `trade/${id}/getStats/${type ? type : ''}`,
+                url: `trade/${id}/getStats${type ? '/' + type : ''}`,
             }),
             transformResponse: (response) => response.success ? response.stats : [],
             providesTags: ["Trade"]
@@ -43,4 +47,4 @@ const tradeApiSlice = apiSlice.injectEndpoints({
     overrideExisting: true
 });
 
-export const { useGetTradeDetailsQuery, useGetStatisticsQuery, useAddUpadateTradeMutation, useDeleteTradeMutation } = tradeApiSlice;
+export const { useGetTradeStatisticsQuery, useGetTradeDetailsQuery, useGetStatisticsQuery, useAddUpadateTradeMutation, useDeleteTradeMutation } = tradeApiSlice;

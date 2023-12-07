@@ -1,7 +1,7 @@
 import express from "express";
 import { verifyToken } from "../middleware/authorise.js";
 import { DeleteTradeImport, ImportTrades } from "../controllers/tradeImport.js";
-import { AddUpdateTrade, DeleteTrades, GetRecentTrade, getTradeData } from "../controllers/tradeDetail.js";
+import { AddUpdateTrade, DeleteTrades, GetRecentTrade, getTradeData, getTradeDetails } from "../controllers/tradeDetail.js";
 import { AddUpdateTradeStats, getDailyPnLAndReturns, getMonthlyPnLAndRevenue, getTotalPnL, getWeeklyPnL } from "../controllers/tradeStats.js";
 import { AddTradeJournal, GetJournalDetails, GetJournalForCalendar } from "../controllers/tradeJournal.js";
 import { CalculateStatistics } from "../utils/calculate.js";
@@ -14,12 +14,13 @@ router.use(verifyToken);
 
 //#region Insert/Update Trade
 router.post("/trade/importTrade", importValidations, HandleAsyncError(ImportTrades));
-router.post("/trade/addUpdateTrade", tradeValidations, AddUpdateTrade, AddUpdateTradeStats, HandleAsyncError(AddTradeJournal));
+router.post("/trade/addUpdateTrade", tradeValidations, HandleAsyncError(AddUpdateTrade), HandleAsyncError(AddUpdateTradeStats), HandleAsyncError(AddTradeJournal));
 //#endregion
 
-//#region Fetch Data
+//#region Fetch Data 
 //Fetch Trade Data
-router.get("/trade/:accountId/getTradeDetails", HandleAsyncError(getTradeData));
+router.get("/trade/:accountId/getTradeStatistics", HandleAsyncError(getTradeData));
+router.get("/trade/:id/getTradeDetails", HandleAsyncError(getTradeDetails));
 router.get("/trade/:accountId/getJounral", HandleAsyncError(GetJournalDetails));
 router.get("/trade/:accountId/getRecentTrades", HandleAsyncError(GetRecentTrade));
 
