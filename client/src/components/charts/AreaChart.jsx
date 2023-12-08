@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
-// third-party
-import ReactApexChart from 'react-apexcharts';
+import ReactApexChart from 'react-apexcharts'; // third-party
 
 const AreaChart = (props) => {
 
-    const { color, height } = props;
+    const { color, height, data, seriesName } = props;
 
     // chart options
     const options = {
@@ -18,6 +17,28 @@ const AreaChart = (props) => {
         colors: [color],
         dataLabels: {
             enabled: false
+        },
+        fill: {
+            type: 'gradient',
+            gradient: {
+                shadeIntensity: 1,
+                inverseColors: false,
+                opacityFrom: 0.7,
+                opacityTo: 0,
+                stops: [0, 100],
+                colorStops: [
+                    {
+                        offset: 70,
+                        color: color, // original color for positive values
+                        opacity: 0.3
+                    },
+                    {
+                        offset: 100,
+                        color: '#f23645', // color for negative values
+                        opacity: 0.8
+                    }
+                ]
+            }
         },
         stroke: {
             curve: 'smooth',
@@ -44,8 +65,8 @@ const AreaChart = (props) => {
 
     const [series, setSeries] = useState([
         {
-            name: 'Profit',
-            data: [416.70, 616.45, 1250.12]
+            name: seriesName,
+            data: data
         }
     ]);
 

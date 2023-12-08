@@ -1,14 +1,24 @@
 import React from 'react';
-import Accordion from './component/';
+import { useGetJournalDetailsQuery } from 'state/api/trade/tradeApi';
+import { useSelector } from 'react-redux';
+import JournalAccordion from './accordion';
 
 const Journal = () => {
-  return (
-    <section className='h-full my-4 mt-8 lg:my-4'>
-      <Accordion status={true} />
-      <Accordion status={false} />
-      <Accordion status={true} />
-    </section>
-  )
+
+    const id = useSelector((state) => state.account?.selectedAccount?.AccountId) || 0;
+    const { data: JournalDetails, isLoading } = useGetJournalDetailsQuery(id, {
+        refetchOnMountOrArgChange: true,
+    });
+
+    return (
+        <>
+            {
+                JournalDetails?.map((journalDetails) => (
+                    <JournalAccordion journal={journalDetails} />
+                ))
+            }
+        </>
+    );
 }
 
 export default Journal;

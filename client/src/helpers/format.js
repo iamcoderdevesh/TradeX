@@ -1,6 +1,6 @@
 import React from 'react'
 import { useSelector } from 'react-redux';
-import { AiFillCaretUp } from "react-icons/ai";
+import { AiFillCaretUp, AiFillCaretDown } from "react-icons/ai";
 
 export const GetFomatedCurrency = (props) => {
     const { value = 0 } = props;
@@ -25,7 +25,9 @@ export const GetFomatedPnl = (props) => {
 
     return (
         <>
-            {showIcon && <AiFillCaretUp className={conVal < 0 ? "text-red mr-1" : "text-green mr-1"} />}
+            {showIcon ? (
+                conVal < 0 ? <AiFillCaretDown className="text-red mr-1" /> : <AiFillCaretUp className="text-green mr-1" />
+            ) : null}
             <span className={conVal < 0 ? "text-red" : conVal > 0 ? "text-green" : 'dark:text-white'}>{output}</span>
         </>
     )

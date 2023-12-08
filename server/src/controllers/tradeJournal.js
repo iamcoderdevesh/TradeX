@@ -14,27 +14,31 @@ export const AddTradeJournal = async (req, res) => {
 };
 
 export const GetJournalDetails = async (req, res) => {
-    const { TradeDate } = req.body;
+    const { TradeDate } = req.query;
     let FilterName = "JournalDate";
 
-    if (TradeDate) req.body.fromDate = new Date(TradeDate);
+    if (TradeDate) req.query.fromDate = new Date(TradeDate);
     const tradeFilter = DateRangeFilter(req, FilterName);
-    req.body.fromDate = undefined; //Undefined the FromDate for further code to execute without date range
+    req.query.fromDate = undefined; //Undefined the FromDate for further code to execute without date range
 
     const JournalTrade = await TradeJournal.find(tradeFilter)
         .select(excludeFields());
 
-    let responseJournal = [];
+    let journalDetails = [];
     if (JournalTrade) {
         for (const journal of JournalTrade) {
             req.body.TradeId = journal.TradeIds;
             const tradeDetail = await getTradeData(req, res);
-
-            let journalObj = journal.toObject(); // Convert the Mongoose document to a plain JavaScript object
+    
+            let journalObj = {...journal.toObject()}; //Using rest/spread operator for deleting tradeId's
+            delete journalObj.TradeIds;
             journalObj.TradeDetails = tradeDetail; // Add TradeDetails to the journal object
-            responseJournal.push(journalObj); // Add the journal object to the response array
+            journalDetails.push(journalObj); // Add the journal object to the response array
         }
-        res.status(200).json(responseJournal);
+        res.status(200).json({
+            success: true,
+            journalDetails
+        });
     }
     else {
         return res.status(404).send(`No Data Found`);

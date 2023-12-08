@@ -1,5 +1,7 @@
 import { classNames } from "utils";
 import StatusPill from "components/common/statusPill";
+import { formatDate } from "utils";
+import { GetFomatedCurrency, GetFomatedPnl } from "helpers/format";
 
 export const RecentTradeCols = [
     {
@@ -47,11 +49,11 @@ export const TradeColumns = [
     {
         accessorKey: "Symbol",
         header: () => <span>Symbol</span>,
-        cell: ({ row }) => <div className="capitalize">{row.getValue("Symbol")}</div>
+        cell: ({ row }) => <div className="uppercase">{row.getValue("Symbol")}</div>
     },
     {
         accessorKey: "TradeStatus",
-        header: () => <div className="capitalize">Status</div>,
+        header: () => <span>Status</span>,
         cell: ({ row }) => (
             <div className="capitalize">
                 <StatusPill value={row.getValue("TradeStatus")} />
@@ -61,42 +63,42 @@ export const TradeColumns = [
     {
         accessorKey: "EntryDate",
         header: () => <div className="capitalize">Open Date</div>,
-        cell: ({ row }) => <div className="capitalize">{row.getValue("EntryDate")}</div>
+        cell: ({ row }) => <div className="capitalize">{formatDate(row.getValue("EntryDate"), 'dd/mm/yyyy')}</div>
     },
     {
         accessorKey: "ExitDate",
         header: () => <div className="capitalize">Close Date</div>,
-        cell: ({ row }) => <div className="capitalize">{row.getValue("ExitDate")}</div>
+        cell: ({ row }) => <div className="capitalize">{formatDate(row.getValue("ExitDate"), 'dd/mm/yyyy')}</div>
     },
     {
         accessorKey: "Action",
         header: () => <div className="capitalize">Action</div>,
-        cell: ({ row }) => <div className="capitalize">{row.getValue("Action")}</div>
+        cell: ({ row }) => <div className="uppercase">{row.getValue("Action")}</div>
     },
     {
         accessorKey: "NetPnL",
         header: () => <div className="capitalize">Net P&L</div>,
-        cell: ({ row }) => <div className={classNames("capitalize font-medium", row.getValue("Net PnL").startsWith("-") ? "text-red" : "text-green")}>{row.getValue("NetPnL")}</div>
+        cell: ({ row }) => <div className="flex items-center capitalize font-medium"><GetFomatedPnl value={row.getValue("NetPnL")} /></div>
     },
     {
         accessorKey: "NetRoi",
         header: () => <div className="capitalize">Net ROI</div>,
-        cell: ({ row }) => <div className={classNames("capitalize font-medium", row.getValue("Net ROI").startsWith("-") ? "text-red" : "text-green")}>{row.getValue("NetRoi")}</div>
+        cell: ({ row }) => <div className="flex items-center capitalize font-medium"><GetFomatedPnl value={row.getValue("NetRoi")} showPercentage={true} showCurrency={false} /></div>
     },
     {
         accessorKey: "EntryPrice",
         header: () => <div className="capitalize">Entry Price</div>,
-        cell: ({ row }) => <div className="capitalize">{row.getValue("EntryPrice")}</div>
+        cell: ({ row }) => <div className="capitalize"><GetFomatedCurrency value={row.getValue("EntryPrice")} /></div>
     },
     {
         accessorKey: "ExitPrice",
         header: () => <div className="capitalize">Exit Price</div>,
-        cell: ({ row }) => <div className="capitalize">{row.getValue("ExitPrice")}</div>
+        cell: ({ row }) => <div className="capitalize"><GetFomatedCurrency value={row.getValue("ExitPrice")} /></div>
     },
     {
         accessorKey: "StopLoss",
         header: () => <div className="capitalize">Stop Loss</div>,
-        cell: ({ row }) => <div className="capitalize">{row.getValue("StopLoss")}</div>
+        cell: ({ row }) => <div className="capitalize"><GetFomatedCurrency value={row.getValue("StopLoss")} /></div>
     },
     {
         accessorKey: "Quantity",

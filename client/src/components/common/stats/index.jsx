@@ -33,7 +33,7 @@ const Statistics = () => {
         <div className="ml-4 flex h-[90px] w-auto flex-row items-center">
           <div className="ml-3 flex w-auto flex-col justify-center">
             <p className="font-dm text-xs font-medium text-gray-400 mb-1">Total PnL</p>
-            <h4 className="text-xl font-medium dark:text-white"><GetFomatedPnl value={data?.totalPnl} /></h4>
+            <h4 className="flex items-center text-xl font-medium dark:text-white"><GetFomatedPnl value={data?.totalPnl} /></h4>
           </div>
         </div>
         <div className="flex item-center rounded-full p-3 mr-3 dark:bg-navy-700">

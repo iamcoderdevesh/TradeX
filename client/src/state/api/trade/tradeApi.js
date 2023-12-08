@@ -11,12 +11,18 @@ const tradeApiSlice = apiSlice.injectEndpoints({
         getTradeDetails: builder.query({
             query: (tradeId = 0) => `trade/${tradeId}/getTradeDetails`,
             transformResponse: (response) => response.success ? response.tradeDetails : [],
+            providesTags: ["Trade"]
         }),
         getStatistics: builder.query({
             query: ({ id = 0, type }) => ({
-                url: `trade/${id}/getStats${type ? '/' + type : ''}`,
+                url: `trade/${id}/getStats${type ? '/' + type : ''}`, //Type params for fetching data for detailed stats.
             }),
             transformResponse: (response) => response.success ? response.stats : [],
+            providesTags: ["Trade"]
+        }),
+        getJournalDetails: builder.query({
+            query: (id = 0) => `trade/${id}/getJounral`,
+            transformResponse: (response) => response.success ? response.journalDetails : [],
             providesTags: ["Trade"]
         }),
         addUpadateTrade: builder.mutation({
@@ -47,4 +53,4 @@ const tradeApiSlice = apiSlice.injectEndpoints({
     overrideExisting: true
 });
 
-export const { useGetTradeStatisticsQuery, useGetTradeDetailsQuery, useGetStatisticsQuery, useAddUpadateTradeMutation, useDeleteTradeMutation } = tradeApiSlice;
+export const { useGetTradeStatisticsQuery, useGetTradeDetailsQuery, useGetStatisticsQuery, useGetJournalDetailsQuery, useAddUpadateTradeMutation, useDeleteTradeMutation } = tradeApiSlice;

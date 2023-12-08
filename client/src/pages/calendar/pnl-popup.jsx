@@ -9,7 +9,7 @@ import { IoClose } from "react-icons/io5";
 
 import AreaChart from 'components/charts/AreaChart';
 import data from 'data/data.json';
-import { DefaultTable } from 'components/common/table/index';
+import { DefaultTable } from 'components/common/table';
 import { TradeColumns } from 'components/common/table/columns';
 
 const PnlPopup = () => {

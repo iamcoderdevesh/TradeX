@@ -6,7 +6,8 @@ import ColumnChart from 'components/charts/ColumnChart';
 import data from 'data/data.json';
 import { DefaultTable } from 'components/common/table';
 import { RecentTradeCols } from 'components/common/table/columns';
-import Statistics from 'components/common/stats/index';
+import Statistics from 'components/common/stats';
+import { FaArrowUpLong } from "react-icons/fa6";
 
 const Dashboard = () => {
 
@@ -45,9 +46,7 @@ const Dashboard = () => {
                                 <div
                                     className="flex items-center px-2.5 py-0.5 text-base font-semibold text-green dark:text-green text-center">
                                     32.5%
-                                    <svg className="w-3 h-3 ml-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 14">
-                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13V1m0 0L1 5m4-4 4 4" />
-                                    </svg>
+                                    <FaArrowUpLong />
                                 </div>
                             </div>
                             <BarChart />
