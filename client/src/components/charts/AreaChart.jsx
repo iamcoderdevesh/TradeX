@@ -18,28 +18,6 @@ const AreaChart = (props) => {
         dataLabels: {
             enabled: false
         },
-        fill: {
-            type: 'gradient',
-            gradient: {
-                shadeIntensity: 1,
-                inverseColors: false,
-                opacityFrom: 0.7,
-                opacityTo: 0,
-                stops: [0, 100],
-                colorStops: [
-                    {
-                        offset: 70,
-                        color: color, // original color for positive values
-                        opacity: 0.3
-                    },
-                    {
-                        offset: 100,
-                        color: '#f23645', // color for negative values
-                        opacity: 0.8
-                    }
-                ]
-            }
-        },
         stroke: {
             curve: 'smooth',
             width: 2

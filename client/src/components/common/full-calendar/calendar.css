@@ -8,7 +8,7 @@
 }
 
 .fc-event-title {
-    @apply dark:text-white
+    @apply dark:text-white font-bold
 }
 
 .fc-toolbar-title {

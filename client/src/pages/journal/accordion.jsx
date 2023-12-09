@@ -42,7 +42,7 @@ const JournalAccordion = (props) => {
             </div>
             <div className="grid grid-cols-2 gap-6 sm:gap-2 my-2 sm:grid-cols-3 lg:grid-cols-6 h-full">
                 <div className="chart h-[85px]">
-                    <AreaChart color={`${TradeStatus.toString().localeCompare("LOSS") === 0  ? '#f23645' : '#089981'}`} height={100} data={GetNetPnl(TradeDetails)} seriesName={"NetP&L"} />
+                    <AreaChart color={`${TradeStatus.toString().localeCompare("LOSS") === 0  ? '#f23645' : '#089981'}`} height={100} data={GetNetPnl(TradeDetails)} seriesName={"Net P&L"} />
                 </div>
                 <div className="flex flex-col justify-end items-center">
                     <h3 className='text-sm font-normal text-gray-400'>Winrate</h3>

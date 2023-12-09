@@ -17,41 +17,69 @@ export const GetJournalDetails = async (req, res) => {
     const { TradeDate } = req.query;
     let FilterName = "JournalDate";
 
-    if (TradeDate) req.query.fromDate = new Date(TradeDate);
+    if (TradeDate) {
+        const tradeDate = new Date(TradeDate);
+        tradeDate.setDate(tradeDate.getDate() - 1);
+        req.query.fromDate = tradeDate;
+    }
     const tradeFilter = DateRangeFilter(req, FilterName);
     req.query.fromDate = undefined; //Undefined the FromDate for further code to execute without date range
 
-    const JournalTrade = await TradeJournal.find(tradeFilter)
-        .select(excludeFields());
+    const fetchJoinJournalTradeDetails = async (journal) => {
+        req.body.TradeId = journal.TradeIds;
+        const tradeDetail = await getTradeData(req, res);
 
-    let journalDetails = [];
-    if (JournalTrade) {
-        for (const journal of JournalTrade) {
-            req.body.TradeId = journal.TradeIds;
-            const tradeDetail = await getTradeData(req, res);
-    
-            let journalObj = {...journal.toObject()}; //Using rest/spread operator for deleting tradeId's
-            delete journalObj.TradeIds;
-            journalObj.TradeDetails = tradeDetail; // Add TradeDetails to the journal object
-            journalDetails.push(journalObj); // Add the journal object to the response array
-        }
-        res.status(200).json({
+        let journalObj = { ...journal.toObject() }; //Using rest/spread operator for deleting tradeId's
+        delete journalObj.TradeIds;
+        journalObj.TradeDetails = tradeDetail; // Add TradeDetails to the journal object
+        return journalObj;
+    }
+
+    //If Condition for fetching date specific single record for pnl calendar popup
+    if (TradeDate) {
+        let journalDetails = [];
+        const journal = await TradeJournal.findOne(tradeFilter).select(excludeFields());
+        if(journal) journalDetails = await fetchJoinJournalTradeDetails(journal);
+
+        return res.status(200).json({
             success: true,
             journalDetails
         });
     }
+    //Else for fetching all records for journal
     else {
-        return res.status(404).send(`No Data Found`);
+        let journalDetails = [];
+        const JournalTrade = await TradeJournal.find(tradeFilter).select(excludeFields());
+
+        if (JournalTrade) {
+            for (const journal of JournalTrade) {
+                const journalDetail = await fetchJoinJournalTradeDetails(journal);
+                journalDetails.push(journalDetail); // Add the journal object to the response array
+            }
+            return res.status(200).json({
+                success: true,
+                journalDetails
+            });
+        }
+        else {
+            return res.status(200).json({
+                success: true,
+                journalDetails
+            });
+        }
     }
 
 };
 
 export const GetJournalForCalendar = async (req, res) => {
 
-    req.body.fromDate = undefined;
+    req.query.fromDate = undefined;
     let FilterName = "JournalDate";
     const tradeFilter = DateRangeFilter(req, FilterName);
-    const JournalTrade = await TradeJournal.find(tradeFilter).select('-_id JournalDate TradeStatus TotalNetPnL');
+    const calendarDetails = await TradeJournal.find(tradeFilter).select('-_id JournalDate TradeStatus TotalNetPnL');
 
-    res.status(200).json(JournalTrade);
+    res.status(200).json({
+        success: true,
+        calendarDetails
+    });
 };

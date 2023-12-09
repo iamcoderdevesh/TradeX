@@ -1,4 +1,3 @@
-import { Toast } from "components/common/alerts";
 import apiSlice from "state/api";
 
 const tradeApiSlice = apiSlice.injectEndpoints({
@@ -20,18 +19,13 @@ const tradeApiSlice = apiSlice.injectEndpoints({
             transformResponse: (response) => response.success ? response.stats : [],
             providesTags: ["Trade"]
         }),
-        getJournalDetails: builder.query({
-            query: (id = 0) => `trade/${id}/getJounral`,
-            transformResponse: (response) => response.success ? response.journalDetails : [],
-            providesTags: ["Trade"]
-        }),
         addUpadateTrade: builder.mutation({
             query: data => ({
                 url: "trade/addUpdateTrade",
                 method: "POST",
                 body: { ...data }
             }),
-            invalidatesTags: ["Trade"],
+            invalidatesTags: ["Trade"]
         }),
         // deleteTrade: builder.mutation({
         //     query: data => ({
@@ -53,4 +47,4 @@ const tradeApiSlice = apiSlice.injectEndpoints({
     overrideExisting: true
 });
 
-export const { useGetTradeStatisticsQuery, useGetTradeDetailsQuery, useGetStatisticsQuery, useGetJournalDetailsQuery, useAddUpadateTradeMutation, useDeleteTradeMutation } = tradeApiSlice;
+export const { useGetTradeStatisticsQuery, useGetTradeDetailsQuery, useGetStatisticsQuery, useAddUpadateTradeMutation, useDeleteTradeMutation } = tradeApiSlice;
