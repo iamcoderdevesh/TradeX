@@ -8,7 +8,7 @@ import AreaChart from 'components/charts/AreaChart';
 import { DefaultTable } from 'components/common/table';
 import { TradeColumns } from 'components/common/table/columns';
 import { useGetJournalDetailsQuery } from 'state/api/journal/journalApi';
-import { GetFomatedCurrency, GetFomatedPnl } from 'helpers/format';
+import { GetFormatedCurrency, GetFormatedPnl } from 'helpers/format';
 import { formatDate } from 'utils';
 
 const PnlPopup = () => {
@@ -45,7 +45,7 @@ const PnlPopup = () => {
                                 <div className="flex">
                                     <h3 className={`text-base font-medium text-${TradeStatus?.toString()?.localeCompare("LOSS") === 0 ? 'red' : 'green'}`}>Net PnL</h3>
                                     <div className="flex mx-3 mt-1">
-                                        <h5 className="flex leading-none text-base font-semibold pb-2"><GetFomatedPnl value={TotalNetPnL} /></h5>
+                                        <h5 className="flex leading-none text-base font-semibold pb-2"><GetFormatedPnl value={TotalNetPnL} /></h5>
                                     </div>
                                 </div>
                             </div>
@@ -83,7 +83,7 @@ const PnlPopup = () => {
                             <div className="flex flex-col justify-between my-4 mx-4">
                                 <div className="flex flex-col sm:flex-row my-2 justify-between items-center">
                                     <h3 className='text-xs font-normal text-gray-400'>Revenue</h3>
-                                    <p className='text-xs font-bold dark:text-white'><GetFomatedCurrency value={TotalRevenue} /></p>
+                                    <p className='text-xs font-bold dark:text-white'><GetFormatedCurrency value={TotalRevenue} /></p>
                                 </div>
                                 <div className="flex flex-col sm:flex-row my-2 justify-between items-center">
                                     <h3 className='text-xs font-normal text-gray-400'>Net ROI</h3>
@@ -93,7 +93,7 @@ const PnlPopup = () => {
                             <div className="flex flex-col justify-between my-4 mx-4">
                                 <div className="flex flex-col sm:flex-row my-2 justify-between items-center">
                                     <h3 className='text-xs font-normal text-gray-400'>Commission & Fees</h3>
-                                    <p className='text-xs font-bold dark:text-white'><GetFomatedCurrency value={TotalFees} /></p>
+                                    <p className='text-xs font-bold dark:text-white'><GetFormatedCurrency value={TotalFees} /></p>
                                 </div>
                                 <div className="flex flex-col sm:flex-row my-2 justify-between items-center">
                                     <h3 className='text-xs font-normal text-gray-400'>Risk & Reward</h3>

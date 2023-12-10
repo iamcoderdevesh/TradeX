@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import ReactApexChart from 'react-apexcharts';
+import { useGetMonthlyPnlQuery } from 'state/api/charts/chartsApi';
 
-const columnChartOptions = {
+const MonthlyPnlChartOptions = {
     chart: {
         type: 'bar',
         height: '140px',
@@ -29,20 +30,8 @@ const columnChartOptions = {
     xaxis: {
         categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
     },
-    yaxis: {
-        title: {
-            text: '$ (thousands)'
-        }
-    },
     fill: {
         opacity: 1
-    },
-    tooltip: {
-        y: {
-            formatter(val) {
-                return `$ ${val} thousands`;
-            }
-        }
     },
     legend: {
         show: true,
@@ -65,19 +54,20 @@ const columnChartOptions = {
     },
 };
 
-const ColumnChart = () => {
-    const series = [
-        {
-            name: 'Net Profit',
-            data: [180, 90, 135, 114, 120, 145, 180, 90, 135, 114, 120, 145]
-        },
-        {
-            name: 'Revenue',
-            data: [120, 45, 78, 150, 168, 99, 120, 45, 78, 150, 168, 99]
-        }
-    ];
+const MonthlyPnlChart = () => {
 
-    const [options, setOptions] = useState(columnChartOptions);
+    const currency = useSelector((state) => state.account.selectedCurrency, []) || '';
+    const id = useSelector((state) => state.account?.selectedAccount?.AccountId);
+    const { data, isLoading } = useGetMonthlyPnlQuery(id, {
+        refetchOnMountOrArgChange: true,
+        skip: !id,
+    });
+
+    const [series, setSeries] = useState([
+        { name: 'Net Profit', data: data?.TotalNetPnL },
+        { name: 'Revenue', data: data?.TotalRevenue }
+    ]);
+    const [options, setOptions] = useState(MonthlyPnlChartOptions);
     const currentMode = useSelector((state) => state.global.mode);
 
     useEffect(() => {
@@ -104,9 +94,21 @@ const ColumnChart = () => {
                 labels: {
                     colors: `${currentMode === 'light' ? '#111827' : '#9ca3af'}`,
                 }
-            }
+            },
+            tooltip: {
+                y: {
+                    formatter(val) {
+                        return `${currency + val}`;
+                    }
+                }
+            },
         }));
-    }, [currentMode]);
+
+        data && setSeries([
+            { name: 'Net Profit', data: data?.TotalNetPnL },
+            { name: 'Revenue', data: data?.TotalRevenue }
+        ]);
+    }, [currentMode, data, isLoading]);
 
     return (
         <div id='chart'>
@@ -115,4 +117,4 @@ const ColumnChart = () => {
     )
 }
 
-export default ColumnChart
+export default MonthlyPnlChart

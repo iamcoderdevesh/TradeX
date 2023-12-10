@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import ReactApexChart from 'react-apexcharts'; // third-party
+import { useSelector } from 'react-redux';
 
 const AreaChart = (props) => {
 
+    const currency = useSelector((state) => state.account.selectedCurrency, []) || '';
     const { color, height, data, seriesName } = props;
 
     // chart options
@@ -24,6 +26,13 @@ const AreaChart = (props) => {
         },
         grid: {
             show: false,
+        },
+        tooltip: {
+            y: {
+                formatter(val) {
+                    return `${currency + val}`;
+                }
+            }
         },
         xaxis: {
             labels: {

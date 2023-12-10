@@ -1,8 +1,21 @@
 import { Toast } from "components/common/alerts";
 import apiSlice from "state/api";
+import { addAccountInfo } from 'state/api/accounts/accountSlice';
 
 const accountApiSlice = apiSlice.injectEndpoints({
     endpoints: builder => ({
+        getAllAccountDetails: builder.query({
+            query: () => `accounts/getAccountDetails/0`,
+            async onQueryStarted(args, { queryFulfilled, dispatch }) {
+                try {
+                    const result = await queryFulfilled;
+                    result.data?.success && dispatch(addAccountInfo(result.data?.account));
+                } catch (err) {
+                    return;
+                }
+            },
+            providesTags: ["Accounts"]
+        }),
         getAccountDetails: builder.query({
             query: (id = 0) => `accounts/getAccountDetails/${id}`,
             transformResponse: (response) => response.success ? response.account : [],
@@ -36,4 +49,5 @@ const accountApiSlice = apiSlice.injectEndpoints({
     overrideExisting: true
 });
 
-export const { useGetAccountDetailsQuery, useCreateUpadateAccountMutation, useDeleteAccountMutation } = accountApiSlice;
+export const { useGetAllAccountDetailsQuery, useGetAccountDetailsQuery, useCreateUpadateAccountMutation, useDeleteAccountMutation } = accountApiSlice;
+export default accountApiSlice;

@@ -8,9 +8,10 @@ import Statistics from 'components/common/stats';
 const TradeStatistics = () => {
 
     const navigate = useNavigate();
-    const accountId = useSelector((state) => state.account?.selectedAccount?.AccountId) || 0;
-    const { data, isLoading } = useGetTradeStatisticsQuery(accountId, {
+    const id = useSelector((state) => state.account?.selectedAccount?.AccountId);
+    const { data, isLoading } = useGetTradeStatisticsQuery(id, {
         refetchOnMountOrArgChange: true,
+        skip: !id
     });
 
     const useNavigateSearch = () => {

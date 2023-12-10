@@ -4,12 +4,24 @@ import Sidebar from 'layouts/MainLayout/Sidebar';
 import { Outlet } from "react-router-dom";
 import { useSelector } from 'react-redux';
 import { ToastContainer } from 'components/common/alerts';
+import { useGetStatisticsQuery } from 'state/api/trade/tradeApi';
+import { useGetAllAccountDetailsQuery } from 'state/api/accounts/accountApi';
 
 const Layout = () => {
 
     const activeMenu = useSelector((state) => state.global.activeSidebar);
     const showPopup = useSelector((state) => state.global.showPopup);
     const filterPopup = useSelector((state) => state.global.filterPopup);
+
+    const { isLoading: isLoadingAcc } = useGetAllAccountDetailsQuery({
+        refetchOnMountOrArgChange: true,
+    });
+    
+    const id = useSelector((state) => state.account?.selectedAccount?.AccountId, []);
+    const { isLoading } = useGetStatisticsQuery(id, {
+      refetchOnMountOrArgChange: true,
+      skip: !id,
+    });
 
     return (
         <>

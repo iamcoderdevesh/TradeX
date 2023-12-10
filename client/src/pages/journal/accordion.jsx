@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { formatDate } from 'utils';
-import { GetFomatedCurrency, GetFomatedPnl } from 'helpers/format';
+import { GetFormatedCurrency, GetFormatedPnl } from 'helpers/format';
 import { FaChevronDown } from "react-icons/fa";
 import { BsDot } from "react-icons/bs";
 import AreaChart from 'components/charts/AreaChart';
@@ -30,7 +30,7 @@ const JournalAccordion = (props) => {
                     <div className="flex">
                         <h3 className={`text-base font-medium text-${TradeStatus.toString().localeCompare("LOSS") === 0 ? 'red' : 'green'}`}>Net PnL</h3>
                         <div className="flex mx-3 mt-1">
-                            <h5 className="flex leading-none text-base font-semibold pb-2"><GetFomatedPnl value={TotalNetPnL} /></h5>
+                            <h5 className="flex leading-none text-base font-semibold pb-2"><GetFormatedPnl value={TotalNetPnL} /></h5>
                         </div>
                     </div>
                 </div>
@@ -58,11 +58,11 @@ const JournalAccordion = (props) => {
                 </div>
                 <div className="flex flex-col justify-end items-center">
                     <h3 className='text-sm font-normal text-gray-400'>Fees & Charges</h3>
-                    <p className='text-base font-bold dark:text-white'><GetFomatedCurrency value={TotalFees} /></p>
+                    <p className='text-base font-bold dark:text-white'><GetFormatedCurrency value={TotalFees} /></p>
                 </div>
                 <div className="flex flex-col justify-end items-center">
                     <h3 className='text-sm font-normal text-gray-400'>Gross PnL</h3>
-                    <p className='flex items-center text-base font-bold dark:text-white'><GetFomatedPnl value={TotalGrossPnL} /></p>
+                    <p className='flex items-center text-base font-bold dark:text-white'><GetFormatedPnl value={TotalGrossPnL} /></p>
                 </div>
             </div>
             {isActive && <div className="mt-10 relative overflow-x-auto shadow-md sm:rounded-lg">

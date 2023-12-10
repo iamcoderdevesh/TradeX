@@ -4,6 +4,7 @@ const initialState = {
     accountInfo: [],
     selectedAccount: undefined,
     selectedCurrency: undefined,
+    stats: [],
 };
 
 const accountSlice = createSlice({
@@ -19,8 +20,11 @@ const accountSlice = createSlice({
         addAccountInfo: (state, action) => {
             state.accountInfo = action.payload;
         },
+        setStatistics: (state, action) => {
+            state.stats = action.payload;
+        },
     },
 });
 
-export const { setSelectedAccount, addAccountInfo, setSelectedCurrencySymbol } = accountSlice.actions;
+export const { setSelectedAccount, addAccountInfo, setSelectedCurrencySymbol, setStatistics } = accountSlice.actions;
 export default accountSlice.reducer;

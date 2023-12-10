@@ -1,13 +1,13 @@
 import React from 'react';
 import { KeyValueTable } from 'components/common/table';
-import { useGetStatisticsQuery } from 'state/api/trade/tradeApi';
+import { useGetDetailedStatisticsQuery } from 'state/api/trade/tradeApi';
 import { useSelector } from 'react-redux';
 
 const DetailedStats = () => {
 
   const id = useSelector((state) => state.account?.selectedAccount?.AccountId);
   const type = 'detailed';
-  const { data, isLoading } = useGetStatisticsQuery({
+  const { data, isLoading } = useGetDetailedStatisticsQuery({
     id,
     type: "detailed"
   }, {

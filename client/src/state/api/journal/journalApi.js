@@ -1,6 +1,6 @@
 import apiSlice from "state/api";
 
-const tradeApiSlice = apiSlice.injectEndpoints({
+const journalApiSlice = apiSlice.injectEndpoints({
     endpoints: builder => ({
         getJournalDetails: builder.query({
             query: ({id = 0, TradeDate}) => `trade/${id}/getJounral${TradeDate ? '?TradeDate=' + TradeDate : ''}`,
@@ -16,4 +16,4 @@ const tradeApiSlice = apiSlice.injectEndpoints({
     overrideExisting: true
 });
 
-export const { useGetJournalDetailsQuery, useGetJournalCalendarQuery } = tradeApiSlice;
+export const { useGetJournalDetailsQuery, useGetJournalCalendarQuery } = journalApiSlice;

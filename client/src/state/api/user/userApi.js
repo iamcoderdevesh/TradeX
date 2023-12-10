@@ -1,5 +1,6 @@
 import apiSlice from "state/api";
 import { addUserInfo, setUserAuthenticated, setToken } from "../auth/authSlice";
+import accountApiSlice from "../accounts/accountApi";
 
 const userApiSlice = apiSlice.injectEndpoints({
     endpoints: builder => ({
@@ -12,7 +13,8 @@ const userApiSlice = apiSlice.injectEndpoints({
                 } catch (err) {
                     return;
                 }
-            }
+            },
+            providesTags: ["User"]
         }),
         refresh: builder.query({
             query: () => ({
@@ -26,13 +28,14 @@ const userApiSlice = apiSlice.injectEndpoints({
                         dispatch(setToken({ accessToken: result.data.token }));
                         dispatch(setUserAuthenticated(true));
 
-                        //To Get the UserDetails when page refresh...
+                        //To Get the UserDetails & AccountDetails when page refresh...
                         dispatch(userApiSlice.endpoints.getUser.initiate());
+                        dispatch(accountApiSlice.endpoints.getAllAccountDetails.initiate());
                     }
                 } catch (err) {
                     return;
                 }
-            }
+            },
         }),
         updateProfile: builder.mutation({
             query: data => ({
@@ -48,6 +51,7 @@ const userApiSlice = apiSlice.injectEndpoints({
                     return;
                 }
             },
+            invalidatesTags: ["User"]
         }),
     }),
     overrideExisting: true

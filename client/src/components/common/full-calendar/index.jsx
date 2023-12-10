@@ -17,6 +17,7 @@ const Calendar = () => {
     const id = useSelector((state) => state.account?.selectedAccount?.AccountId, []);
     const { data, isLoading } = useGetJournalCalendarQuery(id, {
         refetchOnMountOrArgChange: true,
+        skip: !id
     });
 
     const currentMode = useSelector((state) => state.global.mode);
@@ -39,7 +40,6 @@ const Calendar = () => {
         if (!data || data.length === 0) return;
         const activeDates = data?.map(d => formatDate(d.JournalDate, "yyyy/mm/dd"));
         if (activeDates.includes(args.dateStr)) {
-            console.log(args.dateStr);
             dispatch(handleDateClick({ date: args.dateStr }));
         }
     }

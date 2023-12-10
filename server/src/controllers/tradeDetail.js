@@ -108,7 +108,7 @@ const AddUpdateTradeAddDetails = async (req) => {
     }
 };
 
-/* Getting all Trade Data */
+/* Getting all Trade Data & Statistics */
 export const getTradeData = async (req, res) => {
 
     let FilterName = "EntryDate";
@@ -168,7 +168,7 @@ export const getTradeData = async (req, res) => {
         return getTrade;
     }
     else {
-        return res.status(201).json({
+        return res.status(200).json({
             success: true,
             tradeDetails: getTrade
         });
@@ -217,7 +217,7 @@ export const getTradeDetails = async (req, res) => {
         }
     ]);
 
-    return res.status(201).json({
+    return res.status(200).json({
         success: true,
         tradeDetails: { ...getTrade[0] }
     });
@@ -237,6 +237,7 @@ export const GetRecentTrade = async (req, res) => {
         },
         { $sort: { _id: -1 } },
         { $limit: 4 },
+        { $unwind: { path: "$TradeStats", preserveNullAndEmptyArrays: true } },
         {
             $project: {
                 "_id": 0,
@@ -244,13 +245,16 @@ export const GetRecentTrade = async (req, res) => {
                 "EntryDate": 1,
                 "ExitDate": 1,
                 "Action": 1,
-                "TradeStats.TradeStatus": 1,
-                "TradeStats.NetPnL": 1,
-                "TradeStats.NetRoi": 1,
+                "TradeStatus": "$TradeStats.TradeStatus",
+                "NetPnL": "$TradeStats.NetPnL",
+                "NetRoi": "$TradeStats.NetRoi",
             }
         }
     ]);
-    res.status(200).json(getTrade);
+    return res.status(200).json({
+        success: true,
+        tradeDetails: getTrade
+    });
 }
 
 /* Deleting Trade */
@@ -274,7 +278,7 @@ export const DeleteTrades = async (req, res) => {
         const deleteTradeJournal = await TradeJournal.deleteMany(tradeFilter);
 
         if (deleteTrade.deletedCount > 0 && deleteTradeAdd.deletedCount > 0 && deleteTradeStat.deletedCount > 0 && deleteTradeJournal.deletedCount > 0) {
-            if (TradeId) return res.status(201).send("Trade Deleted Successfully");
+            if (TradeId) return res.status(200).send("Trade Deleted Successfully");
             return true;
         }
         else {

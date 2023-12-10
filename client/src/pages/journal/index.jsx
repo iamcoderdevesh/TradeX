@@ -5,9 +5,10 @@ import JournalAccordion from './accordion';
 
 const Journal = () => {
 
-    const id = useSelector((state) => state.account?.selectedAccount?.AccountId) || 0;
+    const id = useSelector((state) => state.account?.selectedAccount?.AccountId);
     const { data: JournalDetails, isLoading } = useGetJournalDetailsQuery({ id }, {
         refetchOnMountOrArgChange: true,
+        skip: !id
     });
 
     return (

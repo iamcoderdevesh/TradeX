@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import ReactApexChart from 'react-apexcharts';
 
-const CircleChartOptions = {
+const WinrateChartOptions = {
     chart: {
         type: 'radialBar',
         offsetY: -20,
@@ -53,10 +53,13 @@ const CircleChartOptions = {
     labels: ['Winrate'],
 };
 
-const CircleChart = () => {
+const WinrateChart = () => {
 
-    const [series] = useState([76]);
-    const [options, setOptions] = useState(CircleChartOptions);
+    const data = useSelector((state) => state.account?.stats, []);
+    const { winrate = 0 } = data;
+
+    const [series] = useState([winrate]);
+    const [options, setOptions] = useState(WinrateChartOptions);
     const currentMode = useSelector((state) => state.global.mode);
 
     useEffect(() => {
@@ -81,4 +84,4 @@ const CircleChart = () => {
     )
 }
 
-export default CircleChart
+export default WinrateChart

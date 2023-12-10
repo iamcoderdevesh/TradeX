@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate, createSearchParams } from 'react-router-dom';
 import TabPanel from '../'
 import { IoClose } from "react-icons/io5";
@@ -6,14 +6,11 @@ import { SubmitButton } from 'components/common/buttons';
 import { DefaultTable } from 'components/common/table';
 import { AccountColumns } from 'components/common/table/columns';
 import AccountForm from './forms/accountForm';
-import { useDeleteAccountMutation, useGetAccountDetailsQuery } from 'state/api/accounts/accountApi';
-import { useDispatch } from 'react-redux';
-import { addAccountInfo } from 'state/api/accounts/accountSlice';
+import { useDeleteAccountMutation, useGetAllAccountDetailsQuery } from 'state/api/accounts/accountApi';
 
 const Accounts = () => {
   
   const navigate = useNavigate();
-  const dispatch = useDispatch();
   const [showAddAccount, setShowAddAccount] = useState(false);
 
   const useNavigateSearch = () => {
@@ -22,14 +19,7 @@ const Accounts = () => {
   };
   const navigateSearch = useNavigateSearch();
 
-  const { data, isLoading: isLoadingAcc } = useGetAccountDetailsQuery();
-
-  useEffect(() => {
-    if (data) {
-      dispatch(addAccountInfo(data));
-    }
-  }, [isLoadingAcc, data]);
-
+  const { data, isLoading: isLoadingAcc } = useGetAllAccountDetailsQuery();
   const [deleteAccount, { isLoading }] = useDeleteAccountMutation();
 
   const handleDeleteClick = async (accountId) => {
@@ -61,7 +51,7 @@ const Accounts = () => {
                 </div>
                 <div className="sm:col-span-2 relative overflow-x-auto shadow-md sm:rounded-lg">
                   <DefaultTable
-                    data={data || []}
+                    data={data?.account || []}
                     columns={AccountColumns}
                     isEdit={true}
                     handleDeleteClick={handleDeleteClick}

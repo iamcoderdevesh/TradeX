@@ -52,14 +52,21 @@ export const getTotalPnL = async (req, res) => {
     const Filters = DateRangeFilter(req, FilterName);
 
     const tradeStats = await TradeStats.find(Filters).select('NetPnL -_id');
-
-    if (!tradeStats) return res.status(404).send('No Data Found!');
-    res.status(200).json(tradeStats);
+    const data = tradeStats.map(item => item.NetPnL);
+    return res.status(200).json({
+        success: true,
+        tradeStats: data
+    });
 }
 
 export const getWeeklyPnL = async (req, res) => {
     const { UserId } = req.body; //Date Range is not applied
-    const dayMap = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
+    const account = await Accounts.findOne({ UserId: UserId, AccountId: parseInt(req.params?.accountId) }).select('TotalBalance');
+
+    const { TotalBalance = 0 } = account || [];
+
+    const dayMap = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
     const today = new Date();
     const day = today.getDay();
     const daysOfWeek = [0, 1, 2, 3, 4, 5, 6].map(dayIndex => ({
@@ -69,6 +76,7 @@ export const getWeeklyPnL = async (req, res) => {
 
     const startDate = new Date();
     startDate.setDate(today.getDate() - 6);
+    startDate.setHours(0, 0, 0, 0);
 
     const getStats = await TradeJournal.aggregate([
         {
@@ -105,6 +113,7 @@ export const getWeeklyPnL = async (req, res) => {
         },
     ]);
 
+    let totalNetPnL = 0;
     if (getStats.length > 0) {
         getStats.forEach(stat => {
             // Convert the day number to a day name
@@ -115,86 +124,102 @@ export const getWeeklyPnL = async (req, res) => {
 
             // Update the NetPnl for that day
             if (dayOfWeek) {
+                totalNetPnL += stat.NetPnl;
                 dayOfWeek.NetPnl = stat.NetPnl;
             }
         });
     }
-    return res.status(200).json(daysOfWeek);
+
+    const netPnl = daysOfWeek?.map(day => day.NetPnl)?.reverse();
+    const weeklyReturns = parseFloat((totalNetPnL / TotalBalance) * 100).toFixed(2);
+
+    return res.status(200).json({
+        success: true,
+        weeklyPnl: {
+            totalNetPnL,
+            weeklyReturns,
+            netPnl
+        }
+    });
 }
 
 export const getMonthlyPnLAndRevenue = async (req, res) => {
     const { UserId } = req.body; //Date Range Filter is not applied
 
     const account = await Accounts.findOne({ UserId: UserId, AccountId: parseInt(req.params.accountId) }).select('InitialBalance');
-    if (account) {
-        const { InitialBalance } = account;
-        const monthMap = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'];
-        const currentYear = new Date().getFullYear();
-        const monthlyStats = monthMap.map(month => ({
-            Month: month,
-            TotalNetPnL: 0,
-            TotalRevenue: 0
-        }));
 
-        const getStats = await TradeJournal.aggregate([
-            {
-                $match: {
-                    UserId: UserId,
-                    AccountId: parseInt(req.params.accountId),
-                    $expr: {
-                        $eq: [{ $year: "$JournalDate" }, currentYear]
-                    }
-                },
-            },
-            {
-                $group: {
-                    _id: {
-                        $month: '$JournalDate',
-                    },
-                    TotalNetPnL: {
-                        $sum: '$TotalNetPnL',
-                    },
-                },
-            },
-            {
-                $sort: {
-                    _id: 1,
-                },
-            },
-            {
-                $project: {
-                    Month: '$_id',
-                    TotalNetPnL: '$TotalNetPnL',
-                    _id: 0,
-                },
-            },
-        ]);
+    const { InitialBalance = 0 } = account || [];
+    const monthMap = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'];
+    const currentYear = new Date().getFullYear();
+    const monthlyStats = monthMap.map(month => ({
+        Month: month,
+        TotalNetPnL: 0,
+        TotalRevenue: 0
+    }));
 
-        if (getStats.length > 0) {
-            let totalPnl = 0;
-            getStats.forEach(stat => {
-                // Convert the month number to a month name
-                let monthName = monthMap[stat.Month - 1];
-
-                // Find the corresponding month in the monthlyStats array
-                let monthStat = monthlyStats.find(month => month.Month === monthName);
-
-                // Update the TotalNetPnL and NetRevenue for that month
-                if (monthStat) {
-                    monthStat.TotalNetPnL = stat.TotalNetPnL;
-                    monthStat.TotalRevenue = InitialBalance + stat.TotalNetPnL + totalPnl;
-                    totalPnl += stat.TotalNetPnL;
+    const getStats = await TradeJournal.aggregate([
+        {
+            $match: {
+                UserId: UserId,
+                AccountId: parseInt(req.params.accountId),
+                $expr: {
+                    $eq: [{ $year: "$JournalDate" }, currentYear]
                 }
-            });
+            },
+        },
+        {
+            $group: {
+                _id: {
+                    $month: '$JournalDate',
+                },
+                TotalNetPnL: {
+                    $sum: '$TotalNetPnL',
+                },
+            },
+        },
+        {
+            $sort: {
+                _id: 1,
+            },
+        },
+        {
+            $project: {
+                Month: '$_id',
+                TotalNetPnL: '$TotalNetPnL',
+                _id: 0,
+            },
+        },
+    ]);
 
-            return res.status(200).json(monthlyStats);
-        } else {
-            return res.status(404).send('No Data Found!');
+    if (getStats.length > 0) {
+        let totalPnl = 0;
+        getStats.forEach(stat => {
+            // Convert the month number to a month name
+            let monthName = monthMap[stat.Month - 1];
+
+            // Find the corresponding month in the monthlyStats array
+            let monthStat = monthlyStats.find(month => month.Month === monthName);
+
+            // Update the TotalNetPnL and NetRevenue for that month
+            if (monthStat) {
+                monthStat.TotalNetPnL = stat.TotalNetPnL;
+                monthStat.TotalRevenue = InitialBalance + stat.TotalNetPnL + totalPnl;
+                totalPnl += stat.TotalNetPnL;
+            }
+        });
+    }
+
+    const TotalNetPnL = monthlyStats?.map(value => value.TotalNetPnL);
+    const TotalRevenue = monthlyStats?.map(value => value.TotalRevenue);
+
+    return res.status(200).json({
+        success: true,
+        monthlyStats: {
+            TotalNetPnL,
+            TotalRevenue
         }
-    }
-    else {
-        res.status(404).json({ error: "Account not found" });
-    }
+    });
+
 }
 //#endregion
 
@@ -206,12 +231,25 @@ export const getDailyPnLAndReturns = async (req, res) => {
     const getStats = await TradeJournal.find(Filters).select('JournalDate TotalNetPnL TotalRoi -_id');
 
     if (!getStats) return res.status(404).send('No Data Found!');
+
+    const journalDates = [];
     getStats.forEach(function (item) {
         let date = new Date(item.JournalDate);
-        let ISTOffset = 5.5 * 60 * 60 * 1000;
-        let ISTDate = new Date(date.getTime() + ISTOffset);
-        item.JournalDate = ISTDate;
+        let ISTDate = new Date(date.getTime() + (5.5 * 60 * 60 * 1000));
+        const convertedDate = new Date(ISTDate).toISOString().split('T')[0];
+        journalDates.push(convertedDate);
     });
-    res.status(200).json(getStats);
+
+    const TotalNetPnl = getStats?.map(trade => trade.TotalNetPnL);
+    const TotalRoi = getStats?.map(trade => trade.TotalRoi);
+
+    res.status(200).json({
+        success: true,
+        stats: {
+            journalDates,
+            TotalNetPnl,
+            TotalRoi
+        }
+    });
 }
 //#endregion

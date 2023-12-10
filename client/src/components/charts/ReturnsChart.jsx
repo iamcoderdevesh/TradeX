@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
+import { useGetDailyPnlReturnsQuery } from 'state/api/charts/chartsApi';
 // third-party
 import ReactApexChart from 'react-apexcharts';
 
@@ -17,7 +18,7 @@ const ReturnsChartOptions = {
         bar: {
             colors: {
                 ranges: [{
-                    from: -10000,
+                    from: -1000000,
                     to: 0,
                     color: '#f23645'
                 }]
@@ -29,26 +30,8 @@ const ReturnsChartOptions = {
     dataLabels: {
         enabled: false,
     },
-    yaxis: {
-        title: {
-            text: 'Growth',
-        },
-        labels: {
-            formatter: function (y) {
-                return y.toFixed(0) + "%";
-            }
-        }
-    },
     xaxis: {
         type: 'datetime',
-        categories: [
-            '2011-01-01', '2011-02-01', '2011-03-01', '2011-04-01', '2011-05-01', '2011-06-01',
-            '2011-07-01', '2011-08-01', '2011-09-01', '2011-10-01', '2011-11-01', '2011-12-01',
-            '2012-01-01', '2012-02-01', '2012-03-01', '2012-04-01', '2012-05-01', '2012-06-01',
-            '2012-07-01', '2012-08-01', '2012-09-01', '2012-10-01', '2012-11-01', '2012-12-01',
-            '2013-01-01', '2013-02-01', '2013-03-01', '2013-04-01', '2013-05-01', '2013-06-01',
-            '2013-07-01', '2013-08-01', '2013-09-01'
-        ],
         labels: {
             rotate: -90
         }
@@ -58,15 +41,16 @@ const ReturnsChartOptions = {
 // ==============================|| Analytics Returns CHART ||============================== //
 
 const ReturnsChart = () => {
-    const [options, setOptions] = useState(ReturnsChartOptions);
 
-    const [series, setSeries] = useState([{
-        name: 'Cash Flow',
-        data: [1.45, 5.42, 5.9, -0.42, -12.6, -18.1, -18.2, -14.16, -11.1, -6.09, 0.34, 3.88, 13.07,
-            5.8, 2, 7.37, 8.1, 13.57, 15.75, 17.1, 19.8, -27.03, -54.4, -47.2, -43.3, -18.6, -
-            48.6, -41.1, -39.6, -37.6, -29.4, -21.4, -2.4
-        ]
-    }]);
+    const id = useSelector((state) => state.account?.selectedAccount?.AccountId);
+    const { data, isLoading } = useGetDailyPnlReturnsQuery(id, {
+        refetchOnMountOrArgChange: true,
+        skip: !id,
+    });
+
+    const [series, setSeries] = useState([]);
+
+    const [options, setOptions] = useState(ReturnsChartOptions);
 
     const currentMode = useSelector((state) => state.global.mode);
 
@@ -81,7 +65,7 @@ const ReturnsChart = () => {
                     style: {
                         colors: `${currentMode === 'light' ? '#111827' : '#9ca3af'}`,
                     }
-                }
+                },
             },
             yaxis: {
                 labels: {
@@ -91,7 +75,33 @@ const ReturnsChart = () => {
                 }
             }
         }));
-    }, [currentMode]);
+
+        if (data) {
+            setOptions((prevState) => ({
+                ...prevState,
+                xaxis: {
+                    categories: data?.journalDates
+                },
+                yaxis: {
+                    title: {
+                        text: 'Growth',
+                    },
+                    labels: {
+                        formatter: function (y) {
+                            return parseFloat(y).toFixed(2) + "%";
+                        }
+                    }
+                },
+            }));
+
+            setSeries([{
+                name: 'Daily Returns',
+                data: data?.TotalRoi
+            }]);
+        }
+
+    }, [currentMode, data, isLoading]);
+
 
     return <ReactApexChart options={options} series={series} type="bar" height={365} />;
 };

@@ -1,9 +1,10 @@
 import apiSlice from "state/api";
+import { setStatistics } from "../accounts/accountSlice";
 
 const tradeApiSlice = apiSlice.injectEndpoints({
     endpoints: builder => ({
         getTradeStatistics: builder.query({
-            query: (accountId = 0) => `trade/${accountId}/getTradeStatistics`,
+            query: (id = 0) => `trade/${id}/getTradeStatistics`,
             transformResponse: (response) => response.success ? response.tradeDetails : [],
             providesTags: ["Trade"]
         }),
@@ -13,10 +14,29 @@ const tradeApiSlice = apiSlice.injectEndpoints({
             providesTags: ["Trade"]
         }),
         getStatistics: builder.query({
+            query: (id = 0) => ({
+                url: `trade/${id}/getStats`,
+            }),
+            async onQueryStarted(args, { queryFulfilled, dispatch }) {
+                try {
+                    const result = await queryFulfilled;
+                    result.data.success && dispatch(setStatistics(result.data.stats));
+                } catch (err) {
+                    return;
+                }
+            },
+            providesTags: ["Trade"]
+        }),
+        getDetailedStatistics: builder.query({
             query: ({ id = 0, type }) => ({
                 url: `trade/${id}/getStats${type ? '/' + type : ''}`, //Type params for fetching data for detailed stats.
             }),
             transformResponse: (response) => response.success ? response.stats : [],
+            providesTags: ["Trade"]
+        }),
+        getRecentTrade: builder.query({
+            query: (id = 0) => `trade/${id}/getRecentTrades`,
+            transformResponse: (response) => response.success ? response.tradeDetails : [],
             providesTags: ["Trade"]
         }),
         addUpadateTrade: builder.mutation({
@@ -25,7 +45,7 @@ const tradeApiSlice = apiSlice.injectEndpoints({
                 method: "POST",
                 body: { ...data }
             }),
-            invalidatesTags: ["Trade"]
+            invalidatesTags: ["Trade", "Charts"]
         }),
         // deleteTrade: builder.mutation({
         //     query: data => ({
@@ -41,10 +61,10 @@ const tradeApiSlice = apiSlice.injectEndpoints({
         //             return;
         //         }
         //     },
-        //     invalidatesTags: ["Trade"],
+        //     invalidatesTags: ["Trade", "Charts"]
         // }),
     }),
     overrideExisting: true
 });
 
-export const { useGetTradeStatisticsQuery, useGetTradeDetailsQuery, useGetStatisticsQuery, useAddUpadateTradeMutation, useDeleteTradeMutation } = tradeApiSlice;
+export const { useGetTradeStatisticsQuery, useGetTradeDetailsQuery, useGetStatisticsQuery, useGetDetailedStatisticsQuery, useGetRecentTradeQuery, useAddUpadateTradeMutation, useDeleteTradeMutation } = tradeApiSlice;

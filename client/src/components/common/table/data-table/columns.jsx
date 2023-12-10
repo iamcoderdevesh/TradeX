@@ -4,7 +4,7 @@ import { FaArrowUp, FaArrowDown } from 'react-icons/fa6';
 import Checkbox from "components/common/checkbox";
 import StatusPill from "components/common/statusPill";
 import { formatDate } from "utils/index";
-import { GetFomatedCurrency, GetFomatedPnl } from "helpers/format";
+import { GetFormatedCurrency, GetFormatedPnl } from "helpers/format";
 
 export const TradeColumns = [
     {
@@ -75,27 +75,27 @@ export const TradeColumns = [
     {
         accessorKey: "NetPnL",
         header: () => <div className="capitalize">Net P&L</div>,
-        cell: ({ row }) => <div className="flex items-center capitalize font-medium"><GetFomatedPnl value={row.getValue("NetPnL")} /></div>
+        cell: ({ row }) => <div className="flex items-center capitalize font-medium"><GetFormatedPnl value={row.getValue("NetPnL")} /></div>
     },
     {
         accessorKey: "NetRoi",
         header: () => <div className="capitalize">Net ROI</div>,
-        cell: ({ row }) => <div className="flex items-center capitalize font-medium"><GetFomatedPnl value={row.getValue("NetRoi")} showPercentage={true} showCurrency={false} /></div>
+        cell: ({ row }) => <div className="flex items-center capitalize font-medium"><GetFormatedPnl value={row.getValue("NetRoi")} showPercentage={true} showCurrency={false} /></div>
     },
     {
         accessorKey: "EntryPrice",
         header: () => <div className="capitalize">Entry Price</div>,
-        cell: ({ row }) => <div className="capitalize"><GetFomatedCurrency value={row.getValue("EntryPrice")} /></div>
+        cell: ({ row }) => <div className="capitalize"><GetFormatedCurrency value={row.getValue("EntryPrice")} /></div>
     },
     {
         accessorKey: "ExitPrice",
         header: () => <div className="capitalize">Exit Price</div>,
-        cell: ({ row }) => <div className="capitalize"><GetFomatedCurrency value={row.getValue("ExitPrice")} /></div>
+        cell: ({ row }) => <div className="capitalize"><GetFormatedCurrency value={row.getValue("ExitPrice")} /></div>
     },
     {
         accessorKey: "StopLoss",
         header: () => <div className="capitalize">Stop Loss</div>,
-        cell: ({ row }) => <div className="capitalize"><GetFomatedCurrency value={row.getValue("StopLoss")} /></div>
+        cell: ({ row }) => <div className="capitalize"><GetFormatedCurrency value={row.getValue("StopLoss")} /></div>
     },
     {
         accessorKey: "Quantity",
