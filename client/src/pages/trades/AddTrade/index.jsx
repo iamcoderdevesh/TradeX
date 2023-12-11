@@ -32,18 +32,13 @@ const AddTrade = () => {
         },
     });
 
-    const [addUpdateTrade, { isLoading, isSuccess, data }] = useAddUpadateTradeMutation();
+    const [addUpdateTrade, { isLoading }] = useAddUpadateTradeMutation();
 
     useEffect(() => {
-        if (isSuccess) {
-            Toast.success(data?.message);
-        }
-
         //Dynamically Setting the Values of form for Update Operation of Trade.
-        if (TradeInfo) {
-            setValues(initialValues);
-        }
-    }, [isSuccess, data, TradeInfo, isLoadingTrade, setValues]);
+        TradeInfo && setValues(initialValues);
+
+    }, [TradeInfo, isLoadingTrade]);
 
 
     const submitForm = async (formData) => {

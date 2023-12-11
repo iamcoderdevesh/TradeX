@@ -1,5 +1,6 @@
 import apiSlice from "state/api";
 import { setStatistics } from "../accounts/accountSlice";
+import { Toast } from "components/common/alerts/index";
 
 const tradeApiSlice = apiSlice.injectEndpoints({
     endpoints: builder => ({
@@ -45,24 +46,32 @@ const tradeApiSlice = apiSlice.injectEndpoints({
                 method: "POST",
                 body: { ...data }
             }),
+            async onQueryStarted(args, { queryFulfilled }) {
+                try {
+                    const result = await queryFulfilled;
+                    result.data?.success && Toast.success(result.data?.message);
+                } catch (err) {
+                    return;
+                }
+            },
             invalidatesTags: ["Trade", "Charts"]
         }),
-        // deleteTrade: builder.mutation({
-        //     query: data => ({
-        //         url: "trade/deleteTrade",
-        //         method: "DELETE",
-        //         body: { ...data }
-        //     }),
-        //     async onQueryStarted(args, { queryFulfilled }) {
-        //         try {
-        //             const result = await queryFulfilled;
-        //             result.data?.success && Toast.success(result.data?.message);
-        //         } catch (err) {
-        //             return;
-        //         }
-        //     },
-        //     invalidatesTags: ["Trade", "Charts"]
-        // }),
+        deleteTrade: builder.mutation({
+            query: data => ({
+                url: "trade/deleteTrade",
+                method: "DELETE",
+                body: { ...data }
+            }),
+            async onQueryStarted(args, { queryFulfilled }) {
+                try {
+                    const result = await queryFulfilled;
+                    result.data?.success && Toast.success(result.data?.message);
+                } catch (err) {
+                    return;
+                }
+            },
+            invalidatesTags: ["Trade", "Charts"]
+        }),
     }),
     overrideExisting: true
 });

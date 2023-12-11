@@ -43,7 +43,7 @@ const accountApiSlice = apiSlice.injectEndpoints({
                     return;
                 }
             },
-            invalidatesTags: ["Accounts"],
+            invalidatesTags: ["Accounts", "Trade", "Charts"],
         }),
     }),
     overrideExisting: true

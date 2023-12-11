@@ -1,28 +1,33 @@
 import React from 'react';
 import { useNavigate, createSearchParams } from 'react-router-dom';
 import DataTable from 'components/common/table/data-table';
-import { useGetTradeStatisticsQuery } from 'state/api/trade/tradeApi';
+import { useDeleteTradeMutation, useGetTradeStatisticsQuery } from 'state/api/trade/tradeApi';
 import { useSelector } from 'react-redux';
 import Statistics from 'components/common/stats';
 
 const TradeStatistics = () => {
 
     const navigate = useNavigate();
+    const useNavigateSearch = () => {
+        return (pathname, params) =>
+            navigate(`${pathname}?${createSearchParams(params)}`);
+    };
+    const navigateSearch = useNavigateSearch();
+    
     const id = useSelector((state) => state.account?.selectedAccount?.AccountId);
     const { data, isLoading } = useGetTradeStatisticsQuery(id, {
         refetchOnMountOrArgChange: true,
         skip: !id
     });
 
-    const useNavigateSearch = () => {
-        return (pathname, params) =>
-            navigate(`${pathname}?${createSearchParams(params)}`);
-    };
-    const navigateSearch = useNavigateSearch();
 
-    const handleDeleteClick = (TradeId) => {
-        //TODO:- Pending
-        console.log(TradeId);
+    const [deleteTrade, { isLoading: isLoadingDelete }] = useDeleteTradeMutation();
+    const handleDeleteClick = async (TradeId) => {
+        try {
+            await deleteTrade({ AccountId: id, TradeId }).unwrap();
+        } catch (error) {
+            return;
+        }
     };
 
     return (

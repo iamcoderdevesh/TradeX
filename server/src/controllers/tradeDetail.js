@@ -1,10 +1,11 @@
 import { validationResult } from 'express-validator';
 import TradeDetails from "../models/tradeDetails.js";
 import TradeAddDetails from '../models/tradeAddDetails.js';
-import { CalculateTradeStats } from '../utils/calculate.js';
+import { CalculateHandleJournal, CalculateTradeStats } from '../utils/calculate.js';
 import TradeStats from '../models/tradeStats.js';
 import TradeJournal from '../models/tradeJournal.js';
 import { DateRangeFilter } from '../utils/general.js';
+import Accounts from '../models/accounts.js';
 
 /* Inserting/Updating TradeDetails */
 export const AddUpdateTrade = async (req, res, next) => {
@@ -69,7 +70,10 @@ export const AddUpdateTrade = async (req, res, next) => {
                 next();
             }
             else {
-                res.status(201).send("Trade " + (req.body?.TradeState ? "Updated" : "Added") + " Successfully!!!");
+                return res.status(201).json({
+                    success: true,
+                    message: "Trade " + (req.body?.TradeState ? "Updated" : "Added") + " Successfully!!!"
+                });
             }
         }
         catch (err) {
@@ -270,22 +274,56 @@ export const DeleteTrades = async (req, res) => {
 
     /* Else Delete all Trade */
     //Checking the records exists or not.
-    const tradeDetail = await TradeDetails.find(tradeFilter);
-    if (tradeDetail) {
-        const deleteTrade = await TradeDetails.deleteMany(tradeFilter);
-        const deleteTradeAdd = await TradeAddDetails.deleteMany(tradeFilter);
-        const deleteTradeStat = await TradeStats.deleteMany(tradeFilter);
-        const deleteTradeJournal = await TradeJournal.deleteMany(tradeFilter);
+    const tradeDetail = await TradeDetails.findOne(tradeFilter);
+    const tradeStats = await TradeStats.findOne(tradeFilter);
 
-        if (deleteTrade.deletedCount > 0 && deleteTradeAdd.deletedCount > 0 && deleteTradeStat.deletedCount > 0 && deleteTradeJournal.deletedCount > 0) {
-            if (TradeId) return res.status(200).send("Trade Deleted Successfully");
-            return true;
+    const prevNetPnl = parseInt(tradeStats?.NetPnL);
+    const updatedNetPnl = prevNetPnl >= 0 ? -prevNetPnl : Math.abs(prevNetPnl);
+
+    const deleteTrade = await TradeDetails.deleteMany(tradeFilter);
+    const deleteTradeAdd = await TradeAddDetails.deleteMany(tradeFilter);
+    const deleteTradeStat = await TradeStats.deleteMany(tradeFilter);
+
+    if (deleteTrade.deletedCount > 0 && deleteTradeStat.deletedCount > 0) {
+        if (TradeId) {
+            //Seaching TradeId's to Update/Delete TradeJournal
+            delete tradeFilter.TradeId;
+            const journal = await TradeJournal.findOne({ "TradeIds": TradeId });
+            const TradeIds = journal?.TradeIds;
+
+            //If there is only one TradeId Delete the tradeJournal
+            if (TradeIds?.length === 1) {
+                // Update the Account's Collection
+                const account = await Accounts.findOne({ AccountId });
+                await Accounts.updateOne(
+                    { AccountId },
+                    {
+                        TotalBalance: (parseInt(account.TotalBalance) + updatedNetPnl)
+                    }
+                );
+                await TradeJournal.deleteOne({ ...tradeFilter, "TradeIds": TradeId });
+            }
+
+            //Else Update it
+            else {
+                const updateJournal = await TradeJournal.updateOne({ ...tradeFilter, "TradeIds": TradeId }, { $pull: { TradeIds: TradeId } });
+
+                if (updateJournal) {
+                    const currentStats = { netPnL: 0 };
+                    await CalculateHandleJournal(TradeId, UserId, AccountId, currentStats, tradeDetail?.EntryDate, true, updatedNetPnl);
+                }
+            }
+            return res.status(200).send({
+                success: true,
+                message: "Trade Deleted Successfully!!!"
+            });
         }
         else {
-            return false;
+            await TradeJournal.deleteMany(tradeFilter);
+            return true;
         }
     }
     else {
-        return true;
+        return false;
     }
 }
