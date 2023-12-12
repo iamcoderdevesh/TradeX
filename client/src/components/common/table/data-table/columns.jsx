@@ -80,7 +80,7 @@ export const TradeColumns = [
     {
         accessorKey: "NetRoi",
         header: () => <div className="capitalize">Net ROI</div>,
-        cell: ({ row }) => <div className="flex items-center capitalize font-medium"><GetFormatedPnl value={row.getValue("NetRoi")} showPercentage={true} showCurrency={false} /></div>
+        cell: ({ row }) => <div className="flex items-center capitalize font-medium"><GetFormatedPnl value={row.getValue("NetRoi")} showPercentage={true} /></div>
     },
     {
         accessorKey: "EntryPrice",

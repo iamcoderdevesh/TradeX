@@ -115,12 +115,16 @@ const AddUpdateTradeAddDetails = async (req) => {
 /* Getting all Trade Data & Statistics */
 export const getTradeData = async (req, res) => {
 
+    const { id: tradeId } = req.query;
+
     let FilterName = "EntryDate";
     const tradeFilter = DateRangeFilter(req, FilterName);
 
     //Filter for fetching TradeDetails to show in Daily Trade Journal.
-    const { TradeId: tradeId } = req.body;
-    if (tradeId) tradeFilter.TradeId = { $in: tradeId };
+    const { TradeId } = req.body;
+    if (TradeId) tradeFilter.TradeId = { $in: TradeId };
+
+    if (tradeId) tradeFilter.TradeId = parseInt(tradeId);
 
     const getTrade = await TradeDetails.aggregate([
         { $match: tradeFilter },
@@ -146,6 +150,7 @@ export const getTradeData = async (req, res) => {
             $project: {
                 "_id": 0,
                 "TradeId": 1,
+                "TradeName": 1,
                 "Symbol": 1,
                 "EntryDate": 1,
                 "ExitDate": 1,
@@ -162,20 +167,42 @@ export const getTradeData = async (req, res) => {
                 "AdditionalInfo": "$TradeAddDetails.TradeAddInfo",
                 "TradeStatus": "$TradeStats.TradeStatus",
                 "NetPnL": "$TradeStats.NetPnL",
+                "GrossPnL": "$TradeStats.GrossPnL",
                 "NetRoi": "$TradeStats.NetRoi",
+                "Fees": "$TradeStats.TotalFees",
+                "TradeRisk": "$TradeStats.TradeRisk",
+                "RiskReward": "$TradeStats.RiskReward",
             }
-        }
-    ]);
+        },
+    ]).sort({ EntryDate: 1 });
 
     //Return All Trades to GetTradeJournal function.
-    if (tradeId) {
+    if (TradeId) {
         return getTrade;
     }
     else {
+
+        let previousTrade, nextTrade;
+        if (tradeId) {
+            //Deleting tradeId from filter because we want prev & next tradeId
+            delete tradeFilter.TradeId;
+
+            //Below code is for getting previous & next tradeId based on actual tradeId using index
+            const tradeDetail = await TradeDetails.find(tradeFilter).sort({ EntryDate: 1 });
+            const currentIndex = tradeDetail.findIndex(trade => trade.TradeId === parseInt(tradeId));
+            previousTrade = currentIndex > 0 ? tradeDetail[currentIndex - 1] : null;
+            nextTrade = currentIndex < tradeDetail.length - 1 ? tradeDetail[currentIndex + 1] : null;
+        }
+
         return res.status(200).json({
             success: true,
-            tradeDetails: getTrade
+            tradeDetails: tradeId ? {
+                ...getTrade[0],
+                previousTradeId: previousTrade?.TradeId,
+                nextTradeId: nextTrade?.TradeId
+            } : getTrade,
         });
+
     }
 };
 

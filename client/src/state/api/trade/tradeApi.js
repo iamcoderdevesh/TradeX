@@ -5,7 +5,7 @@ import { Toast } from "components/common/alerts/index";
 const tradeApiSlice = apiSlice.injectEndpoints({
     endpoints: builder => ({
         getTradeStatistics: builder.query({
-            query: (id = 0) => `trade/${id}/getTradeStatistics`,
+            query: ({ id = 0, tradeId }) => `trade/${id}/getTradeStatistics${tradeId ? '?id=' + tradeId : ''}`,
             transformResponse: (response) => response.success ? response.tradeDetails : [],
             providesTags: ["Trade"]
         }),

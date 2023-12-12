@@ -6,7 +6,7 @@ import { MdDeleteOutline, MdEdit } from "react-icons/md";
 
 const DataTable = (props) => {
 
-    const { data, pagination, isEdit, handleEditClick, handleDeleteClick, Id } = props;
+    const { data, pagination, isEdit, handleClick, handleEditClick, handleDeleteClick, Id } = props;
     const columns = TradeColumns;
 
     const [sorting, setSorting] = useState([]);
@@ -58,9 +58,8 @@ const DataTable = (props) => {
                             table.getRowModel().rows.map((row, i) => (
                                 <tr
                                     key={row.id}
-                                    className={`border-b dark:border-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600
-                                    ${i % 2 === 0 ? "bg-white dark:bg-main-dark" : "bg-gray-100 dark:bg-primary-dark"}
-                                    `}>
+                                    onClick={() => handleClick(row?.original?.[Id])}
+                                    className={`border-b dark:border-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 cursor-pointer ${i % 2 === 0 ? "bg-white dark:bg-main-dark" : "bg-gray-100 dark:bg-primary-dark"}`}>
                                     {row.getVisibleCells().map((cell) => (
                                         <td key={cell.id} className="px-6 py-4 whitespace-nowrap">
                                             {flexRender(cell.column.columnDef.cell, cell.getContext())}
@@ -68,7 +67,7 @@ const DataTable = (props) => {
                                     ))}
 
                                     {isEdit &&
-                                        <td className="py-4 px-4 w-24 flex items-center justify-between whitespace-nowrap">
+                                        <td className="py-4 px-4 w-24 flex items-center justify-between whitespace-nowrap" onClick={(e) => e.stopPropagation()}>
                                             <button className="font-medium text-gray-900 dark:text-white hover:underline" onClick={() => handleEditClick(row?.original?.[Id])}><MdEdit className="w-5 h-5" /></button>
                                             <button className="font-medium text-red-600 dark:text-red-500 hover:underline" onClick={() => handleDeleteClick(row?.original?.[Id])}><MdDeleteOutline className="w-5 h-5" /></button>
                                         </td>

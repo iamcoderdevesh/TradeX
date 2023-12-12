@@ -13,9 +13,9 @@ const TradeStatistics = () => {
             navigate(`${pathname}?${createSearchParams(params)}`);
     };
     const navigateSearch = useNavigateSearch();
-    
+
     const id = useSelector((state) => state.account?.selectedAccount?.AccountId);
-    const { data, isLoading } = useGetTradeStatisticsQuery(id, {
+    const { data, isLoading } = useGetTradeStatisticsQuery({ id }, {
         refetchOnMountOrArgChange: true,
         skip: !id
     });
@@ -39,6 +39,9 @@ const TradeStatistics = () => {
                         data={data || []}
                         pagination={true}
                         isEdit={true}
+                        handleClick={(TradeId) => {
+                            navigateSearch('/tracking', { id: TradeId });
+                        }}
                         handleDeleteClick={handleDeleteClick}
                         handleEditClick={(TradeId) => {
                             navigateSearch('/add-Trade', { id: TradeId });

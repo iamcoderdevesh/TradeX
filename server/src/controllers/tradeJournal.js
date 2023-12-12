@@ -49,7 +49,7 @@ export const GetJournalDetails = async (req, res) => {
     //Else for fetching all records for journal
     else {
         let journalDetails = [];
-        const JournalTrade = await TradeJournal.find(tradeFilter).select(excludeFields());
+        const JournalTrade = await TradeJournal.find(tradeFilter).select(excludeFields()).sort({ JournalDate: 1 });
 
         if (JournalTrade) {
             for (const journal of JournalTrade) {

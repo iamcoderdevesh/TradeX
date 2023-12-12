@@ -1,40 +1,66 @@
 import { IconButton } from 'components/common/buttons/index';
 import React, { useState } from 'react'
 import { FaArrowLeftLong, FaArrowRightLong } from "react-icons/fa6";
-import { AiFillCaretUp, AiFillCaretDown } from "react-icons/ai";
 import { BiChevronDown, BiChevronUp } from "react-icons/bi";
+import { useSelector } from 'react-redux';
+import { useGetTradeStatisticsQuery } from 'state/api/trade/tradeApi';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { GetFormatedCurrency, GetFormatedPnl } from 'helpers/format';
+import { formatDate } from 'utils';
 
 const Tracking = () => {
 
   const [showAdd, setShowAdd] = useState(false);
+  const navigate = useNavigate();    
+
+  const [tradeId, setTradeId] = useState(new URLSearchParams(useLocation().search).get('id'));
+  const id = useSelector((state) => state.account?.selectedAccount?.AccountId);
+
+  const { data, isLoading, refetch } = useGetTradeStatisticsQuery({ id, tradeId }, {
+    refetchOnMountOrArgChange: true,
+    skip: !id
+  });
+
+  const { TradeName, Setup, EntryDate, EntryPrice, ExitPrice, StopLoss, Quantity, EntryReason, ExitReason, MarketCondition, Emotions, AdditionalInfo, TradeStatus, NetPnL, GrossPnL, NetRoi, Fees, TradeRisk, RiskReward, previousTradeId, nextTradeId } = data || [];
 
   return (
-    <section className='min-h-screen h-full w-full max-w-2xl flex flex-col justify-between'>
+    <section className='min-h-screen h-full w-full max-w-2xl flex flex-col '>
       <div className="flex justify-between items-center my-3 mt-8 md:my-4">
         <div>
-          <IconButton>
+          <IconButton onClick={() => navigate(-1)}>
             <FaArrowLeftLong className="mr-2" />Back
           </IconButton>
         </div>
         <div className='flex items-center'>
-          <IconButton>
+          <IconButton disabled={!previousTradeId}
+            onClick={() => {
+              if (previousTradeId) {
+                setTradeId(previousTradeId);
+                refetch();
+              }
+            }}>
             <FaArrowLeftLong className="mr-2" />Previous
           </IconButton>
-          <IconButton>Next
-            <FaArrowRightLong className="ml-2" />
+          <IconButton disabled={!nextTradeId}
+            onClick={() => {
+              if (nextTradeId) {
+                setTradeId(nextTradeId);
+                refetch();
+              }
+            }}>
+            Next<FaArrowRightLong className="ml-2" />
           </IconButton>
         </div>
       </div>
       <div className="p-6 m-2 space-y-5 sm:p-8 bg-white rounded-lg shadow-md dark:bg-main-dark">
         <div className="py-2 px-1 border-b dark:border-gray-600">
-          <h2 className="text-lg font-medium text-gray-900 dark:text-gray-400">DOGE USDT</h2>
-          <span className="text-sm font-medium text-gray-900 dark:text-gray-400 ">Fri, OCT 27, 2023</span>
+          <h2 className="text-lg font-medium text-gray-900 dark:text-gray-400">{TradeName}</h2>
+          <span className="text-sm font-medium text-gray-900 dark:text-gray-400 ">{formatDate(EntryDate, "local-date")}</span>
         </div>
         <div className="pnl-section flex justify-between items-center">
-          <h3 className={`text-lg font-medium my-2 text-green`}>Net P&L</h3>
+          <h3 className={`text-lg font-medium my-2 ${TradeStatus === 'WIN' ? 'text-green' : 'text-red'}`}>Net P&L</h3>
           <div className="flex items-center">
-            <AiFillCaretUp className="text-green mr-1" />
-            <h5 className={`text-lg font-semibold text-green`}>$1250.12</h5>
+            <h5 className={`text-lg font-semibold`}><GetFormatedPnl value={NetPnL} /></h5>
           </div>
         </div>
         <div className='flex justify-between items-center'>
@@ -51,16 +77,16 @@ const Tracking = () => {
             <span className="text-sm font-medium dark:text-white my-2">Risk Reward</span>
           </div>
           <div className="data flex flex-col">
-            <span className={`text-sm font-medium text-green my-2 text-right`}>2.25%</span>
-            <span className="text-sm font-medium dark:text-white my-2 text-right">$250.00</span>
-            <span className={`text-sm font-medium text-green my-2 text-right`}>$1500.12</span>
+            <span className={`text-sm font-medium text-green my-2 text-right`}><GetFormatedPnl value={NetRoi} showPercentage={true} /></span>
+            <span className="text-sm font-medium dark:text-white my-2 text-right"><GetFormatedCurrency value={Fees} /></span>
+            <span className={`text-sm font-medium text-green my-2 text-right`}><GetFormatedPnl value={GrossPnL} /></span>
+            <span className="text-sm font-medium dark:text-white my-2 text-right">{Quantity?.toFixed(2)}</span>
+            <span className="text-sm font-medium dark:text-white my-2 text-right">{StopLoss?.toFixed(2)}</span>
+            <span className="text-sm font-medium dark:text-white my-2 text-right"><GetFormatedCurrency value={EntryPrice} /></span>
             <span className="text-sm font-medium dark:text-white my-2 text-right">-</span>
-            <span className="text-sm font-medium dark:text-white my-2 text-right">-</span>
-            <span className="text-sm font-medium dark:text-white my-2 text-right">-</span>
-            <span className="text-sm font-medium dark:text-white my-2 text-right">-</span>
-            <span className="text-sm font-medium dark:text-white my-2 text-right">-</span>
-            <span className="text-sm font-medium text-red my-2 text-right">$500.00</span>
-            <span className="text-sm font-medium dark:text-white my-2 text-right">2.20</span>
+            <span className="text-sm font-medium dark:text-white my-2 text-right"><GetFormatedCurrency value={ExitPrice} /></span>
+            <span className="text-sm font-medium text-red my-2 text-right"><GetFormatedCurrency value={TradeRisk} /></span>
+            <span className="text-sm font-medium dark:text-white my-2 text-right">{RiskReward?.toFixed(2)}</span>
           </div>
         </div>
         {showAdd &&
@@ -79,13 +105,13 @@ const Tracking = () => {
                 <span className="text-sm font-medium dark:text-white my-2">Additional Information</span>
               </div>
               <div className="data flex flex-col justify-start items-end">
+                <span className="text-sm font-medium dark:text-white my-2 text-right">{Setup}</span>
                 <span className="text-sm font-medium dark:text-white my-2 text-right">-</span>
-                <span className="text-sm font-medium dark:text-white my-2 text-right">-</span>
-                <span className="text-sm font-medium dark:text-white my-2 text-right">-</span>
-                <span className="text-sm font-medium dark:text-white my-2 text-right">-</span>
-                <span className="text-sm font-medium dark:text-white my-2 text-right">-</span>
-                <span className="text-sm font-medium dark:text-white my-2 text-right">-</span>
-                <span className="text-sm font-medium dark:text-white my-2 text-right">-</span>
+                <span className="text-sm font-medium dark:text-white my-2 text-right">{EntryReason}</span>
+                <span className="text-sm font-medium dark:text-white my-2 text-right">{ExitReason}</span>
+                <span className="text-sm font-medium dark:text-white my-2 text-right">{Emotions}</span>
+                <span className="text-sm font-medium dark:text-white my-2 text-right">{MarketCondition}</span>
+                <span className="text-sm font-medium dark:text-white my-2 text-right">{AdditionalInfo}</span>
               </div>
             </div>
           </>

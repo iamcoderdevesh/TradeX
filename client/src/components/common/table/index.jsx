@@ -24,7 +24,7 @@ export const KeyValueTable = (props) => {
 
 export const DefaultTable = (props) => {
 
-    const { columns, data, isEdit, handleEditClick, handleDeleteClick, Id } = props;
+    const { columns, data, isEdit, handleClick, handleEditClick, handleDeleteClick, Id } = props;
 
     const table = useReactTable({
         data,
@@ -59,9 +59,8 @@ export const DefaultTable = (props) => {
                         table.getRowModel().rows.map((row, i) => (
                             <tr
                                 key={row.id}
-                                className={`border-b dark:border-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600
-                                    ${i % 2 === 0 ? "bg-white dark:bg-main-dark" : "bg-gray-100 dark:bg-primary-dark"}
-                                    `}>
+                                onClick={() => handleClick && handleClick(row?.original?.[Id])}
+                                className={`border-b dark:border-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 ${handleClick && 'cursor-pointer'} ${i % 2 === 0 ? "bg-white dark:bg-main-dark" : "bg-gray-100 dark:bg-primary-dark"}`}>
                                 {row.getVisibleCells().map((cell) => (
                                     <td key={cell.id} className="px-6 py-4 text-center whitespace-nowrap">
                                         {flexRender(cell.column.columnDef.cell, cell.getContext())}
