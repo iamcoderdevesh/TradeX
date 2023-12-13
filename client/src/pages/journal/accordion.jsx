@@ -4,14 +4,13 @@ import { GetFormatedCurrency, GetFormatedPnl } from 'helpers/format';
 import { FaChevronDown } from "react-icons/fa";
 import { BsDot } from "react-icons/bs";
 import AreaChart from 'components/charts/AreaChart';
-import { DefaultTable } from 'components/common/table';
 import { TradeColumns } from 'components/common/table/columns';
+import TradeTable from 'components/common/table/data-table/index';
 
 const JournalAccordion = (props) => {
     const { JournalDate, TradeStatus, TotalNetPnL, Winrate, TotalTrades, TotalWins, TotalLoss, TotalFees, TotalGrossPnL, TradeDetails } = props.journal;
 
     const [isActive, setIsActive] = useState(false);
-    const status = true;
 
     const GetNetPnl = (TradeDetails) => {
         return TradeDetails?.map(trade => trade.NetPnL) || [];
@@ -66,7 +65,7 @@ const JournalAccordion = (props) => {
                 </div>
             </div>
             {isActive && <div className="mt-10 relative overflow-x-auto shadow-md sm:rounded-lg">
-                <DefaultTable columns={TradeColumns} data={TradeDetails || []} />
+                <TradeTable columns={TradeColumns} data={TradeDetails || []} />
             </div>}
         </div>
     )

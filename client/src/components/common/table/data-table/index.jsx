@@ -1,13 +1,14 @@
 import { flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, useReactTable } from "@tanstack/react-table";
 import React, { useState } from "react";
+import { useNavigate, createSearchParams } from 'react-router-dom';
 import { DataTablePagination } from "./data-table-pagination";
-import { TradeColumns } from "./columns";
 import { MdDeleteOutline, MdEdit } from "react-icons/md";
+import { useDeleteAccountMutation } from "state/api/accounts/accountApi";
+import { useSelector } from "react-redux";
 
-const DataTable = (props) => {
+const TradeTable = (props) => {
 
-    const { data, pagination, isEdit, handleClick, handleEditClick, handleDeleteClick, Id } = props;
-    const columns = TradeColumns;
+    const { data, columns, pagination, isEdit } = props;
 
     const [sorting, setSorting] = useState([]);
     const [columnFilters, setColumnFilters] = useState([]);
@@ -28,7 +29,25 @@ const DataTable = (props) => {
             columnFilters,
             rowSelection
         }
-    })
+    });
+
+    const navigate = useNavigate();
+    const useNavigateSearch = () => {
+        return (pathname, params) =>
+            navigate(`${pathname}?${createSearchParams(params)}`);
+    };
+    const navigateSearch = useNavigateSearch();
+
+    const id = useSelector((state) => state.account?.selectedAccount?.AccountId);
+
+    const [deleteTrade, { isLoading: isLoadingDelete }] = useDeleteAccountMutation();
+    const handleDeleteClick = async (TradeId) => {
+        try {
+            await deleteTrade({ AccountId: id, TradeId }).unwrap();
+        } catch (error) {
+            return;
+        }
+    };
 
     return (
         <>
@@ -58,7 +77,7 @@ const DataTable = (props) => {
                             table.getRowModel().rows.map((row, i) => (
                                 <tr
                                     key={row.id}
-                                    onClick={() => handleClick(row?.original?.[Id])}
+                                    onClick={() => navigateSearch('/tracking', { id: row?.original?.TradeId })}
                                     className={`border-b dark:border-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 cursor-pointer ${i % 2 === 0 ? "bg-white dark:bg-main-dark" : "bg-gray-100 dark:bg-primary-dark"}`}>
                                     {row.getVisibleCells().map((cell) => (
                                         <td key={cell.id} className="px-6 py-4 whitespace-nowrap">
@@ -68,8 +87,8 @@ const DataTable = (props) => {
 
                                     {isEdit &&
                                         <td className="py-4 px-4 w-24 flex items-center justify-between whitespace-nowrap" onClick={(e) => e.stopPropagation()}>
-                                            <button className="font-medium text-gray-900 dark:text-white hover:underline" onClick={() => handleEditClick(row?.original?.[Id])}><MdEdit className="w-5 h-5" /></button>
-                                            <button className="font-medium text-red-600 dark:text-red-500 hover:underline" onClick={() => handleDeleteClick(row?.original?.[Id])}><MdDeleteOutline className="w-5 h-5" /></button>
+                                            <button className="font-medium text-gray-900 dark:text-white hover:underline" onClick={() => navigateSearch('/add-Trade', { id: row?.original?.TradeId })}><MdEdit className="w-5 h-5" /></button>
+                                            <button className="font-medium text-red-600 dark:text-red-500 hover:underline" onClick={() => handleDeleteClick(row?.original?.TradeId)}><MdDeleteOutline className="w-5 h-5" /></button>
                                         </td>
                                     }
                                 </tr>
@@ -88,4 +107,4 @@ const DataTable = (props) => {
     );
 };
 
-export default DataTable;
+export default TradeTable;

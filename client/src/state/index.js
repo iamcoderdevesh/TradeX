@@ -23,11 +23,10 @@ export const slice = createSlice({
             state.activeSidebar = setStateMode(state.activeSidebar);
         },
         handleDateClick: (state, action) => {
-            if (state.showPopup) 
-            { 
-                state.showPopup = false;        
+            if (state.showPopup) {
+                state.showPopup = false;
             }
-            else{
+            else {
                 state.fullCalendar_date = action.payload.date;
                 state.showPopup = true;
             }

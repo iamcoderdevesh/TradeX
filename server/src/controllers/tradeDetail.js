@@ -272,6 +272,7 @@ export const GetRecentTrade = async (req, res) => {
         {
             $project: {
                 "_id": 0,
+                "TradeId": 1,
                 "Symbol": 1,
                 "EntryDate": 1,
                 "ExitDate": 1,
@@ -322,10 +323,11 @@ export const DeleteTrades = async (req, res) => {
             if (TradeIds?.length === 1) {
                 // Update the Account's Collection
                 const account = await Accounts.findOne({ AccountId });
+                const totalBalance = parseInt(account?.TotalBalance);
                 await Accounts.updateOne(
                     { AccountId },
                     {
-                        TotalBalance: (parseInt(account.TotalBalance) + updatedNetPnl)
+                        TotalBalance: (totalBalance + updatedNetPnl)
                     }
                 );
                 await TradeJournal.deleteOne({ ...tradeFilter, "TradeIds": TradeId });

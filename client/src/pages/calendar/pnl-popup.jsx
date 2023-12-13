@@ -5,7 +5,7 @@ import { BsDot } from "react-icons/bs";
 import { BiChevronDown, BiChevronUp } from "react-icons/bi";
 import { IoClose } from "react-icons/io5";
 import AreaChart from 'components/charts/AreaChart';
-import { DefaultTable } from 'components/common/table';
+import TradeTable from 'components/common/table/data-table';
 import { TradeColumns } from 'components/common/table/columns';
 import { useGetJournalDetailsQuery } from 'state/api/journal/journalApi';
 import { GetFormatedCurrency, GetFormatedPnl } from 'helpers/format';
@@ -31,7 +31,7 @@ const PnlPopup = () => {
 
     return (
         <div>
-            {showPopup && 
+            {showPopup &&
                 <div className='fixed top-0 left-0 right-0 z-50 w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 max-h-full justify-center items-center sm:flex' onClick={() => dispatch(handleDateClick())}>
                     <div className="relative w-full max-w-5xl max-h-full p-4 mt-8 z-50 bg-white rounded-lg shadow-lg dark:bg-main-dark" onClick={(e) => e.stopPropagation()}>
                         <div className="flex justify-between items-center my-2">
@@ -101,8 +101,8 @@ const PnlPopup = () => {
                                 </div>
                             </div>
                         </div>
-                        <div className={`${!showTable && 'hidden sm:block'}`}>
-                            <DefaultTable columns={TradeColumns} data={TradeDetails || []} />
+                        <div className={`${!showTable && 'hidden sm:block'}`} onClick={() => dispatch(handleDateClick())}>
+                            <TradeTable columns={TradeColumns} data={TradeDetails || []} />
                         </div>
                         <div className="flex flex-row items-center justify-center my-4 sm:hidden">
                             <button onClick={() => setShowTable(!showTable)} className="flex flex-col items-center justify-center">
