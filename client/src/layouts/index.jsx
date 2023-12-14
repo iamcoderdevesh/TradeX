@@ -1,27 +1,35 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import Navbar from 'layouts/MainLayout/Navbar';
 import Sidebar from 'layouts/MainLayout/Sidebar';
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import { useSelector } from 'react-redux';
 import { ToastContainer } from 'components/common/alerts';
 import { useGetStatisticsQuery } from 'state/api/trade/tradeApi';
-import { useGetAllAccountDetailsQuery } from 'state/api/accounts/accountApi';
+import { useRefreshQuery } from 'state/api/user/userApi';
 
 const Layout = () => {
 
     const activeMenu = useSelector((state) => state.global.activeSidebar);
     const showPopup = useSelector((state) => state.global.showPopup);
     const filterPopup = useSelector((state) => state.global.filterPopup);
+    const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+    const navigate = useNavigate();
 
-    const { isLoading: isLoadingAcc } = useGetAllAccountDetailsQuery({
+    const { data, error, isLoading: isLoadingRefresh } = useRefreshQuery({
         refetchOnMountOrArgChange: true,
     });
-    
+
     const id = useSelector((state) => state.account?.selectedAccount?.AccountId, []);
     const { isLoading } = useGetStatisticsQuery(id, {
-      refetchOnMountOrArgChange: true,
-      skip: !id,
+        refetchOnMountOrArgChange: true,
+        skip: !id,
     });
+
+    useEffect(() => {
+        if (!data?.success && error && !isAuthenticated) {
+            navigate('/auth/login');
+        }
+    }, [data, isLoadingRefresh]);
 
     return (
         <>
@@ -34,7 +42,6 @@ const Layout = () => {
                 </div>
             </div>
             {(showPopup || filterPopup) && <div className="bg-gray-900 bg-opacity-50 dark:bg-opacity-80 fixed inset-0 z-40"></div>}
-
         </>
     )
 }

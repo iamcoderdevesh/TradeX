@@ -7,7 +7,6 @@ import DateRange from 'components/common/calendar';
 import ModalPopup from 'components/common/popup';
 import { useDispatch, useSelector } from 'react-redux';
 import { setActiveSidebar, setFilterPopup } from 'state';
-import { useRefreshQuery } from 'state/api/user/userApi';
 import { capitalizeWords } from 'utils';
 import ThemeButton from 'state/theme';
 import LogoutButton from 'components/common/buttons/logoutButton';
@@ -23,10 +22,6 @@ const Navbar = () => {
     const [showProfile, setShowProfile] = useState(false);
     const userInfo = useSelector((state) => state.auth.userInfo, []);
     const { FirstName, Email } = userInfo || {};
-
-    const { isLoading: isLoadingRefresh } = useRefreshQuery({
-        refetchOnMountOrArgChange: true,
-    });
 
     return (
         <>
