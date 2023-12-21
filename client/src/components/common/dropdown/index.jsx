@@ -1,7 +1,7 @@
 import React from "react";
 
 const Dropdown = (props) => {
-    const { id, children, selected, htmlName, label, errorMsg, onChange, onBlur, value } = props;
+    const { id, children, htmlName, label, errorMsg, onChange, onBlur, value } = props;
 
     let inputClass = "bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-100 focus:border-primary-100 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-100 dark:focus:border-primary-100";
 

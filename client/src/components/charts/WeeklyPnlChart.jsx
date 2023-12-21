@@ -69,6 +69,7 @@ const WeeklyPnlChart = () => {
         setOptions((prevState) => ({
             ...prevState,
             xaxis: {
+                categories: data?.categories || ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
                 labels: {
                     style: {
                         colors: `${currentMode === 'light' ? '#111827' : '#9ca3af'}`

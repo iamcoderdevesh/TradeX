@@ -11,3 +11,4 @@ export { default as Journal } from './journal/';
 export { default as StrategyLibrary } from './library';
 export { default as Login } from './auth/login';
 export { default as Signup } from './auth/signup';
+export { default as PageNotFound } from './404_page';

@@ -6,7 +6,6 @@ import { Button } from 'components/common/buttons';
 import { Link, useNavigate } from 'react-router-dom';
 import { SignUpSchema } from 'helpers/validation';
 import { useSignUpMutation } from "state/api/auth/authApi.js";
-import { Toast } from 'components/common/alerts';
 
 const SignupForm = () => {
 
@@ -30,10 +29,7 @@ const SignupForm = () => {
 
     useEffect(() => {
         if (isSuccess) {
-            Toast.success(data.message);
-            setTimeout(() => {
-                navigate('/auth/login');
-            }, 3000);
+            navigate('/auth/login');
         }
     }, [isSuccess, data]);
 

@@ -10,7 +10,7 @@ const AccountDropdown = (props) => {
     return (
         <>
 
-            <Dropdown id={"ddAccount"} children={props.children} selected={props.selected} htmlName={props.htmlName} label={props.label} errorMsg={props.errorMsg} onChange={props.onChange} onBlur={props.onBlur} value={props.value}
+            <Dropdown id={"ddAccount"} children={props.children} htmlName={props.htmlName} label={props.label} errorMsg={props.errorMsg} onChange={props.onChange} onBlur={props.onBlur} value={props.value}
                 children={
                     <>
                         <option value={0}>Select Account</option>

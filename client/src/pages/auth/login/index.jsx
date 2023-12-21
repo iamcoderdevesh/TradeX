@@ -6,7 +6,6 @@ import LoginForm from './loginForm';
 const Login = () => {
   return (
     <section className="bg-gray-50 dark:bg-primary-dark">
-      <ToastContainer />
       <div className="min-h-screen flex flex-col items-center lg:justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
         <Logo margin={"mb-6"} height={"sm:h-10 sm:w-10"} />
         <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-main-dark dark:border-gray-800">

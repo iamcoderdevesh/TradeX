@@ -3,8 +3,8 @@ import React, { useState } from "react";
 import { useNavigate, createSearchParams } from 'react-router-dom';
 import { DataTablePagination } from "./data-table-pagination";
 import { MdDeleteOutline, MdEdit } from "react-icons/md";
-import { useDeleteAccountMutation } from "state/api/accounts/accountApi";
 import { useSelector } from "react-redux";
+import { useDeleteTradeMutation } from "state/api/trade/tradeApi";
 
 const TradeTable = (props) => {
 
@@ -40,7 +40,7 @@ const TradeTable = (props) => {
 
     const id = useSelector((state) => state.account?.selectedAccount?.AccountId);
 
-    const [deleteTrade, { isLoading: isLoadingDelete }] = useDeleteAccountMutation();
+    const [deleteTrade, { isLoading: isLoadingDelete }] = useDeleteTradeMutation();
     const handleDeleteClick = async (TradeId) => {
         try {
             await deleteTrade({ AccountId: id, TradeId }).unwrap();

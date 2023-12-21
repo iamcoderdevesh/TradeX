@@ -15,6 +15,7 @@ const Calendar = () => {
 
     const dispatch = useDispatch();
     const id = useSelector((state) => state.account?.selectedAccount?.AccountId, []);
+    const currency = useSelector((state) => state.account?.selectedCurrency, []) || '';
     const { data, isLoading } = useGetJournalCalendarQuery(id, {
         refetchOnMountOrArgChange: true,
         skip: !id
@@ -28,7 +29,7 @@ const Calendar = () => {
     const formatCalendarData = (calendarDetails) => {
         return calendarDetails?.map(details => {
             const { JournalDate, TradeStatus, TotalNetPnL } = details;
-            const title = `${TradeStatus} : ${TotalNetPnL.toFixed(2)}`;
+            const title = `${TradeStatus} : ${currency + TotalNetPnL.toFixed(2)}`;
             const date = formatDate(JournalDate, "yyyy/mm/dd");
             const backgroundColor = TradeStatus.localeCompare("PROFIT") === 0 ? profitColor : lossColor;
             return { title, date, display: "background", backgroundColor };

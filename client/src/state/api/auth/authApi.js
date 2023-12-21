@@ -1,5 +1,6 @@
 import apiSlice from "state/api";
 import { addUserInfo, setUserAuthenticated, setToken } from "./authSlice";
+import { Toast } from "components/common/alerts";
 
 const authApiSlice = apiSlice.injectEndpoints({
   endpoints: builder => ({
@@ -12,7 +13,10 @@ const authApiSlice = apiSlice.injectEndpoints({
       async onQueryStarted(args, { queryFulfilled, dispatch }) {
         try {
           const result = await queryFulfilled;
-          result.data.success && dispatch(addUserInfo(result.data.userInfo));
+          if (result.data.success) {
+            dispatch(addUserInfo(result.data.userInfo));
+            Toast.success(result.data?.message);
+          }
         } catch (err) {
           return;
         }
@@ -29,8 +33,8 @@ const authApiSlice = apiSlice.injectEndpoints({
           const result = await queryFulfilled;
           if (result.data.success) {
             dispatch(setToken({ accessToken: result.data.token }));
-            dispatch(addUserInfo(result.data.userInfo));
             dispatch(setUserAuthenticated(true));
+            Toast.success(result.data?.message);
           }
         } catch (err) {
           return;
@@ -44,12 +48,10 @@ const authApiSlice = apiSlice.injectEndpoints({
       }),
       async onQueryStarted(args, { dispatch, queryFulfilled }) {
         try {
-          const result = await queryFulfilled;
-          if (result.data.success) {
-            dispatch(setUserAuthenticated(false));
-          }
-        } catch(error) {
-            return;
+          await queryFulfilled;
+          dispatch(setUserAuthenticated(false));
+        } catch (error) {
+          return;
         }
       },
     }),

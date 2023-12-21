@@ -53,7 +53,7 @@ const Tracking = () => {
         </div>
       </div>
       <div className="p-6 m-2 space-y-5 sm:p-8 bg-white rounded-lg shadow-md dark:bg-main-dark">
-        <div className="py-2 px-1 border-b dark:border-gray-600">
+        <div className="py-2 border-b dark:border-gray-600">
           <h2 className="text-lg font-medium text-gray-900 dark:text-gray-400">{TradeName}</h2>
           <span className="text-sm font-medium text-gray-900 dark:text-gray-400 ">{formatDate(EntryDate, "local-date")}</span>
         </div>
@@ -77,9 +77,9 @@ const Tracking = () => {
             <span className="text-sm font-medium dark:text-white my-2">Risk Reward</span>
           </div>
           <div className="data flex flex-col">
-            <span className={`text-sm font-medium text-green my-2 text-right`}><GetFormatedPnl value={NetRoi} showPercentage={true} /></span>
+            <span className={`text-sm font-medium my-2 text-right`}><GetFormatedPnl value={NetRoi} showPercentage={true} /></span>
             <span className="text-sm font-medium dark:text-white my-2 text-right"><GetFormatedCurrency value={Fees} /></span>
-            <span className={`text-sm font-medium text-green my-2 text-right`}><GetFormatedPnl value={GrossPnL} /></span>
+            <span className={`text-sm font-medium my-2 text-right`}><GetFormatedPnl value={GrossPnL} /></span>
             <span className="text-sm font-medium dark:text-white my-2 text-right">{Quantity?.toFixed(2)}</span>
             <span className="text-sm font-medium dark:text-white my-2 text-right">{StopLoss?.toFixed(2)}</span>
             <span className="text-sm font-medium dark:text-white my-2 text-right"><GetFormatedCurrency value={EntryPrice} /></span>

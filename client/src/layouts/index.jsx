@@ -1,23 +1,15 @@
-import React, { useEffect } from 'react'
+import React from 'react';
 import Navbar from 'layouts/MainLayout/Navbar';
 import Sidebar from 'layouts/MainLayout/Sidebar';
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import { useSelector } from 'react-redux';
-import { ToastContainer } from 'components/common/alerts';
 import { useGetStatisticsQuery } from 'state/api/trade/tradeApi';
-import { useRefreshQuery } from 'state/api/user/userApi';
 
 const Layout = () => {
 
     const activeMenu = useSelector((state) => state.global.activeSidebar);
     const showPopup = useSelector((state) => state.global.showPopup);
     const filterPopup = useSelector((state) => state.global.filterPopup);
-    const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
-    const navigate = useNavigate();
-
-    const { data, error, isLoading: isLoadingRefresh } = useRefreshQuery({
-        refetchOnMountOrArgChange: true,
-    });
 
     const id = useSelector((state) => state.account?.selectedAccount?.AccountId, []);
     const { isLoading } = useGetStatisticsQuery(id, {
@@ -25,15 +17,8 @@ const Layout = () => {
         skip: !id,
     });
 
-    useEffect(() => {
-        if (!data?.success && error && !isAuthenticated) {
-            navigate('/auth/login');
-        }
-    }, [data, isLoadingRefresh]);
-
     return (
         <>
-            <ToastContainer />
             <Navbar />
             <Sidebar />
             <div className={`min-h-screen p-2 bg-gray-50 dark:bg-primary-dark ${activeMenu && 'md:ml-64'} md:p-4`}>

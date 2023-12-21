@@ -9,8 +9,7 @@ import { TradeSchema } from 'helpers/validation';
 import { useFormik } from "formik";
 import { AccountDropdown } from 'components/common/dropdown/accountDropdown';
 import { useAddUpadateTradeMutation, useGetTradeDetailsQuery } from 'state/api/trade/tradeApi';
-import { Toast } from 'components/common/alerts';
-import { formatDate } from 'utils/index';
+import { formatDate } from 'utils';
 
 const AddTrade = () => {
 

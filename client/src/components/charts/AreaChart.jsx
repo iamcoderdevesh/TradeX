@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import ReactApexChart from 'react-apexcharts'; // third-party
+import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
+import ReactApexChart from 'react-apexcharts'; // third-party
 
 const AreaChart = (props) => {
 
@@ -56,6 +56,10 @@ const AreaChart = (props) => {
             data: data
         }
     ]);
+
+    useEffect(() => {
+        data && setSeries([{ name: seriesName, data: data }]);
+    }, [data]);
 
     return (
         <div id="chart">

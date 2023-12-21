@@ -35,12 +35,12 @@ export const RecentTradeCols = [
     },
     {
         accessorKey: "NetPnL",
-        header: () => <div className="capitalize">Net P&L</div>,
+        header: () => <div className="capitalize text-center">Net P&L</div>,
         cell: ({ row }) => <div className="text-center whitespace-nowrap capitalize font-medium"><GetFormatedPnl value={row.getValue("NetPnL")} /></div>
     },
     {
         accessorKey: "NetRoi",
-        header: () => <div className="capitalize">Net ROI</div>,
+        header: () => <div className="capitalize text-center">Net ROI</div>,
         cell: ({ row }) => <div className="text-center whitespace-nowrap capitalize font-medium"><GetFormatedPnl value={row.getValue("NetRoi")} showPercentage={true} showCurrency={false} /></div>
     },
 ];

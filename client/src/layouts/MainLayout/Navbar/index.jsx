@@ -19,9 +19,10 @@ const Navbar = () => {
     const dispatch = useDispatch();
     const location = useLocation();
 
-    const [showProfile, setShowProfile] = useState(false);
     const userInfo = useSelector((state) => state.auth.userInfo, []);
+    const accountId = useSelector((state) => state.account?.selectedAccount?.AccountId);
     const { FirstName, Email } = userInfo || {};
+    const [showProfile, setShowProfile] = useState(false);
 
     return (
         <>
@@ -49,7 +50,7 @@ const Navbar = () => {
                                     <DateRange range={true} />
                                 </div>
                                 <div className='w-48 mx-4'>
-                                    <FilterAccountDropdown label={''} />
+                                    <FilterAccountDropdown label={''} value={accountId} />
                                 </div>
                             </div>
                             <div>
@@ -108,7 +109,7 @@ const Navbar = () => {
                                 <DateRange range={false} />
                             </div>
                             <div className='my-2'>
-                                <FilterAccountDropdown label={'Select Account'} />
+                                <FilterAccountDropdown label={'Select Account'} value={accountId} />
                             </div>
                         </div>
                     } />

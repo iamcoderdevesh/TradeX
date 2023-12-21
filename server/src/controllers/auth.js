@@ -81,10 +81,6 @@ export const login = async (req, res) => {
             success: true,
             message: "Login Successfully!!!",
             token: refreshToken,
-            userInfo: {
-                FirstName: user.UserName,
-                Email: user.Email
-            }
         });
     }
 };

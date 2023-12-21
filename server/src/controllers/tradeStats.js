@@ -131,6 +131,7 @@ export const getWeeklyPnL = async (req, res) => {
     }
 
     const netPnl = daysOfWeek?.map(day => day.NetPnl)?.reverse();
+    const categories = daysOfWeek?.map(day => day.Day)?.reverse();
     const weeklyReturns = parseFloat((totalNetPnL / TotalBalance) * 100).toFixed(2);
 
     return res.status(200).json({
@@ -138,7 +139,8 @@ export const getWeeklyPnL = async (req, res) => {
         weeklyPnl: {
             totalNetPnL,
             weeklyReturns,
-            netPnl
+            netPnl,
+            categories
         }
     });
 }

@@ -7,7 +7,6 @@ import { Link, useNavigate } from 'react-router-dom';
 import { SignInSchema } from 'helpers/validation';
 import { useSelector } from 'react-redux';
 import { useLoginMutation } from "state/api/auth/authApi.js";
-import { Toast } from 'components/common/alerts';
 
 const LoginForm = () => {
 
@@ -16,11 +15,11 @@ const LoginForm = () => {
     const navigate = useNavigate();
 
     const initialValues = {
-        Email: registeredMail,
+        Email: registeredMail || '',
         Password: '',
     };
 
-    const { values, errors, touched, isSubmitting, handleChange, handleSubmit, handleBlur } = useFormik({
+    const { values, errors, touched, handleChange, handleSubmit, handleBlur } = useFormik({
         initialValues: initialValues,
         validationSchema: SignInSchema,
         onSubmit: values => {
@@ -30,10 +29,7 @@ const LoginForm = () => {
 
     useEffect(() => {
         if (isSuccess) {
-            Toast.success(data.message);
-            setTimeout(() => {
-                navigate('/');
-            }, 3000);
+            navigate('/');
         }
     }, [isSuccess, data]);
 
@@ -49,10 +45,10 @@ const LoginForm = () => {
     return (
         <form className="space-y-4 md:space-y-6" onSubmit={handleSubmit}>
             <div>
-                <InputField label={"Your email"} placeholder={"name@company.com"} id={"email"} type={"text"} htmlName={"Email"} value={values.Email} handleChange={handleChange} onBlur={handleBlur} errorMsg={errors.Email && touched.Email &&errors.Email} />
+                <InputField label={"Your email"} placeholder={"name@company.com"} id={"email"} type={"text"} htmlName={"Email"} value={values.Email} handleChange={handleChange} onBlur={handleBlur} errorMsg={errors.Email && touched.Email && errors.Email} />
             </div>
             <div>
-                <InputField label={"Password"} placeholder={"••••••••"} id={"password"} type={"password"} htmlName={"Password"} value={values.Password} handleChange={handleChange} onBlur={handleBlur} errorMsg={errors.Password && touched.Passwordn && errors.Password} />
+                <InputField label={"Password"} placeholder={"••••••••"} id={"password"} type={"password"} htmlName={"Password"} value={values.Password} handleChange={handleChange} onBlur={handleBlur} errorMsg={errors.Password && touched.Password && errors.Password} />
             </div>
             <div className="flex items-center justify-between">
                 <div className="flex items-start">
@@ -65,7 +61,7 @@ const LoginForm = () => {
                 </div>
                 <a href="#" className="text-sm font-medium text-primary-100 hover:underline dark:text-brand-100">Forgot password?</a>
             </div>
-            <Button type="submit" id="sign-in" disabled={isSubmitting}>Sign in</Button>
+            <Button type="submit" id="sign-in">Sign in</Button>
             <p className="text-sm font-light text-gray-500 dark:text-gray-400">
                 Don’t have an account yet? {" "}
                 <Link

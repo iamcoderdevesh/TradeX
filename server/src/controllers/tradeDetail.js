@@ -20,6 +20,13 @@ export const AddUpdateTrade = async (req, res, next) => {
                 Emotions, MarketConditions, AdditionalInformation, UserId, AccountId, TradeId = 0 } = req.body;
             const Fees = 50.00;
 
+            const accountDetails = await Accounts.findOne({ AccountId });
+
+            if (!accountDetails) return res.status(400).json({
+                success: false,
+                error: "Account Not Found! Please go to Settings and create account"
+            });
+
             //Checking the records exists or not
             const tradeDetails = await TradeDetails.findOne({ UserId, AccountId, TradeId });
             const TradeName = Symbol + " " + Action;
@@ -33,7 +40,10 @@ export const AddUpdateTrade = async (req, res, next) => {
                 );
 
                 if (!updateTrade) {
-                    res.status(400).json({ error: "Oops Something Went! Unable to Update Trade" });
+                    res.status(400).json({
+                        success: false,
+                        error: "Oops Something Went! Unable to Update Trade"
+                    });
                 }
                 else {
                     req.body.TradeState = true; //If true means updated
@@ -49,7 +59,10 @@ export const AddUpdateTrade = async (req, res, next) => {
 
                 const trade = await newTrade.save();
                 if (!trade) {
-                    res.status(400).json({ error: "Oops Something Went! Unable to Insert Trade" });
+                    res.status(400).json({
+                        success: true,
+                        error: "Oops Something Went! Unable to Insert Trade"
+                    });
                 }
                 else {
                     req.body.TradeId = trade.TradeId;
@@ -60,7 +73,10 @@ export const AddUpdateTrade = async (req, res, next) => {
             //If any field had the value then insert data in TradeAddDetails
             if (EntryReason || ExitReason || Emotions || MarketConditions || AdditionalInformation) {
                 if (!AddUpdateTradeAddDetails(req)) {
-                    res.status(400).json({ error: "Oops Something Went Wrong! Unable to Update Trade" });
+                    res.status(400).json({
+                        success: true,
+                        error: "Oops Something Went Wrong! Unable to Update Trade"
+                    });
                 }
             }
 
@@ -239,15 +255,26 @@ export const getTradeDetails = async (req, res) => {
                 "ExitPrice": 1,
                 "StopLoss": 1,
                 "Quantity": 1,
+                "AccountId": 1,
                 "EntryReason": "$TradeAddDetails.EntryReason",
                 "ExitReason": "$TradeAddDetails.ExitReason",
                 "Emotions": "$TradeAddDetails.Emotions",
                 "MarketCondition": "$TradeAddDetails.MarketCondition",
                 "AdditionalInfo": "$TradeAddDetails.TradeAddInfo",
             }
+        },
+        {
+            $addFields: {
+                Account: "$AccountId"
+            }
+        },
+        {
+            $project: {
+                "AccountId": 0
+            }
         }
     ]);
-
+    
     return res.status(200).json({
         success: true,
         tradeDetails: { ...getTrade[0] }
@@ -299,60 +326,54 @@ export const DeleteTrades = async (req, res) => {
     if (TradeId) {
         tradeFilter.TradeId = TradeId;
     }
-
-    /* Else Delete all Trade */
-    //Checking the records exists or not.
+    //Fetching Data Updating the TradeStats & Journal
     const tradeDetail = await TradeDetails.findOne(tradeFilter);
     const tradeStats = await TradeStats.findOne(tradeFilter);
 
     const prevNetPnl = parseInt(tradeStats?.NetPnL);
     const updatedNetPnl = prevNetPnl >= 0 ? -prevNetPnl : Math.abs(prevNetPnl);
 
-    const deleteTrade = await TradeDetails.deleteMany(tradeFilter);
-    const deleteTradeAdd = await TradeAddDetails.deleteMany(tradeFilter);
-    const deleteTradeStat = await TradeStats.deleteMany(tradeFilter);
+    await TradeDetails.deleteMany(tradeFilter);
+    await TradeAddDetails.deleteMany(tradeFilter);
+    await TradeStats.deleteMany(tradeFilter);
+    
+    if (TradeId) {
+        //Seaching TradeId's to Update/Delete TradeJournal
+        delete tradeFilter.TradeId;
+        const journal = await TradeJournal.findOne({ "TradeIds": TradeId });
+        const TradeIds = journal?.TradeIds;
 
-    if (deleteTrade.deletedCount > 0 && deleteTradeStat.deletedCount > 0) {
-        if (TradeId) {
-            //Seaching TradeId's to Update/Delete TradeJournal
-            delete tradeFilter.TradeId;
-            const journal = await TradeJournal.findOne({ "TradeIds": TradeId });
-            const TradeIds = journal?.TradeIds;
-
-            //If there is only one TradeId Delete the tradeJournal
-            if (TradeIds?.length === 1) {
-                // Update the Account's Collection
-                const account = await Accounts.findOne({ AccountId });
-                const totalBalance = parseInt(account?.TotalBalance);
-                await Accounts.updateOne(
-                    { AccountId },
-                    {
-                        TotalBalance: (totalBalance + updatedNetPnl)
-                    }
-                );
-                await TradeJournal.deleteOne({ ...tradeFilter, "TradeIds": TradeId });
-            }
-
-            //Else Update it
-            else {
-                const updateJournal = await TradeJournal.updateOne({ ...tradeFilter, "TradeIds": TradeId }, { $pull: { TradeIds: TradeId } });
-
-                if (updateJournal) {
-                    const currentStats = { netPnL: 0 };
-                    await CalculateHandleJournal(TradeId, UserId, AccountId, currentStats, tradeDetail?.EntryDate, true, updatedNetPnl);
+        //If there is only one TradeId Delete the tradeJournal
+        if (TradeIds?.length === 1) {
+            // Update the Account's Collection
+            const account = await Accounts.findOne({ AccountId });
+            const totalBalance = parseInt(account?.TotalBalance);
+            await Accounts.updateOne(
+                { AccountId },
+                {
+                    TotalBalance: (totalBalance + updatedNetPnl)
                 }
-            }
-            return res.status(200).send({
-                success: true,
-                message: "Trade Deleted Successfully!!!"
-            });
+            );
+            await TradeJournal.deleteOne({ ...tradeFilter, "TradeIds": TradeId });
         }
+
+        //Else Update it
         else {
-            await TradeJournal.deleteMany(tradeFilter);
-            return true;
+            const updateJournal = await TradeJournal.updateOne({ ...tradeFilter, "TradeIds": TradeId }, { $pull: { TradeIds: TradeId } });
+
+            if (updateJournal) {
+                const currentStats = { netPnL: 0 };
+                await CalculateHandleJournal(TradeId, UserId, AccountId, currentStats, tradeDetail?.EntryDate, true, updatedNetPnl);
+            }
         }
+        return res.status(200).send({
+            success: true,
+            message: "Trade Deleted Successfully!!!"
+        });
     }
     else {
-        return false;
+        await TradeJournal.deleteMany(tradeFilter);
+        return true;
     }
+
 }

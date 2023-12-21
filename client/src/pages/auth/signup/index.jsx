@@ -7,7 +7,6 @@ const Signup = () => {
 
     return (
         <div>
-            <ToastContainer />
             <section className="bg-gray-50 dark:bg-primary-dark">
                 <div className="min-h-screen flex flex-col items-center lg:justify-center px-6 py-8 mx-auto md:h-[45rem] lg:py-0">
                     <Logo margin={"mb-4"} height={"sm:h-10 sm:w-10"} />
