@@ -3,7 +3,6 @@ import { SubmitButton, ResetButton } from 'components/common/buttons';
 import InputField from 'components/common/inputs/InputField';
 import Dropdown from 'components/common/dropdown';
 import { useFormik } from "formik";
-import { Toast } from 'components/common/alerts';
 import { useCreateUpadateAccountMutation, useGetAccountDetailsQuery } from 'state/api/accounts/accountApi';
 import { AccountSchema } from 'helpers/validation';
 import { useLocation } from 'react-router-dom';
@@ -32,18 +31,13 @@ const AccountForm = ({ setShowAccountPage }) => {
         },
     });
 
-    const [createUpdateAccount, { isLoading, isSuccess, data }] = useCreateUpadateAccountMutation();
+    const [createUpdateAccount, { isSuccess, data }] = useCreateUpadateAccountMutation();
 
     useEffect(() => {
-        if (isSuccess) {
-            Toast.success(data?.message);
-            setShowAccountPage(false);
-        }
-
-        //Dynamically Setting the Values of form for Edit Operation of account.
-        if (AccountInfo) {
-            setValues(initialValues);
-        }
+        //Dynamically Setting the Values of form for Update/Edit Operation of account.
+        AccountInfo && setValues(initialValues);
+        
+        isSuccess && setShowAccountPage(false);
     }, [isSuccess, data, AccountInfo, isLoadingAcc, setValues]);
 
 

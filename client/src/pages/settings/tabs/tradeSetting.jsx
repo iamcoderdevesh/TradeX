@@ -9,4 +9,4 @@ const TradeSettings = () => {
   )
 }
 
-export default TradeSettings
+export default TradeSettings;

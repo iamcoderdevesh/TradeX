@@ -3,7 +3,6 @@ import TabPanel from '../'
 import { DeleteButton } from 'components/common/buttons';
 import ProfileForm from './forms/profileForm';
 
-
 const General = () => {
 
   return (
@@ -31,4 +30,4 @@ const General = () => {
   )
 }
 
-export default General
+export default General;

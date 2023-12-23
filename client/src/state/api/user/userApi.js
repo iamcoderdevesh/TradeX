@@ -1,6 +1,7 @@
 import apiSlice from "state/api";
 import { addUserInfo, setUserAuthenticated, setToken } from "../auth/authSlice";
-import accountApiSlice from "../accounts/accountApi";
+import accountApiSlice from "state/api/accounts/accountApi";
+import { SetLoadingWithResults } from "helpers";
 
 const userApiSlice = apiSlice.injectEndpoints({
     endpoints: builder => ({
@@ -8,7 +9,7 @@ const userApiSlice = apiSlice.injectEndpoints({
             query: () => `auth/getUserDetails`,
             async onQueryStarted(arg, { dispatch, queryFulfilled }) {
                 try {
-                    const result = await queryFulfilled;
+                    const result = await SetLoadingWithResults(queryFulfilled, dispatch);
                     result.data.success && dispatch(addUserInfo(result.data.userInfo));
                 } catch (err) {
                     return;
@@ -23,7 +24,7 @@ const userApiSlice = apiSlice.injectEndpoints({
             }),
             async onQueryStarted(arg, { dispatch, queryFulfilled }) {
                 try {
-                    const result = await queryFulfilled;
+                    const result = await SetLoadingWithResults(queryFulfilled, dispatch);
                     if (result.data.success) {
                         dispatch(setToken({ accessToken: result.data.token }));
                         dispatch(setUserAuthenticated(true));
@@ -45,7 +46,7 @@ const userApiSlice = apiSlice.injectEndpoints({
             }),
             async onQueryStarted(args, { queryFulfilled, dispatch }) {
                 try {
-                    const result = await queryFulfilled;
+                    const result = await SetLoadingWithResults(queryFulfilled, dispatch);
                     result.data.success && dispatch(addUserInfo(result.data.userInfo));
                 } catch (err) {
                     return;
@@ -58,3 +59,4 @@ const userApiSlice = apiSlice.injectEndpoints({
 });
 
 export const { useGetUserQuery, useRefreshQuery, useUpdateProfileMutation } = userApiSlice;
+export default userApiSlice;

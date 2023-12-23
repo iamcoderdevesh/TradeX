@@ -38,10 +38,3 @@ const TabPanel = () => {
 }
 
 export default TabPanel;
-
-//Tab Exports for router
-export { default as General } from './tabs/general';
-export { default as Accounts } from './tabs/account';
-export { default as Imports } from './tabs/import';
-export { default as Tags } from './tabs/tags';
-export { default as TradeSettings } from './tabs/tradeSetting';

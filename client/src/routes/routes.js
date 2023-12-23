@@ -1,4 +1,4 @@
-import React from "react";
+import React, { lazy } from "react";
 
 //Icons
 import { AiOutlineHome, AiOutlinePieChart, AiOutlinePlusCircle } from "react-icons/ai";
@@ -9,11 +9,28 @@ import { MdOutlineLibraryBooks } from "react-icons/md";
 import { SlCalender } from "react-icons/sl";
 import { HiMiniArrowsRightLeft } from "react-icons/hi2";
 
-//Pages
-import { Home, Dashboard, Analytics, BackTester, StrategyLibrary, PnLCalendar, AddTrade, ImportTrade, Tracking, Journal, TradeStatistics, Login, Signup } from 'pages';
-
 //Tabs
-import { Accounts, General, Imports, Tags, TradeSettings } from "pages/settings/index";
+const Accounts = lazy(() => import("pages/settings/tabs/account"));
+const General = lazy(() => import("pages/settings/tabs/general"));
+const Imports = lazy(() => import("pages/settings/tabs/import"));
+const Tags = lazy(() => import("pages/settings/tabs/tags"));
+const TradeSettings = lazy(() => import("pages/settings/tabs/tradeSetting"));
+
+//Pages
+const Home = lazy(() => import("pages/home"));
+const BackTester = lazy(() => import("pages/backtester"));
+const StrategyLibrary = lazy(() => import("pages/backtester"));
+const Login = lazy(() => import("pages/auth/login"));
+const Signup = lazy(() => import("pages/auth/signup"));
+const Analytics = lazy(() => import("pages/analytics"));
+const Dashboard = lazy(() => import("pages/dashboard"));
+const PnLCalendar = lazy(() => import("pages/calendar"));
+const Journal = lazy(() => import("pages/journal"));
+const AddTrade = lazy(() => import("pages/trades/AddTrade"));
+const ImportTrade = lazy(() => import("pages/trades/ImportTrade"));
+const Tracking = lazy(() => import("pages/trades/Tracking"));
+const TradeStatistics = lazy(() => import("pages/trades/TradeStatistics"));
+
 
 const routes = {
     menu: [

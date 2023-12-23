@@ -1,4 +1,5 @@
 import { Toast } from "components/common/alerts";
+import { SetLoadingWithResults } from "helpers";
 import apiSlice from "state/api";
 import { addAccountInfo } from 'state/api/accounts/accountSlice';
 
@@ -8,7 +9,7 @@ const accountApiSlice = apiSlice.injectEndpoints({
             query: () => `accounts/getAccountDetails/0`,
             async onQueryStarted(args, { queryFulfilled, dispatch }) {
                 try {
-                    const result = await queryFulfilled;
+                    const result = await SetLoadingWithResults(queryFulfilled, dispatch);
                     result.data?.success && dispatch(addAccountInfo(result.data?.account));
                 } catch (err) {
                     return;
@@ -18,6 +19,13 @@ const accountApiSlice = apiSlice.injectEndpoints({
         }),
         getAccountDetails: builder.query({
             query: (id = 0) => `accounts/getAccountDetails/${id}`,
+            async onQueryStarted(args, { queryFulfilled, dispatch }) {
+                try {
+                    await SetLoadingWithResults(queryFulfilled, dispatch);
+                } catch (err) {
+                    return;
+                }
+            },
             transformResponse: (response) => response.success ? response.account : [],
             providesTags: ["Accounts"]
         }),
@@ -27,6 +35,14 @@ const accountApiSlice = apiSlice.injectEndpoints({
                 method: "POST",
                 body: { ...data }
             }),
+            async onQueryStarted(args, { queryFulfilled, dispatch }) {
+                try {
+                    const result = await SetLoadingWithResults(queryFulfilled, dispatch);
+                    result.data?.success && Toast.success(result.data?.message);
+                } catch (err) {
+                    return;
+                }
+            },
             invalidatesTags: ["Accounts"],
         }),
         deleteAccount: builder.mutation({
@@ -35,9 +51,9 @@ const accountApiSlice = apiSlice.injectEndpoints({
                 method: "DELETE",
                 body: { ...data }
             }),
-            async onQueryStarted(args, { queryFulfilled }) {
+            async onQueryStarted(args, { queryFulfilled, dispatch }) {
                 try {
-                    const result = await queryFulfilled;
+                    const result = await SetLoadingWithResults(queryFulfilled, dispatch);
                     result.data?.success && Toast.success(result.data?.message);
                 } catch (err) {
                     return;

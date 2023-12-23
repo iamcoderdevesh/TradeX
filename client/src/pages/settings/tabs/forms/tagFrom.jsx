@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import { useFormik } from "formik";
 import InputField from 'components/common/inputs/InputField';
 import { useLocation } from 'react-router-dom';
-import { Toast } from 'components/common/alerts';
 import { SubmitButton } from 'components/common/buttons';
 import Dropdown from 'components/common/dropdown';
 import { ResetButton } from 'components/common/buttons';
@@ -16,35 +15,24 @@ const TagForm = ({ setShowTagForm }) => {
         refetchOnMountOrArgChange: true,
         skip: !TagId
     });
-    const { TagName, TagType, TagDesc } = TagInfo || {};
 
+    const initialValues = TagInfo ? { ...TagInfo } : { TagName: '', TagType: '', TagDesc: '' };
     const { values, errors, touched, isSubmitting, handleChange, handleSubmit, handleBlur, setValues } = useFormik({
-        initialValues: {
-            TagName: TagName,
-            TagType: TagType,
-            TagDesc: TagDesc
-        },
+        initialValues,
         validationSchema: TagSchema,
         onSubmit: values => {
             submitForm(values);
         },
     });
 
-    const [createUpadateTags, { isLoading, isSuccess, data }] = useCreateUpadateTagsMutation();
+    const [createUpadateTags, { isSuccess, data }] = useCreateUpadateTagsMutation();
 
     useEffect(() => {
-        if (isSuccess) {
-            Toast.success(data.message);
-            setShowTagForm(false);
-        }
+        isSuccess && setShowTagForm(false);
 
-        if (TagInfo) {
-            setValues({
-                TagName: TagInfo?.TagName,
-                TagType: TagInfo?.TagType,
-                TagDesc: TagInfo?.TagDesc
-            });
-        }
+        //Dynamically Setting the Values of form for Update/Edit Operation of account.
+        TagInfo && setValues(initialValues);
+        
     }, [isSuccess, data, TagInfo, isLoadingTag, setValues]);
 
 

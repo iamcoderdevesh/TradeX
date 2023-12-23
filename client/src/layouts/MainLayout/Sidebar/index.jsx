@@ -4,15 +4,16 @@ import { BiChevronDown } from "react-icons/bi";
 import { IoClose } from "react-icons/io5";
 import { IoMdJournal } from "react-icons/io";
 import routes from "routes/routes";
-
 import { useDispatch, useSelector } from 'react-redux';
 import { setActiveSidebar } from 'state'
 import Logo from "assets/logo/index";
+import useIsMobile from "helpers/resize";
 
 // SidebarLink component for individual links
-const SidebarLink = ({ to, icon, name, active, submenu }) => (
+const SidebarLink = ({ to, icon, name, active, submenu, onClick }) => (
     <NavLink
         to={to}
+        onClick={onClick}
         className={`flex items-center py-3 px-4 font-medium text-${active ? 'brand-100' : 'gray-900'} dark:text-${active ? 'white border-r-brand-100 border-r-2 bg-brand-50 dark:bg-gray-700' : 'gray-400'} hover:bg-brand-50 dark:hover:bg-gray-700`}>
         <div className={`text-${active ? 'brand-100' : 'gray-500 dark:text-gray-400 dark:group-hover:text-white group-hover:text-black'} ${submenu ? 'w-5 h-5' : ''}`}>{icon}</div>
         <span className="ml-3 text-xs">{name}</span>
@@ -26,8 +27,10 @@ const SidebarMenu = ({ route }) => {
     // Check if the current location is active
     const isActive = (routeName) => location.pathname.includes(routeName);
 
+    const dispatch = useDispatch();
     const [expandedMenu, setExpandedMenu] = useState(false);
-
+    const isMobile = useIsMobile();
+    
     return (
         <div key={route.id}>
             <button type="button" onClick={() => setExpandedMenu(!expandedMenu)} className="flex items-center w-full py-3 px-4 text-base text-gray-900 transition duration-75 hover:bg-brand-50 dark:text-white dark:hover:bg-gray-700">
@@ -37,11 +40,13 @@ const SidebarMenu = ({ route }) => {
             </button>
             <ul id="dropdown-example" className={`${!expandedMenu && 'hidden'}`}>
                 {routes.submenu.map((link) => (
+                    //Skip Tracking Page in (submenu) 
                     link.id !== 2 && <li key={link.id}>
                         <SidebarLink
                             to={`/${link.path}`}
                             name={link.name}
                             submenu={true}
+                            onClick={() => useIsMobile && dispatch(setActiveSidebar())}
                             active={isActive(link.path)}
                         />
                     </li>
@@ -64,6 +69,7 @@ const Sidebar = () => {
 
     const activeMenu = useSelector((state) => state.global.activeSidebar);
     const dispatch = useDispatch();
+    const isMobile = useIsMobile();
 
     return (
         <div>
@@ -86,6 +92,7 @@ const Sidebar = () => {
                                         icon={route.icon}
                                         name={route.name}
                                         submenu={false}
+                                        onClick={() => isMobile && dispatch(setActiveSidebar())}
                                         active={isActive(route.path)} />
                                 </li>
                             )

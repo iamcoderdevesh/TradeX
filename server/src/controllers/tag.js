@@ -23,7 +23,10 @@ export const CreateUpdateTag = async (req, res) => {
 
             if (updateTags) {
                 const { TagId, TagName, TagType, TagDesc } = updateTags;
-                res.status(200).json({ TagId, TagName, TagType, TagDesc });
+                res.status(201).json({
+                    success: true,
+                    message: "Tag Updated Successfully!!!"
+                });
             }
         }
 

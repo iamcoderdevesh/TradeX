@@ -2,10 +2,12 @@ import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
     mode: "light",
+    isLoading: 0,
     activeSidebar: true,
     fullCalendar_date: "",
     showPopup: false,
     filterPopup: false,
+    profilePopup: false,
 }
 
 const setStateMode = (mode) => {
@@ -33,10 +35,16 @@ export const slice = createSlice({
         },
         setFilterPopup: (state) => {
             state.filterPopup = setStateMode(state.filterPopup);
+        },
+        setProfilePopup: (state) => {
+            state.profilePopup = setStateMode(state.profilePopup);
+        },
+        setLoading: (state, action) => {
+            state.isLoading = action.payload;
         }
     }
 })
 
-export const { setMode, setActiveSidebar, handleDateClick, showPopup, setFilterPopup } = slice.actions;
+export const { setMode, setActiveSidebar, handleDateClick, showPopup, setFilterPopup, setLoading, setProfilePopup } = slice.actions;
 
 export default slice.reducer;

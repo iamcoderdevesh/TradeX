@@ -3,13 +3,14 @@ import { ToastContainer } from 'components/common/alerts';
 import { useRefreshQuery } from 'state/api/user/userApi';
 import { Outlet, useNavigate } from "react-router-dom";
 import { useSelector } from 'react-redux';
+import { TopLoader } from 'components/common/loader';
 
 const Prefetch = () => {
 
-    const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+    const isAuthenticated = useSelector((state) => state.auth?.isAuthenticated);
     const navigate = useNavigate();
-    const { data, error, isLoading: isLoadingRefresh } = useRefreshQuery({
-        refetchOnMountOrArgChange: true,
+    const { data, error, isLoading: isLoadingRefresh } = useRefreshQuery(isAuthenticated, {
+        refetchOnMountOrArgChange: true
     });
 
     useEffect(() => {
@@ -20,6 +21,7 @@ const Prefetch = () => {
 
     return (
         <>
+            <TopLoader />
             <ToastContainer />
             <Outlet />
         </>
