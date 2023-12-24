@@ -21,7 +21,7 @@ export const GetUserDetails = async (req, res) => {
 /* Handle Refresh Token */
 export const handleRefreshToken = async (req, res) => {
     const cookies = req.cookies;
-    if (!cookies?.token) return res.status(401).json({ message: 'Unauthorized' })
+    if (!cookies?.token) return res.status(203).json({ message: "Unauthorized" });
     const refreshToken = cookies.token;
     jwt.verify(
         refreshToken,

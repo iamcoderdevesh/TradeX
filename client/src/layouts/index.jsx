@@ -1,17 +1,18 @@
 import React, { useEffect } from 'react';
 import Navbar from 'layouts/MainLayout/Navbar';
 import Sidebar from 'layouts/MainLayout/Sidebar';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { Outlet, useNavigate } from "react-router-dom";
 import { TopLoader } from 'components/common/loader';
 import { ToastContainer } from 'components/common/alerts';
 import { useGetStatisticsQuery } from 'state/api/trade/tradeApi';
 import { useRefreshQuery } from 'state/api/user/userApi';
+import { setMode } from 'state';
 
 export const Layout = () => {
 
     const activeMenu = useSelector((state) => state.global.activeSidebar);
-    const showPopup = useSelector((state) => state.global.showPopup);
+    const pnlPopup = useSelector((state) => state.global.pnlPopup);
     const filterPopup = useSelector((state) => state.global.filterPopup);
 
     const id = useSelector((state) => state.account?.selectedAccount?.AccountId, []);
@@ -29,26 +30,30 @@ export const Layout = () => {
                     <Outlet />
                 </div>
             </div>
-            {(showPopup || filterPopup) && <div className="bg-gray-900 bg-opacity-50 dark:bg-opacity-80 fixed inset-0 z-40"></div>}
+            {(pnlPopup || filterPopup) && <div className="bg-gray-900 bg-opacity-50 dark:bg-opacity-80 fixed inset-0 z-40"></div>}
         </>
     )
 }
 
 export const MainLayout = () => {
 
+    const dispatch = useDispatch();
     const isAuthenticated = useSelector((state) => state.auth?.isAuthenticated);
     const navigate = useNavigate();
-    const { data, error, isLoading: isLoadingRefresh } = useRefreshQuery(isAuthenticated, {
+    const { data, isLoading: isLoadingRefresh } = useRefreshQuery(isAuthenticated, {
         refetchOnMountOrArgChange: true,
-        skip: !isAuthenticated
     });
-
-    useEffect(() => {
-        if (!data?.success && error && !isAuthenticated) {
-            navigate('/auth/login');
-        }
-    }, [data, isLoadingRefresh, isAuthenticated]);
     
+    useEffect(() => {
+        if ((data?.message === "Unauthorized" || data?.message === "Forbidden") && !isAuthenticated) {
+            navigate('/auth/login');         
+        }
+
+        const mode = localStorage.getItem("themeMode");
+        mode && dispatch(setMode(mode));
+
+    }, [data, isLoadingRefresh, isAuthenticated]);
+
     return (
         <>
             <TopLoader />

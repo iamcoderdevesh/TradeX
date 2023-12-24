@@ -8,7 +8,7 @@ const Toast = {
     success: (message) => toast.success(message, { type: "success", position: toast.POSITION.TOP_RIGHT }),
 };
 
-const CustomToastContainer = props => {
+const CustomToastContainer = () => {
 
     return (
         <ToastContainer

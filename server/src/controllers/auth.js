@@ -4,6 +4,7 @@ import bcrypt from "bcrypt";
 import { validationResult } from 'express-validator';
 import { createTokenOptions } from "../utils/cookies.js";
 import generateTokens from "../utils/token.js";
+import UserToken from "../models/userToken.js";
 
 /* REGISTER USER */
 export const register = async (req, res) => {
@@ -66,7 +67,7 @@ export const login = async (req, res) => {
         return res.status(400).json({ errors: errors.array() });
     }
     else {
-        const { Email, Password } = req.body;
+        const { Email, Password, IsRemember = true } = req.body;
         const user = await UserInfo.findOne({ Email });
         if (!user) return res.status(400).json({ message: "Email does not exist." });
 
@@ -75,7 +76,10 @@ export const login = async (req, res) => {
 
         const { authToken, refreshToken } = await generateTokens(user);
 
-        res.cookie('token', authToken, { ...createTokenOptions(), maxAge: 24 * 60 * 60 * 1000 });
+        res.cookie('token', authToken, {
+            ...createTokenOptions(),
+            maxAge: IsRemember ? 30 * 24 * 60 * 60 * 1000 : 24 * 60 * 60 * 1000
+        });
 
         res.status(200).json({
             success: true,
@@ -87,8 +91,12 @@ export const login = async (req, res) => {
 
 /* LOGGING OUT */
 export const handleLogout = async (req, res) => {
+    const { UserId } = req.body;
     const cookies = req.cookies;
-    if (!cookies?.token) return res.sendStatus(204); //No content
+
+    await UserToken.deleteOne({ UserId });
+    if (!cookies?.token) return res.sendStatus(204);//No content
+
     res.clearCookie('token', createTokenOptions());
     res.status(200).json({
         success: true,

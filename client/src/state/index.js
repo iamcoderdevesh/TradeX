@@ -5,9 +5,9 @@ const initialState = {
     isLoading: 0,
     activeSidebar: true,
     fullCalendar_date: "",
-    showPopup: false,
+    pnlPopup: false,
     filterPopup: false,
-    profilePopup: false,
+    profilePopup: false
 }
 
 const setStateMode = (mode) => {
@@ -18,19 +18,24 @@ export const slice = createSlice({
     name: 'default',
     initialState,
     reducers: {
-        setMode: (state) => {
-            state.mode = state.mode === "light" ? "dark" : "light"
+        setMode: (state, action) => {
+            const currentMode = action.payload ? action.payload : state.mode === "light" ? "dark" : "light";
+            state.mode = currentMode;
+            const root = window.document.documentElement;
+            root.classList.remove(currentMode === "light" ? "dark" : "light");
+            root.classList.add(currentMode);
+            localStorage.setItem("themeMode", currentMode);
         },
         setActiveSidebar: (state) => {
             state.activeSidebar = setStateMode(state.activeSidebar);
         },
         handleDateClick: (state, action) => {
-            if (state.showPopup) {
-                state.showPopup = false;
+            if (state.pnlPopup) {
+                state.pnlPopup = false;
             }
             else {
                 state.fullCalendar_date = action.payload.date;
-                state.showPopup = true;
+                state.pnlPopup = true;
             }
         },
         setFilterPopup: (state) => {
@@ -45,6 +50,6 @@ export const slice = createSlice({
     }
 })
 
-export const { setMode, setActiveSidebar, handleDateClick, showPopup, setFilterPopup, setLoading, setProfilePopup } = slice.actions;
+export const { setMode, setActiveSidebar, handleDateClick, setFilterPopup, setLoading, setProfilePopup } = slice.actions;
 
 export default slice.reducer;

@@ -33,11 +33,7 @@ const userApiSlice = apiSlice.injectEndpoints({
                         dispatch(userApiSlice.endpoints.getUser.initiate());
                         dispatch(accountApiSlice.endpoints.getAllAccountDetails.initiate());
                     }
-                    else {
-                        dispatch(setUserAuthenticated(false));
-                    }
                 } catch (err) {
-                    dispatch(setUserAuthenticated(false));
                     return;
                 }
             },

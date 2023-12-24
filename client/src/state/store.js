@@ -15,7 +15,7 @@ const rootReducer = combineReducers({
 const errorsMiddleware = (dispatch) => (next) => (action) => {
     if (isRejectedWithValue(action)) {
         const { payload } = action;
-        payload.data != null ? Toast.error(payload.data.message) 
+        payload.data != null ? Toast.error(payload.data.message)
         : Toast.error('Oops looks like Something went wrong Internal Server Error!!!');
     }
 

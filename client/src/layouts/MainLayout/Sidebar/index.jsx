@@ -46,7 +46,7 @@ const SidebarMenu = ({ route }) => {
                             to={`/${link.path}`}
                             name={link.name}
                             submenu={true}
-                            onClick={() => useIsMobile && dispatch(setActiveSidebar())}
+                            onClick={() => isMobile && dispatch(setActiveSidebar())}
                             active={isActive(link.path)}
                         />
                     </li>

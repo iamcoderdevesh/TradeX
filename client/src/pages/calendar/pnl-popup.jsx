@@ -13,7 +13,7 @@ import { formatDate } from 'utils';
 
 const PnlPopup = () => {
 
-    const showPopup = useSelector((state) => state.global.showPopup);
+    const pnlPopup = useSelector((state) => state.global.pnlPopup);
     const [showTable, setShowTable] = useState(false);
     const dispatch = useDispatch();
 
@@ -31,7 +31,7 @@ const PnlPopup = () => {
 
     return (
         <div>
-            {showPopup &&
+            {pnlPopup &&
                 <div className='fixed top-0 left-0 right-0 z-50 w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 max-h-full justify-center items-center sm:flex' onClick={() => dispatch(handleDateClick())}>
                     <div className="relative w-full max-w-5xl max-h-full p-4 mt-8 z-50 bg-white rounded-lg shadow-lg dark:bg-main-dark" onClick={(e) => e.stopPropagation()}>
                         <div className="flex justify-between items-center my-2">

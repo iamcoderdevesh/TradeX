@@ -17,6 +17,7 @@ const LoginForm = () => {
     const initialValues = {
         Email: registeredMail || '',
         Password: '',
+        IsRemember: true,
     };
 
     const { values, errors, touched, handleChange, handleSubmit, handleBlur } = useFormik({
@@ -52,12 +53,12 @@ const LoginForm = () => {
                 </div>
                 <div className="flex items-center justify-between">
                     <div className="flex items-start">
-                        {/* <div className="flex items-center h-5">
-                            <Checkbox id="remember" />
+                        <div className="flex items-center h-5">
+                            <Checkbox id="remember" name="IsRemember" onChange={handleChange} checked={values.IsRemember} />
                         </div>
                         <div className="ml-2 text-sm">
                             <label htmlFor="remember" className="text-gray-500 dark:text-gray-300">Remember me</label>
-                        </div> */}
+                        </div>
                     </div>
                     <a href="#" className="text-sm font-medium text-primary-100 hover:underline dark:text-brand-100">Forgot password?</a>
                 </div>
