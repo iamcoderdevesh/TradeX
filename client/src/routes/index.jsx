@@ -1,10 +1,9 @@
 import React, { useState, useEffect, lazy, Suspense } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import routes from "./routes";
-import Layout from 'layouts';
 import { useSelector } from 'react-redux';
-import Prefetch from 'layouts/prefetch';
 import { NavigateTopLoader } from 'components/common/loader';
+import { MainLayout, Layout } from 'layouts';
 const Dashboard = lazy(() => import("pages/dashboard"));
 const PageNotFound = lazy(() => import("pages/404_page"));
 
@@ -21,7 +20,7 @@ const PageRoute = () => {
     <BrowserRouter>
       <Suspense fallback={<NavigateTopLoader />}>
         <Routes>
-          <Route element={(<Prefetch />)}>
+          <Route element={(<MainLayout />)}>
             <Route path="*" element={(<PageNotFound />)} />
             ({authStatus
               ? // Protected Routes

@@ -1,11 +1,14 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Navbar from 'layouts/MainLayout/Navbar';
 import Sidebar from 'layouts/MainLayout/Sidebar';
-import { Outlet } from "react-router-dom";
 import { useSelector } from 'react-redux';
+import { Outlet, useNavigate } from "react-router-dom";
+import { TopLoader } from 'components/common/loader';
+import { ToastContainer } from 'components/common/alerts';
 import { useGetStatisticsQuery } from 'state/api/trade/tradeApi';
+import { useRefreshQuery } from 'state/api/user/userApi';
 
-const Layout = () => {
+export const Layout = () => {
 
     const activeMenu = useSelector((state) => state.global.activeSidebar);
     const showPopup = useSelector((state) => state.global.showPopup);
@@ -31,4 +34,26 @@ const Layout = () => {
     )
 }
 
-export default Layout
+export const MainLayout = () => {
+
+    const isAuthenticated = useSelector((state) => state.auth?.isAuthenticated);
+    const navigate = useNavigate();
+    const { data, error, isLoading: isLoadingRefresh } = useRefreshQuery(isAuthenticated, {
+        refetchOnMountOrArgChange: true,
+        skip: !isAuthenticated
+    });
+
+    useEffect(() => {
+        if (!data?.success && error && !isAuthenticated) {
+            navigate('/auth/login');
+        }
+    }, [data, isLoadingRefresh, isAuthenticated]);
+    
+    return (
+        <>
+            <TopLoader />
+            <ToastContainer />
+            <Outlet />
+        </>
+    )
+}

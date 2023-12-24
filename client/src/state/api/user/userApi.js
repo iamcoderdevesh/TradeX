@@ -18,7 +18,7 @@ const userApiSlice = apiSlice.injectEndpoints({
             providesTags: ["User"]
         }),
         refresh: builder.query({
-            query: () => ({
+            query: (isAuthenticated) => ({
                 url: 'auth/refresh',
                 credentials: 'include',
             }),
@@ -33,7 +33,11 @@ const userApiSlice = apiSlice.injectEndpoints({
                         dispatch(userApiSlice.endpoints.getUser.initiate());
                         dispatch(accountApiSlice.endpoints.getAllAccountDetails.initiate());
                     }
+                    else {
+                        dispatch(setUserAuthenticated(false));
+                    }
                 } catch (err) {
+                    dispatch(setUserAuthenticated(false));
                     return;
                 }
             },
