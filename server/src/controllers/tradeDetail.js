@@ -16,9 +16,8 @@ export const AddUpdateTrade = async (req, res, next) => {
     else {
         try {
             const { Market, Broker, Setup, TradeStatus, Action, Symbol, EntryDate, ExitDate,
-                EntryPrice, ExitPrice, StopLoss, Quantity, EntryReason, ExitReason,
+                EntryPrice, ExitPrice, Fees = 0, StopLoss, Quantity, EntryReason, ExitReason,
                 Emotions, MarketConditions, AdditionalInformation, UserId, AccountId, TradeId = 0 } = req.body;
-            const Fees = 50.00;
 
             const accountDetails = await Accounts.findOne({ AccountId });
 
@@ -239,7 +238,16 @@ export const getTradeDetails = async (req, res) => {
                 as: "TradeAddDetails",
             },
         },
+        {
+            $lookup: {
+                from: "TradeStats",
+                localField: "TradeId",
+                foreignField: "TradeId",
+                as: "TradeStats"
+            },
+        },
         { $unwind: { path: "$TradeAddDetails", preserveNullAndEmptyArrays: true } },
+        { $unwind: { path: "$TradeStats", preserveNullAndEmptyArrays: true } },
         {
             $project: {
                 "_id": 0,
@@ -256,6 +264,7 @@ export const getTradeDetails = async (req, res) => {
                 "StopLoss": 1,
                 "Quantity": 1,
                 "AccountId": 1,
+                "Fees": "$TradeStats.TotalFees",
                 "EntryReason": "$TradeAddDetails.EntryReason",
                 "ExitReason": "$TradeAddDetails.ExitReason",
                 "Emotions": "$TradeAddDetails.Emotions",

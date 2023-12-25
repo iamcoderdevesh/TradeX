@@ -9,7 +9,6 @@ const DateRange = (props) => {
     });
 
     const handleValueChange = (newValue) => {
-        console.log("newValue:", newValue);
         setValue(newValue);
     }
 

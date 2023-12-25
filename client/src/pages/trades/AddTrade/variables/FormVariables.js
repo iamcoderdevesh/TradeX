@@ -4,9 +4,16 @@ export const Inputs = {
         {
             id: "Symbol",
             label: "Symbol",
-            divClass: "sm:col-span-2",
+            divClass: "w-full",
             placeholder: "Ex.: Apple",
             type: "text",
+        },
+        {
+            id: "Fees",
+            label: "Fees (Optional)",
+            divClass: "w-full",
+            placeholder: "Ex.: 50",
+            type: "number",
         },
         {
             id: "EntryDate",

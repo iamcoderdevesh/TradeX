@@ -51,10 +51,10 @@ export const ProfilePopup = () => {
     return (
         <div className="flex items-center ml-3" ref={ref}>
             <div>
-                <button type="button" className="flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
+                <button type="button" className="inline-flex items-center justify-center w-8 h-8 overflow-hidden bg-brand-200 rounded-full dark:bg-brand-300 ring-2 ring-gray-300 dark:ring-gray-500"
                     onClick={() => setShowProfile(!showProfile)} >
                     <span className="sr-only">Open user menu</span>
-                    <img className="w-8 h-8 rounded-full" src="https://www.w3schools.com/howto/img_avatar.png" alt="user photo" />
+                    <span className="w-7 h-7 rounded-full text-white font-semibold uppercase">{Array.from(FirstName?.toString() || '')[0]}</span>
                 </button>
             </div>
             <div className={`${!showProfile && 'hidden'} w-52 fixed top-0 right-0 z-50 mt-14 text-base list-none bg-white divide-y divide-gray-100 rounded shadow dark:bg-gray-700 dark:divide-gray-600`}>

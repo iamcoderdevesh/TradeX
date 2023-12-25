@@ -9,6 +9,7 @@ import { setActiveSidebar, setFilterPopup } from 'state';
 import { capitalizeWords } from 'utils';
 import ThemeButton from 'state/theme';
 import { FilterAccountDropdown } from 'components/common/dropdown/accountDropdown';
+import { FullScreenButton } from 'components/common/buttons';
 
 const Navbar = () => {
 
@@ -42,7 +43,7 @@ const Navbar = () => {
                             </div>
                             <div className="hidden lg:flex items-center">
                                 <div className='w-56'>
-                                    <DateRange range={true} />
+                                    {/* <DateRange range={true} /> */}
                                 </div>
                                 <div className='w-48 mx-4'>
                                     <FilterAccountDropdown label={''} value={accountId} />
@@ -50,6 +51,9 @@ const Navbar = () => {
                             </div>
                             <div>
                                 <ThemeButton />
+                            </div>
+                            <div>
+                                <FullScreenButton />
                             </div>
                             <div className="flex items-center">
                                 <ProfilePopup />
@@ -68,8 +72,8 @@ const Navbar = () => {
                     body={
                         <div className="flex flex-col justify-between">
                             <div className='my-2'>
-                                <label htmlFor="date-range" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Select Date Range</label>
-                                <DateRange range={false} />
+                                {/* <label htmlFor="date-range" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Select Date Range</label>
+                                <DateRange range={false} /> */}
                             </div>
                             <div className='my-2'>
                                 <FilterAccountDropdown label={'Select Account'} value={accountId} />
