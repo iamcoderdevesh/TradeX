@@ -60,7 +60,7 @@ const WeeklyPnlChart = () => {
         skip: !id,
     });
 
-    const [series, setSeries] = useState([{ name: 'P&L', data: data?.netPnl }]);
+    const [series, setSeries] = useState([]);
 
     const [options, setOptions] = useState(WeeklyPnlChartOptions);
     const currentMode = useSelector((state) => state.global.mode);

@@ -115,6 +115,7 @@ export const getWeeklyPnL = async (req, res) => {
 
     let totalNetPnL = 0;
     if (getStats.length > 0) {
+        const dayMap = ['', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
         getStats.forEach(stat => {
             // Convert the day number to a day name
             let dayName = dayMap[stat.Day - 1];

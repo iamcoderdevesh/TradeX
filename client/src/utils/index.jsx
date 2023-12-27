@@ -13,12 +13,13 @@ export const formatDate = (date, type) => {
     if (day.length < 2)
         day = '0' + day;
 
+    if (type === 'local-date') return d.toDateString();
+    
     d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
 
     if (type === 'dd/mm/yyyy') return [day, month, year].join('/');
     else if (type === 'yyyy/mm/dd') return [year, month, day].join('-');
     else if (type === 'date-time') return d.toISOString().slice(0, 16);
-    else if (type === 'local-date') return d.toLocaleDateString('en-US', { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' });
     else return [year, month, day].join('-');
 }
 

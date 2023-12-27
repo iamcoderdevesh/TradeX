@@ -63,10 +63,7 @@ const MonthlyPnlChart = () => {
         skip: !id,
     });
 
-    const [series, setSeries] = useState([
-        { name: 'Net Profit', data: data?.TotalNetPnL },
-        { name: 'Revenue', data: data?.TotalRevenue }
-    ]);
+    const [series, setSeries] = useState([]);
     const [options, setOptions] = useState(MonthlyPnlChartOptions);
     const currentMode = useSelector((state) => state.global.mode);
 

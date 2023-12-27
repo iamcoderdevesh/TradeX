@@ -38,7 +38,7 @@ const TotalPnlChart = () => {
     skip: !id,
   });
 
-  const [series, setSeries] = useState([{ name: 'P&L', data: data }]);
+  const [series, setSeries] = useState([]);
 
   const [options, setOptions] = useState(areaChartOptions);
   const currentMode = useSelector((state) => state.global.mode);

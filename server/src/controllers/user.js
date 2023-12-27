@@ -34,7 +34,7 @@ export const handleRefreshToken = async (req, res) => {
 
             const { refreshToken } = await generateTokens(foundUser);
 
-            res.status(201).json({ success: true, token: refreshToken });
+            res.status(200).json({ success: true, token: refreshToken });
         }
     )
 };

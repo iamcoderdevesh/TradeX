@@ -38,10 +38,7 @@ const DailyPnlChart = () => {
     skip: !id,
   });
 
-  const [series, setSeries] = useState([{
-    name: 'Daily P&L',
-    data: data?.TotalNetPnl
-  }]);
+  const [series, setSeries] = useState([]);
 
   const [options, setOptions] = useState(areaChartOptions);
   const currentMode = useSelector((state) => state.global.mode);
