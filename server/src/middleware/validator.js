@@ -65,9 +65,8 @@ export const tradeValidations = [
 ];
 
 export const importValidations = [
-    body('Broker', 'Please select valid broker').isLength({ min: 2 }),
-    body('AccountName', 'Please select valid account name').isLength({ min: 2 }),
-    body('ImportDesc', 'Please enter a valida import description').isLength({ min: 2 }),
-    body('AccountId', 'Account not found').isNumeric().isLength({ min: 1, max: 9 })
+    body('broker', 'Please select valid broker').isLength({ min: 2 }),
+    body('AccountId', 'Account not found').isNumeric().isLength({ min: 1, max: 9 }),
+    // body('description', 'Please enter a valida import description').isLength({ min: 2 }),
 ];
 //#endregion

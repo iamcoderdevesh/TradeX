@@ -48,5 +48,11 @@ const TradeSchema = Yup.object().shape({
   Quantity: Yup.number().positive().integer().required("Quantity is required")
 });
 
+const ImportSchema = Yup.object().shape({
+  account: Yup.string().required("Select Account"),
+  broker: Yup.string().required("Select Broker"),
+  // file: Yup.mixed().required('File is required'),
+});
 
-export { SignUpSchema, SignInSchema, AccountSchema, TagSchema, TradeSchema };
+
+export { SignUpSchema, SignInSchema, AccountSchema, TagSchema, TradeSchema, ImportSchema };

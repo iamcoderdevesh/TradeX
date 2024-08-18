@@ -6,6 +6,8 @@ import TradeStats from '../models/tradeStats.js';
 import TradeJournal from '../models/tradeJournal.js';
 import { DateRangeFilter } from '../utils/general.js';
 import Accounts from '../models/accounts.js';
+import { AddUpdateTradeStats } from './tradeStats.js';
+import { AddTradeJournal } from './tradeJournal.js';
 
 /* Inserting/Updating TradeDetails */
 export const AddUpdateTrade = async (req, res, next) => {
@@ -17,7 +19,7 @@ export const AddUpdateTrade = async (req, res, next) => {
         try {
             const { Market, Broker, Setup, TradeStatus, Action, Symbol, EntryDate, ExitDate,
                 EntryPrice, ExitPrice, Fees = 0, StopLoss, Quantity, EntryReason, ExitReason,
-                Emotions, MarketConditions, AdditionalInformation, UserId, AccountId, TradeId = 0 } = req.body;
+                Emotions, MarketConditions, AdditionalInformation, UserId, AccountId, TradeId = 0, IsImport = false } = req.body;
 
             const accountDetails = await Accounts.findOne({ AccountId });
 
@@ -82,6 +84,12 @@ export const AddUpdateTrade = async (req, res, next) => {
             //Calculate Stats only if tradeStatus is Closed
             if (TradeStatus === "Closed") {
                 req.body.Stats = await CalculateTradeStats(Action, EntryPrice, ExitPrice, StopLoss, Quantity, Fees, AccountId);
+
+                if(IsImport) {
+                    await AddUpdateTradeStats(req, res, next);
+                    await AddTradeJournal(req, res, next);
+                    return true;
+                }
                 next();
             }
             else {

@@ -95,12 +95,12 @@ export const DeleteAccount = async (req, res) => {
     //If isVerified is true that means user is verified and can delete everthing
     if (isVerified) {
         await DeleteTag(req, res);
-        await DeleteTradeImport(req, res);
     }
     
     if (AccountId) accountFilter.AccountId = AccountId;
     await AccountDetails.deleteMany(accountFilter);
     await DeleteTrades(req, res);
+    await DeleteTradeImport(req, res);
     return res.status(201).json({
         success: true,
         message: "Account Deleted Successfully!!!"

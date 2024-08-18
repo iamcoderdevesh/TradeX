@@ -7,6 +7,7 @@ const baseQuery = fetchBaseQuery({
     prepareHeaders: async (headers, { getState }) => {
         const token = getState()?.auth?.accessToken;
         if (token) headers.set('Authorization', `Bearer ${token}`);
+        // headers.set('Content-Type', 'multipart/form-data');
         return headers;
     },
 });

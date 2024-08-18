@@ -69,7 +69,7 @@ const tradeApiSlice = apiSlice.injectEndpoints({
             transformResponse: (response) => response.success ? response.tradeDetails : [],
             providesTags: ["Trade"]
         }),
-        addUpadateTrade: builder.mutation({
+        addUpdateTrade: builder.mutation({
             query: data => ({
                 url: "trade/addUpdateTrade",
                 method: "POST",
@@ -80,6 +80,24 @@ const tradeApiSlice = apiSlice.injectEndpoints({
                     const result = await SetLoadingWithResults(queryFulfilled, dispatch);
                     result.data?.success && Toast.success(result.data?.message);
                 } catch (err) {
+                    return;
+                }
+            },
+            invalidatesTags: ["Trade", "Charts"]
+        }),
+        importTrade: builder.mutation({
+            query: data => ({
+                url: "trade/importTrade",
+                method: "POST",
+                body: data
+            }),
+            async onQueryStarted(args, { queryFulfilled, dispatch }) {
+                try {
+                    const result = await SetLoadingWithResults(queryFulfilled, dispatch);
+                    result.data?.success == true ? Toast.success(result?.data?.message) : Toast.error(result?.data?.message);
+                } catch (err) {
+                    console.log(err);
+                    
                     return;
                 }
             },
@@ -105,4 +123,4 @@ const tradeApiSlice = apiSlice.injectEndpoints({
     overrideExisting: true
 });
 
-export const { useGetTradeStatisticsQuery, useGetTradeDetailsQuery, useGetStatisticsQuery, useGetDetailedStatisticsQuery, useGetRecentTradeQuery, useAddUpadateTradeMutation, useDeleteTradeMutation } = tradeApiSlice;
+export const { useGetTradeStatisticsQuery, useGetTradeDetailsQuery, useGetStatisticsQuery, useGetDetailedStatisticsQuery, useGetRecentTradeQuery, useAddUpdateTradeMutation, useImportTradeMutation, useDeleteTradeMutation } = tradeApiSlice;

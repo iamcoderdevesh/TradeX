@@ -9,7 +9,7 @@ const generateTokens = async (UserInfo) => {
     const refreshToken = jwt.sign(
       payload,
       process.env.REFRESH_TOKEN,
-      { expiresIn: "15m" }
+      { expiresIn: "24h" }
     );
 
     const authToken = jwt.sign(

@@ -58,11 +58,11 @@ export const FullScreenButton = () => {
     const handleFullScreen = () => {
         const { documentElement, fullscreenElement, exitFullscreen } = document;
         const vendorFullScreenElement = fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement;
-    
+
         if (!vendorFullScreenElement) {
             (documentElement.requestFullscreen || documentElement.webkitRequestFullscreen || documentElement.mozRequestFullScreen || documentElement.msRequestFullscreen).call(documentElement);
             setFullScreen(true);
-        } else if (exitFullscreen) {
+        } else {
             (exitFullscreen || document.webkitExitFullscreen || document.mozCancelFullScreen || document.msExitFullscreen).call(document);
             setFullScreen(false);
         }

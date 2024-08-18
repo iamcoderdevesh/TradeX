@@ -6,7 +6,7 @@ import { DateRangeFilter } from "../utils/general.js";
 /* Inserting/Updating Calculated Trade statistics in TradeStats */
 export const AddUpdateTradeStats = async (req, res, next) => {
 
-    const { TradeId, AccountId, UserId, Stats, EntryDate } = req.body;
+    const { TradeId, AccountId, UserId, Stats, EntryDate, IsImport = false } = req.body;
     const { tradeStatus, netProfit, netLoss, netPnL, netRoi, grossPnL, totalFees, tradeRisk, riskReward } = Stats;
 
     //Date Time Reset
@@ -42,6 +42,10 @@ export const AddUpdateTradeStats = async (req, res, next) => {
         if (!tradeStats) {
             res.status(400).json({ error: "Oops Something Went! Unable to Insert Trade Stats" });
         }
+    }
+
+    if(IsImport) {
+        return true;
     }
     next();
 };

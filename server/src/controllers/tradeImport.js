@@ -1,34 +1,63 @@
 import { validationResult } from 'express-validator';
 import TradeImport from "../models/tradeImports.js";
+import excelToJson from 'convert-excel-to-json';
+import { AddUpdateTrade } from './tradeDetail.js';
+import fs from "fs";
 
 /* Creating Account */
-export const ImportTrades = async (req, res) => {
+export const ImportTrades = async (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
     }
     else {
-        const { UserId, Broker, AccountName, ImportDesc, AccountId } = req.body;
-
-        // Find the last Id from Collection. If record does'nt exist, start with 1, otherwise increment the last Id
-        let lastId = await TradeImport.findOne().sort('-ImportId');
-        const ImportId = lastId ? lastId.ImportId + 1 : 1;
-
-        const TotalTrades = 80;
-        const Import = new TradeImport({
-            ImportId,
-            Broker,
-            AccountName,
-            // ImportFile,
-            ImportDesc,
-            TotalTrades,
-            AccountId,
-            UserId,
-            CreatedBy: UserId,
+        const { UserId, broker, AccountId, description } = req.body;
+        const file = 'uploads/' + req.file.filename;
+        const result = excelToJson({
+            sourceFile: file,
+            header: {
+                rows: 1
+            },
+            columnToKey: {
+                "*": "{{columnHeader}}"
+            }
         });
 
-        await Import.save();
-        res.status(201).send("Trade Imported Successfully!!!");
+        if (result?.Sheet1?.length !== 0) {
+            let tradeCount = 0;
+            req.body.IsImport = true;
+            for (const row of result.Sheet1) {
+                req.body.TradeId = 0;
+                Object.assign(req.body, row);
+                await AddUpdateTrade(req, res, next);
+                tradeCount++;
+            }
+
+            let lastId = await TradeImport.findOne().sort('-ImportId');
+            const id = lastId ? lastId.ImportId + 1 : 1;
+
+            const newTrade = new TradeImport({ ImportId: id, Broker: broker, ImportDesc: description, TotalTrades: tradeCount, AccountId, UserId, CreatedBy: UserId });
+
+            const trade = await newTrade.save();
+            if (!trade) {
+                res.status(400).json({
+                    success: true,
+                    message: "Oops Something Went! Unable to Insert Trade"
+                });
+            }
+        } else {
+            res.status(400).json({
+                success: false,
+                message: "Excel file is empty or invalid"
+            });
+        }
+
+        fs.unlinkSync(`uploads/${req.file.filename}`);
+
+        return res.status(200).json({
+            success: true,
+            message: "Trades Imported Successfully!!!"
+        });
     }
 };
 

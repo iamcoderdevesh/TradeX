@@ -8,7 +8,7 @@ import { Inputs } from "./variables/FormVariables";
 import { TradeSchema } from 'helpers/validation';
 import { useFormik } from "formik";
 import { AccountDropdown } from 'components/common/dropdown/accountDropdown';
-import { useAddUpadateTradeMutation, useGetTradeDetailsQuery } from 'state/api/trade/tradeApi';
+import { useAddUpdateTradeMutation, useGetTradeDetailsQuery } from 'state/api/trade/tradeApi';
 import { formatDate } from 'utils';
 
 const AddTrade = () => {
@@ -31,7 +31,7 @@ const AddTrade = () => {
         },
     });
 
-    const [addUpdateTrade, { isLoading }] = useAddUpadateTradeMutation();
+    const [addUpdateTrade, { isLoading }] = useAddUpdateTradeMutation();
 
     useEffect(() => {
         //Dynamically Setting the Values of form for Update Operation of Trade.

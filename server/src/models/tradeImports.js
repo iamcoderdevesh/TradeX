@@ -11,10 +11,6 @@ const ImportSechma = new mongoose.Schema(
             type: String, 
             required: true,
         },
-        AccountName: {
-            type: String,
-            required: true,
-        },
         ImportFile: {
             type: Buffer,
             default: null,
@@ -30,7 +26,6 @@ const ImportSechma = new mongoose.Schema(
         AccountId: {
             type: Number,
             required: true,
-            unique: true,
             ref: "Accounts",
         },
         UserId: {

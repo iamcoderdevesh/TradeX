@@ -5,12 +5,18 @@ import { getTradeData } from "./tradeDetail.js";
 
 /* Inserting Data in TradeJournal */
 export const AddTradeJournal = async (req, res) => {
-    const { TradeId = 0, AccountId, UserId, Stats, EntryDate, TradeState, prevNetPnl } = req.body;
+    const { TradeId = 0, AccountId, UserId, Stats, EntryDate, TradeState, prevNetPnl, IsImport = false } = req.body;
     await CalculateHandleJournal(TradeId, UserId, AccountId, Stats, EntryDate, TradeState, prevNetPnl);
-    return res.status(201).json({
-        success: true,
-        message: "Trade " + (TradeState ? "Updated" : "Added") + " Successfully!!!"
-    });
+    if(IsImport) {
+        return true;
+    }
+    else {
+        return res.status(201).json({
+            success: true,
+            message: "Trade " + (TradeState ? "Updated" : "Added") + " Successfully!!!"
+        });
+    }
+
 };
 
 export const GetJournalDetails = async (req, res) => {

@@ -7,13 +7,27 @@ import { AddTradeJournal, GetJournalDetails, GetJournalForCalendar } from "../co
 import { CalculateStatistics } from "../utils/calculate.js";
 import { HandleAsyncError } from "../middleware/catchError.js";
 import { importValidations, tradeValidations } from "../middleware/validator.js";
+import multer from "multer";
 
 /* Routes */
 const router = express.Router();
 router.use(verifyToken);
 
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+      cb(null, 'uploads/')
+    },
+    filename: function (req, file, cb) {
+    //   const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
+      cb(null, file.originalname);
+    }
+});
+const upload = multer({ storage });
+
+
+
 //#region Insert/Update Trade
-router.post("/trade/importTrade", importValidations, HandleAsyncError(ImportTrades));
+router.post("/trade/importTrade", upload.single('file'), verifyToken, HandleAsyncError(ImportTrades));
 router.post("/trade/addUpdateTrade", tradeValidations, HandleAsyncError(AddUpdateTrade), HandleAsyncError(AddUpdateTradeStats), HandleAsyncError(AddTradeJournal));
 //#endregion
 
