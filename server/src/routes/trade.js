@@ -1,6 +1,6 @@
 import express from "express";
 import { verifyToken } from "../middleware/authorise.js";
-import { DeleteTradeImport, ImportTrades } from "../controllers/tradeImport.js";
+import { DeleteTradeImport, ImportTrades, GetImportTrades } from "../controllers/tradeImport.js";
 import { AddUpdateTrade, DeleteTrades, GetRecentTrade, getTradeData, getTradeDetails } from "../controllers/tradeDetail.js";
 import { AddUpdateTradeStats, getDailyPnLAndReturns, getMonthlyPnLAndRevenue, getTotalPnL, getWeeklyPnL } from "../controllers/tradeStats.js";
 import { AddTradeJournal, GetJournalDetails, GetJournalForCalendar } from "../controllers/tradeJournal.js";
@@ -38,8 +38,12 @@ router.get("/trade/:id/getTradeDetails", HandleAsyncError(getTradeDetails));
 router.get("/trade/:accountId/getJounral", HandleAsyncError(GetJournalDetails));
 router.get("/trade/:accountId/getRecentTrades", HandleAsyncError(GetRecentTrade));
 
+//Get Import File data
+router.get("/trade/getImportTrades", HandleAsyncError(GetImportTrades));
+
 //Fetch Trade Statistics
 router.get("/trade/:accountId/getStats", HandleAsyncError(CalculateStatistics));
+
 //For Detailed stats with currency and float values
 router.get("/trade/:accountId/getStats/:type", HandleAsyncError(CalculateStatistics));
 

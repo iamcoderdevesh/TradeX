@@ -70,7 +70,7 @@ export const getWeeklyPnL = async (req, res) => {
 
     const { TotalBalance = 0 } = account || [];
 
-    const dayMap = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+    const dayMap = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
     const today = new Date();
     const day = today.getDay();
     const daysOfWeek = [0, 1, 2, 3, 4, 5, 6].map(dayIndex => ({
@@ -119,10 +119,10 @@ export const getWeeklyPnL = async (req, res) => {
 
     let totalNetPnL = 0;
     if (getStats.length > 0) {
-        const dayMap = ['', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+        const dayMap = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
         getStats.forEach(stat => {
             // Convert the day number to a day name
-            let dayName = dayMap[stat.Day - 1];
+            let dayName = dayMap[stat.Day];
 
             // Find the corresponding day in the daysOfWeek array
             let dayOfWeek = daysOfWeek.find(day => day.Day === dayName);

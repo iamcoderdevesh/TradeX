@@ -61,6 +61,38 @@ export const ImportTrades = async (req, res, next) => {
     }
 };
 
+/* Get Imported Trade Details */
+export const GetImportTrades = async (req, res) => {
+    const { UserId } = req.body;
+    const importDetails = await TradeImport.aggregate([
+        { $match: { UserId: UserId } },
+        {
+            $lookup: {
+                from: "Accounts",
+                localField: "AccountId",
+                foreignField: "AccountId",
+                as: "Accounts"
+            },
+        },
+        { $unwind: { path: "$Accounts", preserveNullAndEmptyArrays: true } },
+        {
+            $project: {
+                "_id": 0,
+                "TotalTrades": 1,
+                "Broker": 1,
+                "ImportDesc": 1,
+                "ImportedOn": "$createdAt",
+                "AccountName": "$Accounts.AccountName",
+            }
+        }
+    ]);
+
+    res.status(200).json({
+        success: true,
+        importDetails
+    });
+};
+
 /* Deleting TradeImport */
 export const DeleteTradeImport = async (req, res) => {
     const { UserId, AccountId, ImportId } = req.body;

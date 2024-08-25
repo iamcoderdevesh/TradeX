@@ -41,7 +41,7 @@ const Accounts = () => {
             {!showAddAccount &&
               <div className="grid gap-4 sm:grid-cols-2 sm:gap-6">
                 <div className="w-full">
-                  <h2 className="mb-2 sm:mb-2 text-sm font-bold text-gray-900 dark:text-white">MANAGE ACCOUNTS</h2>
+                  <h2 className="mb-2 sm:mb-2 text-lg font-bold text-gray-900 dark:text-white">Manage Accounts</h2>
                 </div>
                 <div className="w-full flex sm:justify-end sm:items-start">
                   <SubmitButton id="add-account" onClick={() => {

@@ -2,11 +2,15 @@ import React from 'react'
 import TabPanel from '../'
 import { DeleteButton } from 'components/common/buttons';
 import { DefaultTable } from 'components/common/table';
-import { ImportHistColumns } from 'components/common/table/columns';
+import { ImportHistColumns, TagsColumns } from 'components/common/table/columns';
+import { useGetImportTradeQuery } from 'state/api/trade/tradeApi';
+import { useDeleteTagMutation, useGetTagDetailsQuery } from 'state/api/tags/tagApi';
 
 const Imports = () => {
 
-  const data = [];
+  // const { data, isLoading: isLoadingTag } = useGetTagDetailsQuery();
+  const { data, isLoading } = useGetImportTradeQuery();
+  // console.log(data);
 
   return (
     <div>
@@ -17,14 +21,17 @@ const Imports = () => {
             <form>
               <div className="grid gap-4 sm:grid-cols-2 sm:gap-6">
                 <div className="w-full">
-                  <h2 className="mb-2 sm:mb-2 text-lg font-bold text-gray-900 dark:text-white uppercase">Import History</h2>
+                  <h2 className="mb-2 sm:mb-2 text-lg font-bold text-gray-900 dark:text-white">Import History</h2>
                 </div>
                 <div className="sm:col-span-2 relative overflow-x-auto shadow-md sm:rounded-lg">
-                  <DefaultTable data={data} columns={ImportHistColumns} />
+                  <DefaultTable
+                    data={data || []}
+                    columns={ImportHistColumns}
+                    Id={'TagId'} />
                 </div>
-                <div className="sm:col-span-2 flex sm:justify-end sm:items-start">
+                {/* <div className="sm:col-span-2 flex sm:justify-end sm:items-start">
                   <DeleteButton id="clear-tags">CLEAR ALL TRADES</DeleteButton>
-                </div>
+                </div> */}
               </div>
             </form>
           </div>

@@ -57,6 +57,7 @@ const authApiSlice = apiSlice.injectEndpoints({
           return;
         }
       },
+      invalidatesTags: ["Trade", "Charts", "ImportTrades", "Accounts", "User", "Tags"]
     }),
   }),
   overrideExisting: true

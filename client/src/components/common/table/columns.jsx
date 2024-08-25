@@ -180,28 +180,28 @@ export const TagsColumns = [
 
 export const ImportHistColumns = [
     {
-        accessorKey: "Imported On",
-        header: () => <span>Imported On</span>,
-        cell: ({ row }) => <div className="capitalize">{row.getValue("Imported On")}</div>
-    },
-    {
-        accessorKey: "Broker Name",
-        header: () => <span>Broker Name</span>,
-        cell: ({ row }) => <div className="capitalize">{row.getValue("Broker Name")}</div>
-    },
-    {
-        accessorKey: "Account Name",
+        accessorKey: "AccountName",
         header: () => <span>Account Name</span>,
-        cell: ({ row }) => <div className="capitalize">{row.getValue("Account Name")}</div>
+        cell: ({ row }) => <div className="capitalize">{row.getValue("AccountName")}</div>
     },
     {
-        accessorKey: "Total Trades",
+        accessorKey: "Broker",
+        header: () => <span>Broker Name</span>,
+        cell: ({ row }) => <div className="capitalize">{row.getValue("Broker")}</div>
+    },
+    {
+        accessorKey: "TotalTrades",
         header: () => <span>Total Trades</span>,
-        cell: ({ row }) => <div className="capitalize">{row.getValue("Total Trades")}</div>
+        cell: ({ row }) => <div className="capitalize">{row.getValue("TotalTrades")}</div>
     },
     {
-        accessorKey: "File",
-        header: () => <span>File</span>,
-        cell: ({ row }) => <div className="capitalize">{row.getValue("File")}</div>
+        accessorKey: "ImportedOn",
+        header: () => <span>Imported On</span>,
+        cell: ({ row }) => <div className="capitalize">{formatDate(row.getValue("ImportedOn"), 'dd/mm/yyyy')}</div>
     },
+    // {
+    //     accessorKey: "File",
+    //     header: () => <span>File</span>,
+    //     cell: ({ row }) => <div className="capitalize">{row.getValue("File")}</div>
+    // },
 ];

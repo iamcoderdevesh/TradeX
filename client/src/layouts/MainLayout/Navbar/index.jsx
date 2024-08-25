@@ -3,13 +3,14 @@ import { AiOutlineMenuFold, AiOutlineMenuUnfold } from "react-icons/ai";
 import { FaFilter } from "react-icons/fa";
 import { useLocation } from 'react-router-dom';
 import DateRange from 'components/common/calendar';
-import { ProfilePopup, ModalPopup} from 'components/common/popup';
+import { ProfilePopup, ModalPopup } from 'components/common/popup';
 import { useDispatch, useSelector } from 'react-redux';
 import { setActiveSidebar, setFilterPopup } from 'state';
 import { capitalizeWords } from 'utils';
 import ThemeButton from 'state/theme';
 import { FilterAccountDropdown } from 'components/common/dropdown/accountDropdown';
 import { FullScreenButton } from 'components/common/buttons';
+import sampleExcel from 'sample/sample_import_trades.xlsx';
 
 const Navbar = () => {
 
@@ -19,7 +20,7 @@ const Navbar = () => {
     const location = useLocation();
 
     const accountId = useSelector((state) => state.account?.selectedAccount?.AccountId);
-
+    
     return (
         <>
             <nav className={`fixed top-0 z-20 ${activeMenu && 'md:ml-64 md:w-[calc(100%-256px)]'} w-full bg-white border-b border-gray-200 dark:bg-main-dark dark:border-gray-700`}>
@@ -42,9 +43,17 @@ const Navbar = () => {
                                 </button>
                             </div>
                             <div className="hidden lg:flex items-center">
-                                <div className='w-56'>
-                                    {/* <DateRange range={true} /> */}
-                                </div>
+                                {/* <DateRange range={true} /> */}
+                                {
+                                    location.pathname == '/import-trades'
+                                        &&
+                                        <div className=''>
+                                            <a type="button" class="text-brand-300 border border-brand-300 hover:bg-brand-200 hover:text-white focus:outline-none font-medium rounded-full text-sm p-2.5 text-center inline-flex items-center dark:border-brand-300 dark:text-brand-300 dark:hover:text-white dark:hover:bg-brand-300" href={sampleExcel}>
+                                                <svg class="fill-current w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M13 8V2H7v6H2l8 8 8-8h-5zM0 18h20v2H0v-2z" /></svg>
+                                                <span class="sr-only">Icon description</span>
+                                            </a>
+                                        </div>
+                                }
                                 <div className='w-48 mx-4'>
                                     <FilterAccountDropdown label={''} value={accountId} />
                                 </div>

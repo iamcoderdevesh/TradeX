@@ -9,10 +9,10 @@ export const CalculateTradeStats = async (Action, EntryPrice, ExitPrice, StopLos
     const account = await Accounts.findOne({ AccountId });
     const _capital = account.TotalBalance;
 
-    const _grossPnL = parseFloat((ExitPrice - EntryPrice) * Quantity).toFixed(2);
+    const _tradeStatus = EntryPrice < ExitPrice ? (Action === 'Buy' ? 'WIN' : 'LOSS') : (EntryPrice > ExitPrice ? (Action === 'Sell' ? 'WIN' : 'LOSS') : 'BREAKEVEN');
+    const _grossPnL = (_tradeStatus === 'WIN' && Action === 'Sell') ? parseFloat((EntryPrice - ExitPrice) * Quantity).toFixed(2) : parseFloat((ExitPrice - EntryPrice) * Quantity).toFixed(2)
     const _netPnL = parseFloat((_grossPnL - Fees).toFixed(2));
     const _tradeRisk = parseFloat((EntryPrice - StopLoss) * Quantity + Fees).toFixed(2);
-    const _tradeStatus = EntryPrice < ExitPrice ? (Action === 'Buy' ? 'WIN' : 'LOSS') : (EntryPrice > ExitPrice ? (Action === 'Sell' ? 'WIN' : 'LOSS') : 'BREAKEVEN');
     const _netProfit = _tradeStatus === 'WIN' ? _netPnL : 0;
     const _netLoss = _tradeStatus === 'LOSS' ? _netPnL : 0;
     const riskReward = ((ExitPrice - EntryPrice) / (EntryPrice - StopLoss)).toFixed(2);

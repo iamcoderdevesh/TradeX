@@ -69,6 +69,18 @@ const tradeApiSlice = apiSlice.injectEndpoints({
             transformResponse: (response) => response.success ? response.tradeDetails : [],
             providesTags: ["Trade"]
         }),
+        getImportTrade: builder.query({
+            query: (id = 0) => `trade/getImportTrades`,
+            async onQueryStarted(args, { queryFulfilled, dispatch }) {
+                try {
+                    await SetLoadingWithResults(queryFulfilled, dispatch);
+                } catch (err) {
+                    return;
+                }
+            },
+            transformResponse: (response) => response.success ? response?.importDetails : [],
+            providesTags: ["ImportTrades"]
+        }),
         addUpdateTrade: builder.mutation({
             query: data => ({
                 url: "trade/addUpdateTrade",
@@ -101,7 +113,7 @@ const tradeApiSlice = apiSlice.injectEndpoints({
                     return;
                 }
             },
-            invalidatesTags: ["Trade", "Charts"]
+            invalidatesTags: ["Trade", "Charts", "ImportTrades"]
         }),
         deleteTrade: builder.mutation({
             query: data => ({
@@ -123,4 +135,4 @@ const tradeApiSlice = apiSlice.injectEndpoints({
     overrideExisting: true
 });
 
-export const { useGetTradeStatisticsQuery, useGetTradeDetailsQuery, useGetStatisticsQuery, useGetDetailedStatisticsQuery, useGetRecentTradeQuery, useAddUpdateTradeMutation, useImportTradeMutation, useDeleteTradeMutation } = tradeApiSlice;
+export const { useGetTradeStatisticsQuery, useGetTradeDetailsQuery, useGetStatisticsQuery, useGetDetailedStatisticsQuery, useGetRecentTradeQuery, useGetImportTradeQuery, useAddUpdateTradeMutation, useImportTradeMutation, useDeleteTradeMutation } = tradeApiSlice;
