@@ -42,9 +42,9 @@ const TradeSchema = Yup.object().shape({
   Symbol: Yup.string().required("Symbol is required"),
   EntryDate: Yup.date().required("Entry Date is required"),
   ExitDate: Yup.date().required("Exit Date is required").min(Yup.ref('EntryDate')),
-  EntryPrice: Yup.number().positive().integer().required("Entry Price is required"),
-  ExitPrice: Yup.number().positive().integer().required("Initial Balance is required"),
-  StopLoss: Yup.number().positive().integer().required("Stop Loss is required"),
+  EntryPrice: Yup.number().required("Entry Price is required"),
+  ExitPrice: Yup.number().required("Initial Balance is required"),
+  StopLoss: Yup.number().required("Stop Loss is required"),
   Quantity: Yup.number().positive().integer().required("Quantity is required")
 });
 

@@ -61,7 +61,7 @@ export const tradeValidations = [
     body('ExitPrice', 'Enter a valid exit price').isNumeric().isLength({ min: 1, max: 9 }),
     body('StopLoss', 'Enter a valid stop loss').isNumeric().isLength({ min: 1, max: 9 }),
     body('Quantity', 'Enter a valid quantity').isNumeric().isLength({ min: 1, max: 9 }),
-    body('AccountId', 'Account not found').isLength({ min: 1 }),
+    // body('AccountId', 'Account not found').isLength({ min: 1 }),
 ];
 
 export const importValidations = [

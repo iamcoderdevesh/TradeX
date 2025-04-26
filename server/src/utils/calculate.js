@@ -7,23 +7,23 @@ import { DateRangeFilter } from "./general.js";
 export const CalculateTradeStats = async (Action, EntryPrice, ExitPrice, StopLoss, Quantity, Fees, AccountId) => {
 
     const account = await Accounts.findOne({ AccountId });
-    const _capital = account.TotalBalance;
+    const _capital = Number(parseFloat(account.TotalBalance).toFixed(2));
 
-    const _tradeStatus = EntryPrice < ExitPrice ? (Action === 'Buy' ? 'WIN' : 'LOSS') : (EntryPrice > ExitPrice ? (Action === 'Sell' ? 'WIN' : 'LOSS') : 'BREAKEVEN');
-    const _grossPnL = (_tradeStatus === 'WIN' && Action === 'Sell') ? parseFloat((EntryPrice - ExitPrice) * Quantity).toFixed(2) : parseFloat((ExitPrice - EntryPrice) * Quantity).toFixed(2)
-    const _netPnL = parseFloat((_grossPnL - Fees).toFixed(2));
-    const _tradeRisk = parseFloat((EntryPrice - StopLoss) * Quantity + Fees).toFixed(2);
-    const _netProfit = _tradeStatus === 'WIN' ? _netPnL : 0;
-    const _netLoss = _tradeStatus === 'LOSS' ? _netPnL : 0;
-    const riskReward = ((ExitPrice - EntryPrice) / (EntryPrice - StopLoss)).toFixed(2);
+    const _tradeStatus = EntryPrice < ExitPrice ? (Action === 'BUY' ? 'WIN' : 'LOSS') : (EntryPrice > ExitPrice ? (Action === 'SELL' ? 'WIN' : 'LOSS') : 'BREAKEVEN');
+    const _grossPnL = (_tradeStatus === 'WIN' && Action === 'SELL') ? Number(parseFloat((EntryPrice - ExitPrice) * Quantity).toFixed(2)) : (_tradeStatus === 'LOSS' && Action === 'SELL') ? Number(parseFloat((EntryPrice - ExitPrice) * Quantity).toFixed(2)) : Number(parseFloat((ExitPrice - EntryPrice) * Quantity).toFixed(2));
+    const _netPnL = Number(parseFloat((_grossPnL - Fees)).toFixed(2));
+    const _tradeRisk = Number(parseFloat((EntryPrice - StopLoss) * Quantity + Fees).toFixed(2));
+    const _netProfit = Number(parseFloat(_tradeStatus === 'WIN' ? _netPnL : 0).toFixed(2));
+    const _netLoss = Number(parseFloat(_tradeStatus === 'LOSS' ? _netPnL : 0).toFixed(2));
+    const riskReward = Number(parseFloat((ExitPrice - EntryPrice) / (EntryPrice - StopLoss)).toFixed(2));
 
     return {
         tradeStatus: _tradeStatus,
         netProfit: _netProfit,
         netLoss: _netLoss,
         netPnL: _netPnL,
-        netRoi: parseFloat((_netPnL / _capital * 100).toFixed(2)),
-        grossPnL: parseFloat(_grossPnL).toFixed(2),
+        netRoi: Number(parseFloat((_netPnL / _capital * 100).toFixed(2))),
+        grossPnL: Number(parseFloat(_grossPnL).toFixed(2)),
         totalFees: Fees,
         tradeRisk: _tradeRisk,
         riskReward: riskReward
@@ -40,7 +40,19 @@ export const CalculateHandleJournal = async (TradeId, UserId, AccountId, current
     const _totalCapital = account.TotalBalance + (isUpdate ? prevNetPnl || 0 : 0);
 
     // Initialize variables
-    let _totalNetPnL = netPnL, _totalTrades = 1, _tradeStatus = tradeStatus === 'WIN' ? 'PROFIT' : 'LOSS', _totalWins = tradeStatus === 'WIN' ? 1 : 0, _totalLoss = tradeStatus === 'LOSS' ? 1 : 0, _Winrate = 0, _totalFees = totalFees, _totalGrossPnL = grossPnL, _totalRR = riskReward, _netRevenue = netPnL, _grossRevenue = (totalFees + _netRevenue + _capital), _totalRevenue = _netRevenue + _totalCapital, _netRoi = parseFloat((netPnL / _capital * 100).toFixed(2));
+    let _totalNetPnL = netPnL,
+        _totalTrades = 1,
+        _tradeStatus = tradeStatus === 'WIN' ? 'PROFIT' : 'LOSS',
+        _totalWins = tradeStatus === 'WIN' ? 1 : 0,
+        _totalLoss = tradeStatus === 'LOSS' ? 1 : 0,
+        _Winrate = 0,
+        _totalFees = totalFees,
+        _totalGrossPnL = grossPnL,
+        _totalRR = riskReward,
+        _netRevenue = Number(netPnL),
+        _grossRevenue = Number(parseFloat(totalFees + (_netRevenue) + _capital).toFixed(2)),
+        _totalRevenue = Number(parseFloat(_netRevenue + _totalCapital).toFixed(2)),
+        _netRoi = Number(parseFloat((netPnL / _capital * 100)).toFixed(2));
 
     // Define date range for today's trades
     let end = new Date(todaysDate);
@@ -107,10 +119,10 @@ export const CalculateHandleJournal = async (TradeId, UserId, AccountId, current
             });
 
             // Calculate additional fields
-            _Winrate = ((_totalWins / _totalTrades) * 100).toFixed(2);
+            _Winrate = Number(parseFloat((_totalWins / _totalTrades) * 100).toFixed(2));
             _netRevenue = _totalNetPnL;
             _grossRevenue = (_totalGrossPnL + _capital);
-            _netRoi = ((_totalNetPnL / _capital) * 100).toFixed(2);
+            _netRoi = Number(parseFloat((_totalNetPnL / _capital) * 100).toFixed(2));
             _totalRevenue = _totalCapital + netPnL;
             _tradeStatus = _totalNetPnL > 0 ? 'PROFIT' : _totalNetPnL === 0 ? 'BREAKEVEN' : 'LOSS';
 
@@ -127,7 +139,7 @@ export const CalculateHandleJournal = async (TradeId, UserId, AccountId, current
                         Winrate: _Winrate,
                         TotalFees: _totalFees,
                         TotalGrossPnL: _totalGrossPnL,
-                        TotalRR: (_totalRR).toFixed(2),
+                        TotalRR: Number(parseFloat(_totalRR).toFixed(2)),
                         NetRevenue: _netRevenue,
                         GrossRevenue: _grossRevenue,
                         TotalRevenue: _totalRevenue,
@@ -390,12 +402,12 @@ export const CalculateStatistics = async (req, res) => {
         // Update the local variables with the values from the database
         _totalProfit = totalProfit;
         _totalLoss = totalLoss;
-        _averagePnl = averagePnl.toFixed(2);
+        _averagePnl = Number(parseFloat(averagePnl).toFixed(2));
         _maxProfit = maxProfit;
         _maxLoss = maxLoss;
         _totalFees = totalFees;
-        _avgProfit = avgProfit.toFixed(2);
-        _avgLoss = avgLoss.toFixed(2);
+        _avgProfit = Number(parseFloat(avgProfit).toFixed(2));
+        _avgLoss = Number(parseFloat(avgLoss).toFixed(2));
         _totalWins = countWin;
         _totalLosses = countLoss;
         _winDays = totalWinDays;
@@ -415,14 +427,14 @@ export const CalculateStatistics = async (req, res) => {
     //#endregion
 
     //#region Minor Calculations
-    const _totalRevenue = _tradeCount === 0 ? 0 : parseFloat(TotalBalance).toFixed(2);
-    const _totalPnl = _tradeCount === 0 ? 0 : parseInt((TotalBalance - InitialBalance));
-    const _Winrate = _tradeCount === 0 ? 0 : parseFloat((_totalWins / _tradeCount) * 100).toFixed(2);
-    const _roi = _tradeCount === 0 ? 0 : parseFloat((TotalBalance - InitialBalance) / InitialBalance * 100).toFixed(2);
+    const _totalRevenue = _tradeCount === 0 ? 0 : Number(parseFloat(TotalBalance).toFixed(2));
+    const _totalPnl = _tradeCount === 0 ? 0 : Number(parseFloat((TotalBalance - InitialBalance)).toFixed(2));
+    const _Winrate = _tradeCount === 0 ? 0 : Number(parseFloat((_totalWins / _tradeCount) * 100).toFixed(2));
+    const _roi = _tradeCount === 0 ? 0 : Number(parseFloat((TotalBalance - InitialBalance) / InitialBalance * 100).toFixed(2));
 
-    const _totalRR = (_totalProfit !== 0 && _totalLoss !== 0) ? Math.abs(((_totalProfit / InitialBalance) * 100) / ((_totalLoss / InitialBalance) * 100)).toFixed(2) : 0;
-    const _grossPnl = (_totalPnl + _totalFees).toFixed(2);
-    const _profitFactor = (_totalProfit !== 0 && _totalLoss !== 0) ? Math.abs((_totalProfit / _totalLoss)).toFixed(2) : 0;
+    const _totalRR = Number(parseFloat((_totalProfit !== 0 && _totalLoss !== 0) ? Math.abs(((_totalProfit / InitialBalance) * 100) / ((_totalLoss / InitialBalance) * 100)) : 0).toFixed(2));
+    const _grossPnl = Number(parseFloat(_totalPnl + _totalFees).toFixed(2));
+    const _profitFactor = Number(parseFloat((_totalProfit !== 0 && _totalLoss !== 0) ? Math.abs((_totalProfit / _totalLoss)) : 0).toFixed(2));
 
     _averageHoldTime = `${Math.floor(_averageHoldTime / 1000 / 60 / 60)} Hours ${Math.floor((_averageHoldTime / 1000 / 60) % 60)} Minutes`;
     _averageWinHoldTime = `${Math.floor(_averageWinHoldTime / 1000 / 60 / 60)} Hours ${Math.floor((_averageWinHoldTime / 1000 / 60) % 60)} Minutes`;
@@ -430,18 +442,18 @@ export const CalculateStatistics = async (req, res) => {
     //#endregion
 
     const responseData = {
-        totalPnl: type === 'detailed' ? _currencySymbol + parseFloat(_totalPnl).toFixed(2) : _totalPnl,
-        totalRevenue: type === 'detailed' ? _currencySymbol + parseFloat(_totalRevenue).toFixed(2) : _totalRevenue,
+        totalPnl: type === 'detailed' ? _currencySymbol + Number(parseFloat(_totalPnl).toFixed(2)) : _totalPnl,
+        totalRevenue: type === 'detailed' ? _currencySymbol + Number(parseFloat(_totalRevenue).toFixed(2)) : _totalRevenue,
         totalReturns: type === 'detailed' ? _roi + '%' : _roi,
         winrate: type === 'detailed' ? _Winrate + '%' : _Winrate,
-        totalProfit: type === 'detailed' ? _currencySymbol + parseFloat(_totalProfit).toFixed(2) : _totalProfit,
-        totalLoss: type === 'detailed' ? _currencySymbol + parseFloat(_totalLoss).toFixed(2) : _totalLoss,
-        averageProfit: type === 'detailed' ? _currencySymbol + parseFloat(_avgProfit).toFixed(2) : _avgProfit,
-        averageLoss: type === 'detailed' ? _currencySymbol + parseFloat(_avgLoss).toFixed(2) : _avgLoss,
-        maximumProfit: type === 'detailed' ? _currencySymbol + parseFloat(_maxProfit).toFixed(2) : _maxProfit,
-        maximumLoss: type === 'detailed' ? _currencySymbol + parseFloat(_maxLoss).toFixed(2) : _maxLoss,
-        minimumProfit: type === 'detailed' ? _currencySymbol + parseFloat(_minProfit).toFixed(2) : _minProfit,
-        minimumLoss: type === 'detailed' ? _currencySymbol + parseFloat(_minLoss).toFixed(2) : _minLoss,
+        totalProfit: type === 'detailed' ? _currencySymbol + Number(parseFloat(_totalProfit).toFixed(2)) : _totalProfit,
+        totalLoss: type === 'detailed' ? _currencySymbol + Number(parseFloat(_totalLoss).toFixed(2)) : _totalLoss,
+        averageProfit: type === 'detailed' ? _currencySymbol + Number(parseFloat(_avgProfit).toFixed(2)) : _avgProfit,
+        averageLoss: type === 'detailed' ? _currencySymbol + Number(parseFloat(_avgLoss).toFixed(2)) : _avgLoss,
+        maximumProfit: type === 'detailed' ? _currencySymbol + Number(parseFloat(_maxProfit).toFixed(2)) : _maxProfit,
+        maximumLoss: type === 'detailed' ? _currencySymbol + Number(parseFloat(_maxLoss).toFixed(2)) : _maxLoss,
+        minimumProfit: type === 'detailed' ? _currencySymbol + Number(parseFloat(_minProfit).toFixed(2)) : _minProfit,
+        minimumLoss: type === 'detailed' ? _currencySymbol + Number(parseFloat(_minLoss).toFixed(2)) : _minLoss,
         totalTrades: _tradeCount,
         numberOfWinningTrades: _totalWins,
         numberOfLosingTrades: _totalLosses,
@@ -450,20 +462,20 @@ export const CalculateStatistics = async (req, res) => {
         numberOfBreakevenTrade: 0, //TODO :- To be calculated
         maxConsecutiveWins: _convWins,
         maxConsecutiveLosses: _convLoss,
-        totalCommissionsFees: type === 'detailed' ? _currencySymbol + parseFloat(_totalFees).toFixed(2) : _totalFees,
-        grossPnl: type === 'detailed' ? _currencySymbol + parseFloat(_grossPnl).toFixed(2) : _grossPnl,
+        totalCommissionsFees: type === 'detailed' ? _currencySymbol + Number(parseFloat(_totalFees).toFixed(2)) : _totalFees,
+        grossPnl: type === 'detailed' ? _currencySymbol + Number(parseFloat(_grossPnl).toFixed(2)) : _grossPnl,
         timeAllTrades: _averageHoldTime,
         timeWinTrades: _averageWinHoldTime,
         timeLossTrades: _averageLossHoldTime,
-        averageTradePnl: type === 'detailed' ? _currencySymbol + parseFloat(_averagePnl).toFixed(2) : _averagePnl,
-        profitFactor: type === 'detailed' ? parseFloat(_profitFactor).toFixed(2) : _profitFactor,
+        averageTradePnl: type === 'detailed' ? _currencySymbol + Number(parseFloat(_averagePnl).toFixed(2)) : _averagePnl,
+        profitFactor: type === 'detailed' ? Number(parseFloat(_profitFactor).toFixed(2)) : _profitFactor,
         openedTrades: _tradeOpenedCount,
         totalTradingDays: _totalTradeDays,
         totalWinningDays: _winDays,
         totalLosingDays: _lossDays,
         totalBreakevenDays: _breakevenDays, //TODO :- To be calculated
-        netDailyPnl: type === 'detailed' ? _currencySymbol + parseFloat(_netDailyPnl).toFixed(2) : _netDailyPnl,
-        totalRR: type === 'detailed' ? parseFloat(_totalRR).toFixed(2) : _totalRR,
+        netDailyPnl: type === 'detailed' ? _currencySymbol + Number(parseFloat(_netDailyPnl).toFixed(2)) : _netDailyPnl,
+        totalRR: type === 'detailed' ? Number(parseFloat(_totalRR).toFixed(2)) : _totalRR,
     };
 
     res.status(201).json({

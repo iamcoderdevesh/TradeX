@@ -54,8 +54,8 @@ const Tracking = () => {
       </div>
       <div className="p-6 m-2 space-y-5 sm:p-8 bg-white rounded-lg shadow-md dark:bg-main-dark">
         <div className="py-2 border-b dark:border-gray-600">
-          <h2 className="text-lg font-medium text-gray-900 dark:text-gray-400">{TradeName}</h2>
-          <span className="text-sm font-medium text-gray-900 dark:text-gray-400 ">{formatDate(EntryDate, "local-date")}</span>
+          <h2 className="text-lg font-medium text-gray-900 dark:text-gray-400 uppercase">{TradeName}</h2>
+          <span className="text-sm font-medium text-gray-900 dark:text-gray-400 ">{formatDate(EntryDate, "date_time")}</span>
         </div>
         <div className="pnl-section flex justify-between items-center">
           <h3 className={`text-lg font-medium my-2 ${TradeStatus === 'WIN' ? 'text-green' : 'text-red'}`}>Net P&L</h3>
@@ -82,9 +82,9 @@ const Tracking = () => {
             <span className={`text-sm font-medium my-2 text-right`}><GetFormatedPnl value={GrossPnL} /></span>
             <span className="text-sm font-medium dark:text-white my-2 text-right">{Quantity?.toFixed(2)}</span>
             <span className="text-sm font-medium dark:text-white my-2 text-right">{StopLoss?.toFixed(2)}</span>
-            <span className="text-sm font-medium dark:text-white my-2 text-right"><GetFormatedCurrency value={EntryPrice} /></span>
+            <span className="text-sm font-medium dark:text-white my-2 text-right"><GetFormatedCurrency value={EntryPrice} isFixed={0} /></span>
             <span className="text-sm font-medium dark:text-white my-2 text-right">-</span>
-            <span className="text-sm font-medium dark:text-white my-2 text-right"><GetFormatedCurrency value={ExitPrice} /></span>
+            <span className="text-sm font-medium dark:text-white my-2 text-right"><GetFormatedCurrency value={ExitPrice} isFixed={0} /></span>
             <span className="text-sm font-medium text-red my-2 text-right"><GetFormatedCurrency value={TradeRisk} /></span>
             <span className="text-sm font-medium dark:text-white my-2 text-right">{RiskReward?.toFixed(2)}</span>
           </div>

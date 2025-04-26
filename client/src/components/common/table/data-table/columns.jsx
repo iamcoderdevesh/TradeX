@@ -85,17 +85,17 @@ export const TradeColumns = [
     {
         accessorKey: "EntryPrice",
         header: () => <div className="capitalize">Entry Price</div>,
-        cell: ({ row }) => <div className="capitalize"><GetFormatedCurrency value={row.getValue("EntryPrice")} /></div>
+        cell: ({ row }) => <div className="capitalize"><GetFormatedCurrency value={row.getValue("EntryPrice")} isFixed={0} /></div>
     },
     {
         accessorKey: "ExitPrice",
         header: () => <div className="capitalize">Exit Price</div>,
-        cell: ({ row }) => <div className="capitalize"><GetFormatedCurrency value={row.getValue("ExitPrice")} /></div>
+        cell: ({ row }) => <div className="capitalize"><GetFormatedCurrency value={row.getValue("ExitPrice")} isFixed={0} /></div>
     },
     {
         accessorKey: "StopLoss",
         header: () => <div className="capitalize">Stop Loss</div>,
-        cell: ({ row }) => <div className="capitalize"><GetFormatedCurrency value={row.getValue("StopLoss")} /></div>
+        cell: ({ row }) => <div className="capitalize"><GetFormatedCurrency value={row.getValue("StopLoss")} isFixed={0} /></div>
     },
     {
         accessorKey: "Quantity",

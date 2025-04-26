@@ -119,6 +119,7 @@ export const Inputs = {
                 "ANGLE ONE",
                 "UPSTOX",
                 "DHAN",
+                "BINANCE",
             ],
         },
         {
@@ -141,8 +142,8 @@ export const Inputs = {
             id: "Action",
             label: "Action",
             children: [
-                "Buy",
-                "Sell",
+                "BUY",
+                "SELL",
             ],
         },
     ],

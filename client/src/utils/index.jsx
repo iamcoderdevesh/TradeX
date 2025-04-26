@@ -14,6 +14,9 @@ export const formatDate = (date, type) => {
         day = '0' + day;
 
     if (type === 'local-date') return d.toDateString();
+
+    const options = { weekday: 'short', year: 'numeric', month: 'short', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false, timeZone: 'Asia/Kolkata' };
+    if (type === 'date_time') return d.toLocaleString('en-US', options).replace(',', '');
     
     d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
 

@@ -77,6 +77,7 @@ const AccountForm = ({ setShowAccountPage }) => {
                                 <option>ANGLE ONE</option>
                                 <option>UPSTOX</option>
                                 <option>DHAN</option>
+                                <option>BINANCE</option>
                             </>
                         } />
                 </div>

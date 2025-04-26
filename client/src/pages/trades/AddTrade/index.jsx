@@ -21,7 +21,7 @@ const AddTrade = () => {
 
     const initialValues = TradeInfo
         ? { ...TradeInfo }
-        : { Account: '', Market: '', Broker: '', Setup: '', TradeStatus: 'Closed', Action: 'Buy', Symbol: '', Fees: '', EntryDate: '', ExitDate: '', EntryPrice: '', ExitPrice: '', StopLoss: '', Quantity: '', EntryReason: '', ExitReason: '', Emotions: '', MarketConditions: '', AdditionalInformation: '' };
+        : { Account: '', Market: '', Broker: '', Setup: '', TradeStatus: 'Closed', Action: 'BUY', Symbol: '', Fees: '', EntryDate: '', ExitDate: '', EntryPrice: '', ExitPrice: '', StopLoss: '', Quantity: '', EntryReason: '', ExitReason: '', Emotions: '', MarketConditions: '', AdditionalInformation: '' };
 
     const { values, errors, touched, isSubmitting, handleChange, handleSubmit, handleBlur, setValues } = useFormik({
         initialValues,

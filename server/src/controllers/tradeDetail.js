@@ -8,6 +8,8 @@ import { DateRangeFilter } from '../utils/general.js';
 import Accounts from '../models/accounts.js';
 import { AddUpdateTradeStats } from './tradeStats.js';
 import { AddTradeJournal } from './tradeJournal.js';
+import { decrypt } from '../helpers/main.js';
+import { calculateFeesByExchange } from '../helpers/fees.js';
 
 /* Inserting/Updating TradeDetails */
 export const AddUpdateTrade = async (req, res, next) => {
@@ -18,8 +20,16 @@ export const AddUpdateTrade = async (req, res, next) => {
     else {
         try {
             const { Market, Broker, Setup, TradeStatus, Action, Symbol, EntryDate, ExitDate,
-                EntryPrice, ExitPrice, Fees = 0, StopLoss, Quantity, EntryReason, ExitReason,
-                Emotions, MarketConditions, AdditionalInformation, UserId, AccountId, TradeId = 0, IsImport = false } = req.body;
+                EntryPrice, ExitPrice, Fees: total_fees, StopLoss, Quantity, EntryReason, ExitReason,
+                Emotions, MarketConditions, AdditionalInformation, UserId: user_id = null, AccountId: account_id = null, TradeId = 0, IsImport = false } = req.body;
+            const { accountId, userId } = req.params;
+
+            let UserId = user_id == null ? decrypt(userId) : user_id, AccountId = account_id == null ? decrypt(accountId) : account_id;
+            req.body.UserId = UserId;
+            req.body.AccountId = AccountId;
+            
+            let Fees = total_fees == "" || total_fees == undefined ? calculateFeesByExchange(Broker, EntryPrice, ExitPrice, Quantity) : total_fees;
+            req.body.Fees = Fees;
 
             const accountDetails = await Accounts.findOne({ AccountId });
 
@@ -85,7 +95,7 @@ export const AddUpdateTrade = async (req, res, next) => {
             if (TradeStatus === "Closed") {
                 req.body.Stats = await CalculateTradeStats(Action, EntryPrice, ExitPrice, StopLoss, Quantity, Fees, AccountId);
 
-                if(IsImport) {
+                if (IsImport) {
                     await AddUpdateTradeStats(req, res, next);
                     await AddTradeJournal(req, res, next);
                     return true;
@@ -291,7 +301,7 @@ export const getTradeDetails = async (req, res) => {
             }
         }
     ]);
-    
+
     return res.status(200).json({
         success: true,
         tradeDetails: { ...getTrade[0] }
@@ -353,7 +363,7 @@ export const DeleteTrades = async (req, res) => {
     await TradeDetails.deleteMany(tradeFilter);
     await TradeAddDetails.deleteMany(tradeFilter);
     await TradeStats.deleteMany(tradeFilter);
-    
+
     if (TradeId) {
         //Seaching TradeId's to Update/Delete TradeJournal
         delete tradeFilter.TradeId;
